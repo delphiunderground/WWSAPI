@@ -70,11 +70,42 @@ type
 //  ENUM DEFINITIONS
 
 type
+  WS_XML_READER_PROPERTY_ID = integer;
   WS_XML_CANONICALIZATION_ALGORITHM = integer;
   WS_XML_CANONICALIZATION_PROPERTY_ID = integer;
+  WS_XML_WRITER_PROPERTY_ID = integer;
+  WS_XML_TEXT_TYPE = integer;
+  WS_XML_NODE_TYPE = integer;
+  WS_MOVE_TO = integer;
+  WS_VALUE_TYPE = integer;
+  WS_XML_READER_INPUT_TYPE = integer;
+  WS_XML_READER_ENCODING_TYPE = integer;
   WS_ERROR_PROPERTY_ID = integer;
 
 const
+//  XML Reader enum
+//
+//   Each xml reader property is identified by an ID and has an associated
+//  value.
+//
+  //type = WS_XML_READER_PROPERTY_ID
+  WS_XML_READER_PROPERTY_MAX_DEPTH                              = 0;
+  WS_XML_READER_PROPERTY_ALLOW_FRAGMENT                         = 1;
+  WS_XML_READER_PROPERTY_MAX_ATTRIBUTES                         = 2;
+  WS_XML_READER_PROPERTY_READ_DECLARATION                       = 3;
+  WS_XML_READER_PROPERTY_CHARSET                                = 4;
+  WS_XML_READER_PROPERTY_ROW                                    = 5;
+  WS_XML_READER_PROPERTY_COLUMN                                 = 6;
+  WS_XML_READER_PROPERTY_UTF8_TRIM_SIZE                         = 7;
+  WS_XML_READER_PROPERTY_STREAM_BUFFER_SIZE                     = 8;
+  WS_XML_READER_PROPERTY_IN_ATTRIBUTE                           = 9;
+  WS_XML_READER_PROPERTY_STREAM_MAX_ROOT_MIME_PART_SIZE         = 10;
+  WS_XML_READER_PROPERTY_STREAM_MAX_MIME_HEADERS_SIZE           = 11;
+  WS_XML_READER_PROPERTY_MAX_MIME_PARTS                         = 12;
+  WS_XML_READER_PROPERTY_ALLOW_INVALID_CHARACTER_REFERENCES     = 13;
+  WS_XML_READER_PROPERTY_MAX_NAMESPACES                         = 14;
+
+
 //  XML Canonicalization enum
 //
 //   Defines the values for the XML canonicalization algorithms.
@@ -98,6 +129,132 @@ const
   WS_XML_CANONICALIZATION_PROPERTY_OUTPUT_BUFFER_SIZE     = 3;
 
 
+//  XML Writer enum
+//
+//   Each xml writer property is identified by an ID and has an associated value.
+//
+  //type = WS_XML_WRITER_PROPERTY_ID
+  WS_XML_WRITER_PROPERTY_MAX_DEPTH                              = 0;
+  WS_XML_WRITER_PROPERTY_ALLOW_FRAGMENT                         = 1;
+  WS_XML_WRITER_PROPERTY_MAX_ATTRIBUTES                         = 2;
+  WS_XML_WRITER_PROPERTY_WRITE_DECLARATION                      = 3;
+  WS_XML_WRITER_PROPERTY_INDENT                                 = 4;
+  WS_XML_WRITER_PROPERTY_BUFFER_TRIM_SIZE                       = 5;
+  WS_XML_WRITER_PROPERTY_CHARSET                                = 6;
+  WS_XML_WRITER_PROPERTY_BUFFERS                                = 7;
+  WS_XML_WRITER_PROPERTY_BUFFER_MAX_SIZE                        = 8;
+  WS_XML_WRITER_PROPERTY_BYTES                                  = 9;
+  WS_XML_WRITER_PROPERTY_IN_ATTRIBUTE                           = 10;
+  WS_XML_WRITER_PROPERTY_MAX_MIME_PARTS_BUFFER_SIZE             = 11;
+  WS_XML_WRITER_PROPERTY_INITIAL_BUFFER                         = 12;
+  WS_XML_WRITER_PROPERTY_ALLOW_INVALID_CHARACTER_REFERENCES     = 13;
+  WS_XML_WRITER_PROPERTY_MAX_NAMESPACES                         = 14;
+  WS_XML_WRITER_PROPERTY_BYTES_WRITTEN                          = 15;
+  WS_XML_WRITER_PROPERTY_BYTES_TO_CLOSE                         = 16;
+  WS_XML_WRITER_PROPERTY_COMPRESS_EMPTY_ELEMENTS                = 17;
+  WS_XML_WRITER_PROPERTY_EMIT_UNCOMPRESSED_EMPTY_ELEMENTS       = 18;
+
+
+//  XML Node enum
+//
+//   Indicates the type of WS_XML_TEXT structure.
+//
+  //type = WS_XML_TEXT_TYPE
+  WS_XML_TEXT_TYPE_UTF8          = 1;
+  WS_XML_TEXT_TYPE_UTF16         = 2;
+  WS_XML_TEXT_TYPE_BASE64        = 3;
+  WS_XML_TEXT_TYPE_BOOL          = 4;
+  WS_XML_TEXT_TYPE_INT32         = 5;
+  WS_XML_TEXT_TYPE_INT64         = 6;
+  WS_XML_TEXT_TYPE_UINT64        = 7;
+  WS_XML_TEXT_TYPE_FLOAT         = 8;
+  WS_XML_TEXT_TYPE_DOUBLE        = 9;
+  WS_XML_TEXT_TYPE_DECIMAL       = 10;
+  WS_XML_TEXT_TYPE_GUID          = 11;
+  WS_XML_TEXT_TYPE_UNIQUE_ID     = 12;
+  WS_XML_TEXT_TYPE_DATETIME      = 13;
+  WS_XML_TEXT_TYPE_TIMESPAN      = 14;
+  WS_XML_TEXT_TYPE_QNAME         = 15;
+  WS_XML_TEXT_TYPE_LIST          = 16;
+
+
+//  XML Node enum
+//
+//   Indicates the type of WS_XML_NODE structure.
+//
+  //type = WS_XML_NODE_TYPE
+  WS_XML_NODE_TYPE_ELEMENT         = 1;
+  WS_XML_NODE_TYPE_TEXT            = 2;
+  WS_XML_NODE_TYPE_END_ELEMENT     = 3;
+  WS_XML_NODE_TYPE_COMMENT         = 4;
+  WS_XML_NODE_TYPE_CDATA           = 6;
+  WS_XML_NODE_TYPE_END_CDATA       = 7;
+  WS_XML_NODE_TYPE_EOF             = 8;
+  WS_XML_NODE_TYPE_BOF             = 9;
+
+
+//  XML Buffer enum
+//
+//   This enumeration identifies the various ways to move about an xml document.
+//
+  //type = WS_MOVE_TO
+  WS_MOVE_TO_ROOT_ELEMENT         = 0;
+  WS_MOVE_TO_NEXT_ELEMENT         = 1;
+  WS_MOVE_TO_PREVIOUS_ELEMENT     = 2;
+  WS_MOVE_TO_CHILD_ELEMENT        = 3;
+  WS_MOVE_TO_END_ELEMENT          = 4;
+  WS_MOVE_TO_PARENT_ELEMENT       = 5;
+  WS_MOVE_TO_NEXT_NODE            = 6;
+  WS_MOVE_TO_PREVIOUS_NODE        = 7;
+  WS_MOVE_TO_FIRST_NODE           = 8;
+  WS_MOVE_TO_BOF                  = 9;
+  WS_MOVE_TO_EOF                  = 10;
+  WS_MOVE_TO_CHILD_NODE           = 11;
+
+
+//  XML Node enum
+//
+//   An enumeration of the different types of fixed-size primitives.
+//
+  //type = WS_VALUE_TYPE
+  WS_BOOL_VALUE_TYPE         = 0;
+  WS_INT8_VALUE_TYPE         = 1;
+  WS_INT16_VALUE_TYPE        = 2;
+  WS_INT32_VALUE_TYPE        = 3;
+  WS_INT64_VALUE_TYPE        = 4;
+  WS_UINT8_VALUE_TYPE        = 5;
+  WS_UINT16_VALUE_TYPE       = 6;
+  WS_UINT32_VALUE_TYPE       = 7;
+  WS_UINT64_VALUE_TYPE       = 8;
+  WS_FLOAT_VALUE_TYPE        = 9;
+  WS_DOUBLE_VALUE_TYPE       = 10;
+  WS_DECIMAL_VALUE_TYPE      = 11;
+  WS_DATETIME_VALUE_TYPE     = 12;
+  WS_TIMESPAN_VALUE_TYPE     = 13;
+  WS_GUID_VALUE_TYPE         = 14;
+  WS_DURATION_VALUE_TYPE     = 15;
+
+
+//  XML Reader enum
+//
+//   Indicates the type of WS_XML_READER_INPUT structure.
+//
+  //type = WS_XML_READER_INPUT_TYPE
+  WS_XML_READER_INPUT_TYPE_BUFFER     = 1;
+  WS_XML_READER_INPUT_TYPE_STREAM     = 2;
+
+
+//  XML Reader enum
+//
+//   Indicates the type of WS_XML_READER_ENCODING structure.
+//
+  //type = WS_XML_READER_ENCODING_TYPE
+  WS_XML_READER_ENCODING_TYPE_TEXT       = 1;
+  WS_XML_READER_ENCODING_TYPE_BINARY     = 2;
+  WS_XML_READER_ENCODING_TYPE_MTOM       = 3;
+  WS_XML_READER_ENCODING_TYPE_RAW        = 4;
+
+
 //  Errors enum
 //  
 //   A set of property values associated with the error.  They are set
@@ -110,8 +267,8 @@ const
 
 
 type
-
 //  STRUCT DEFINITIONS
+
 
 //  XML Canonicalization structure
 //
@@ -123,14 +280,16 @@ type
     valueSize:ULONG;
   end;
 
+
 //  Utilities structure
-//  
+//
 //   An array of unicode characters and a length.
 //
   WS_STRING = record
     length:ULONG;
     chars:PWideChar;
   end;
+
 
 //  Utilities structure
 //  A structure used to serialize and deserialize an array of bytes.
@@ -140,11 +299,31 @@ type
   end;
 
 
+//  XML Reader structure
+//
+//   Specifies where the reader should obtain the bytes that comprise the xml document.
+//
+  WS_XML_READER_INPUT = record
+    inputType : WS_XML_READER_INPUT_TYPE;
+  end;
+
+
+//  XML Reader structure
+//
+//   This structure is the base type for all the different kinds of reader encodings.
+//
+  WS_XML_READER_ENCODING = record
+    encodingType : WS_XML_READER_ENCODING_TYPE;
+  end;
+
+
+
 //  POINTER DEFINITIONS
 
   PWS_XML_STRING = pointer;          //TODO : définir la structure plus précisément
   PWS_XML_CANONICALIZATION_PROPERTY = ^WS_XML_CANONICALIZATION_PROPERTY;
-  PWS_XML_READER_ENCODING = pointer; //TODO
+  PWS_XML_READER_INPUT = ^WS_XML_READER_INPUT;
+  PWS_XML_READER_ENCODING = ^WS_XML_READER_ENCODING;
   PWS_XML_WRITER_ENCODING = pointer; //TODO
   PWS_XML_WRITER_PROPERTY = pointer; //TODO
   PWS_XML_READER_PROPERTY = pointer; //TODO
@@ -153,6 +332,7 @@ type
   PWS_ASYNC_CONTEXT = pointer;       //TODO
   PWS_BYTES = ^WS_BYTES;
   PWS_HEAP_PROPERTY = pointer;       //TODO
+
 
 
 //  CALLBACK DEFINITIONS
@@ -170,6 +350,7 @@ WS_READ_CALLBACK = function(
   asyncContext : PWS_ASYNC_CONTEXT;
   error : PWS_ERROR):HRESULT; stdcall;
 
+
 //  XML Writer callback
 //
 //   A user-defined callback used by the WS_XML_WRITER
@@ -182,6 +363,7 @@ WS_WRITE_CALLBACK = function(
   asyncContext : PWS_ASYNC_CONTEXT;
   error : PWS_ERROR):HRESULT; stdcall;
 
+
 //  XML Writer callback
 //
 //   A user-defined callback used by WsPushBytes to request that data be written.
@@ -192,6 +374,7 @@ WS_PUSH_BYTES_CALLBACK = function(
   writeCallbackState : pointer;
   asyncContext : PWS_ASYNC_CONTEXT;
   error : PWS_ERROR):HRESULT; stdcall;
+
 
 //  XML Writer callback
 //
@@ -205,6 +388,7 @@ WS_PULL_BYTES_CALLBACK = function(
   ActualSize : PULONG;
   asyncContext : PWS_ASYNC_CONTEXT;
   error : PWS_ERROR):HRESULT; stdcall;
+
 
 //  XML Writer callback
 //
@@ -234,6 +418,7 @@ function WsStartReaderCanonicalization(
           propertyCount : ULONG;
           error : PWS_ERROR):HRESULT; stdcall;
 
+
 //  XML Canonicalization function
 //
 //   Stops XML canonicalization started by the preceding WsStartReaderCanonicalization call.
@@ -241,6 +426,7 @@ function WsStartReaderCanonicalization(
 function WsEndReaderCanonicalization(
           reader : PWS_XML_READER;
           error : PWS_ERROR):HRESULT; stdcall;
+
 
 //  XML Canonicalization function
 //
@@ -253,6 +439,7 @@ function WsStartWriterCanonicalization(
           properties : PWS_XML_CANONICALIZATION_PROPERTY;
           propertyCount : ULONG;
           error : PWS_ERROR):HRESULT; stdcall;
+
 
 //  XML Canonicalization function
 //
@@ -276,6 +463,7 @@ function WsWriteXmlBufferToBytes(
           bytes : PPointer;
           byteCount : PULONG;
           error : PWS_ERROR):HRESULT; stdcall;
+
 
 //  XML Buffer function
 //
@@ -340,12 +528,14 @@ function WsCreateHeap(maxSize : size_t;
                       heap : PPWS_HEAP;
                       error : PWS_ERROR):HRESULT; stdcall;
 
+
 //  Heap function
 //
 //   This frees the heap object, and the memory associated with any allocations
 //  made on it using WsAlloc.
 //
 procedure WsFreeHeap(heap : PWS_HEAP); stdcall;
+
 
 //  XML Reader function
 //
@@ -357,11 +547,35 @@ function WsCreateReader(properties : PWS_XML_READER_PROPERTY;
                         reader : PPWS_XML_READER;
                         error : PWS_ERROR):HRESULT; stdcall;
 
+
+//  XML Reader function
+//
+//   Sets the encoding and input sources for the reader.
+//
+function WsSetInput(reader : PWS_XML_READER;
+                    encoding : PWS_XML_READER_ENCODING;
+                    input : PWS_XML_READER_INPUT;
+                    properties : PWS_XML_READER_PROPERTY;
+                    propertyCount : ULONG;
+                    error : PWS_ERROR):HRESULT; stdcall;
+
+
 //  XML Reader function
 //
 //   Releases the memory associated with the WS_XML_READER object.
 //
 procedure WsFreeReader(reader : PWS_XML_READER); stdcall;
+
+
+//  XML Reader function
+//
+//   Ensures that the reader has at least a specified amount of data available to it for reading.
+//
+function WsFillReader(reader : PWS_XML_READER;
+                      minSize : ULONG;
+                      asyncContext : PWS_ASYNC_CONTEXT;
+                      error : PWS_ERROR):HRESULT; stdcall;
+
 
 //  XML Writer function
 //
@@ -372,6 +586,7 @@ function WsCreateWriter(properties : PWS_XML_WRITER_PROPERTY;
                         propertyCount : ULONG;
                         writer : PPWS_XML_WRITER;
                         error : PWS_ERROR):HRESULT; stdcall;
+
 
 //  XML Writer function
 //
@@ -438,7 +653,9 @@ procedure WsFreeError; external WEBSERVICES_DLL name 'WsFreeError';
 function WsCreateHeap; external WEBSERVICES_DLL name 'WsCreateHeap';
 procedure WsFreeHeap; external WEBSERVICES_DLL name 'WsFreeHeap';
 function WsCreateReader; external WEBSERVICES_DLL name 'WsCreateReader';
+function WsSetInput; external WEBSERVICES_DLL name 'WsSetInput';
 procedure WsFreeReader; external WEBSERVICES_DLL name 'WsFreeReader';
+function WsFillReader; external WEBSERVICES_DLL name 'WsFillReader';
 function WsCreateWriter; external WEBSERVICES_DLL name 'WsCreateWriter';
 procedure WsFreeWriter; external WEBSERVICES_DLL name 'WsFreeWriter';
 
