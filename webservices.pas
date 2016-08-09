@@ -74,12 +74,16 @@ type
   WS_XML_CANONICALIZATION_ALGORITHM = integer;
   WS_XML_CANONICALIZATION_PROPERTY_ID = integer;
   WS_XML_WRITER_PROPERTY_ID = integer;
+  WS_XML_BUFFER_PROPERTY_ID = integer;
   WS_XML_TEXT_TYPE = integer;
   WS_XML_NODE_TYPE = integer;
   WS_MOVE_TO = integer;
   WS_VALUE_TYPE = integer;
   WS_XML_READER_INPUT_TYPE = integer;
   WS_XML_READER_ENCODING_TYPE = integer;
+  WS_CHARSET = integer;
+  WS_XML_WRITER_ENCODING_TYPE = integer;
+  WS_XML_WRITER_OUTPUT_TYPE = integer;
   WS_ERROR_PROPERTY_ID = integer;
 
 const
@@ -153,6 +157,15 @@ const
   WS_XML_WRITER_PROPERTY_BYTES_TO_CLOSE                         = 16;
   WS_XML_WRITER_PROPERTY_COMPRESS_EMPTY_ELEMENTS                = 17;
   WS_XML_WRITER_PROPERTY_EMIT_UNCOMPRESSED_EMPTY_ELEMENTS       = 18;
+
+
+//  XML Buffer enum
+//
+//   Each xml buffer property is identified by an ID and has an associated
+//  value.
+//
+  //type = WS_XML_BUFFER_PROPERTY_ID = integer;
+  //empty typedef enum
 
 
 //  XML Node enum
@@ -255,8 +268,37 @@ const
   WS_XML_READER_ENCODING_TYPE_RAW        = 4;
 
 
-//  Errors enum
+//  XML Writer enum
+
+  //type = WS_CHARSET
+  WS_CHARSET_AUTO        = 0;
+  WS_CHARSET_UTF8        = 1;
+  WS_CHARSET_UTF16LE     = 2;
+  WS_CHARSET_UTF16BE     = 3;
+
+
+//  XML Writer enum
+//
+//   Indicates the type of WS_XML_WRITER_ENCODING structure.
 //  
+  //type = WS_XML_WRITER_ENCODING_TYPE
+  WS_XML_WRITER_ENCODING_TYPE_TEXT       = 1;
+  WS_XML_WRITER_ENCODING_TYPE_BINARY     = 2;
+  WS_XML_WRITER_ENCODING_TYPE_MTOM       = 3;
+  WS_XML_WRITER_ENCODING_TYPE_RAW        = 4;
+
+
+//  XML Writer enum
+//
+//   Indicates the type of WS_XML_WRITER_OUTPUT structure.
+//
+  //type = WS_XML_WRITER_OUTPUT_TYPE
+  WS_XML_WRITER_OUTPUT_TYPE_BUFFER     = 1;
+  WS_XML_WRITER_OUTPUT_TYPE_STREAM     = 2;
+
+
+//  Errors enum
+//
 //   A set of property values associated with the error.  They are set
 //  and retrieved using WsGetErrorProperty and WsSetErrorProperty.
 //
@@ -270,6 +312,98 @@ type
 //  STRUCT DEFINITIONS
 
 
+//  XML Node structure
+//
+//   Represents a string that optionally has (WS_XML_DICTIONARY) dictionary
+//   information associated with it.  The xml APIs use WS_XML_STRINGs to identify prefixes,
+//  localNames and namespaces.
+//
+  WS_XML_STRING = record
+    length:ULONG;
+    bytes:PByte;
+    dictionary:pointer; //in fact, PWS_XML_DICTIONARY but not yet declared here
+    id:ULONG;
+  end;
+
+  PWS_XML_STRING = ^WS_XML_STRING;
+
+
+//  XML Node structure
+//
+//   Represents a set of unique strings.  This information is used by the binary
+//  encoding to write a more compact xml document.
+//
+  WS_XML_DICTIONARY = record
+    guid:TGUID;
+    strings:PWS_XML_STRING;
+    stringCount:ULONG;
+    isConst:BOOL;
+  end;
+
+  PWS_XML_DICTIONARY = ^WS_XML_DICTIONARY;
+
+
+//  XML Node structure
+//
+//   A structure used to specify an XML name (of an element or an attribute) as
+//  a local name, namespace pair.
+//
+  WS_XML_QNAME = record
+    localName:WS_XML_STRING;
+    ns:WS_XML_STRING;
+  end;
+
+  PWS_XML_QNAME = ^WS_XML_QNAME;
+
+
+//  XML Buffer structure
+//
+//   Represents a position within an XML Buffer.  The current position within
+//  a reader or writer may be obtained by calling WsGetReaderPosition or
+//   WsGetWriterPosition.  The current position within a reader or writer
+//  may be set by calling WsSetReaderPosition or WsSetWriterPosition.
+//
+//   Using WsRemoveNode to remove a node that corresponds to or contains a
+//  position will cause subsequent use of the position to fail.  The position itself
+//  remains valid, but operations that depend on that position will fail.
+//
+//   Positions may be used as long as the containing XML buffer is valid.  Using a position
+//  after its corresponding buffer has been deleted will exhibit undefined behavior.
+//
+  WS_XML_NODE_POSITION = record
+    buffer:PWS_XML_BUFFER;
+    node:pointer;
+  end;
+
+  PWS_XML_NODE_POSITION = ^WS_XML_NODE_POSITION;
+
+
+//  XML Reader structure
+//
+//   Specifies a reader specific setting.
+//
+  WS_XML_READER_PROPERTY = record
+    id:WS_XML_READER_PROPERTY_ID;
+    value:pointer;
+    valueSize:ULONG;
+  end;
+
+
+//  XML Canonicalization structure
+//
+//   An array of XML prefixes that should be treated as
+//  inclusive prefixes during exclusive XML canonicalization.  The
+//  treatment of inclusive prefixes is defined in
+//   (http://tools.ietf.org/html/rfc3741) RFC 3741.
+//
+  WS_XML_CANONICALIZATION_INCLUSIVE_PREFIXES = record
+    prefixCount:ULONG;
+    prefixes:PWS_XML_STRING;
+  end;
+
+  PWS_XML_CANONICALIZATION_INCLUSIVE_PREFIXES = ^WS_XML_CANONICALIZATION_INCLUSIVE_PREFIXES;
+
+
 //  XML Canonicalization structure
 //
 //   Specifies a setting that controls how XML canonicalization is done.
@@ -278,6 +412,189 @@ type
     id:WS_XML_CANONICALIZATION_PROPERTY_ID;
     value:pointer;
     valueSize:ULONG;
+  end;
+
+  PWS_XML_CANONICALIZATION_PROPERTY = ^WS_XML_CANONICALIZATION_PROPERTY;
+
+
+//  XML Writer structure
+//
+//   Specifies a writer specific setting.
+//
+  WS_XML_WRITER_PROPERTY = record
+    id:WS_XML_WRITER_PROPERTY_ID;
+    value:pointer;
+    valueSize:ULONG;
+  end;
+
+  PWS_XML_WRITER_PROPERTY = ^WS_XML_WRITER_PROPERTY;
+
+
+//  XML Buffer structure
+//
+//   Specifies an xml buffer specific setting.
+//
+  WS_XML_BUFFER_PROPERTY = record
+    id:WS_XML_BUFFER_PROPERTY_ID;
+    value:pointer;
+    valueSize:ULONG;
+  end;
+
+  PWS_XML_BUFFER_PROPERTY = ^WS_XML_BUFFER_PROPERTY;
+
+
+//  XML Node structure
+//
+//   Represents a node of text content in xml.
+//
+  WS_XML_TEXT = record
+    textType:WS_XML_TEXT_TYPE;
+  end;
+
+  PWS_XML_TEXT = ^WS_XML_TEXT;
+
+
+//  XML Node structure
+//
+//   Represents text encoded as UTF-8 bytes.
+//
+  WS_XML_UTF8_TEXT = record
+    text:WS_XML_TEXT;
+    value:WS_XML_STRING;
+  end;
+
+  PWS_XML_UTF8_TEXT = ^WS_XML_UTF8_TEXT;
+
+
+//  XML Node structure
+//
+//   Represents text encoded as UTF-16 bytes.
+//
+  WS_XML_UTF16_TEXT = record
+    text:WS_XML_TEXT;
+    bytes:PByte;
+    byteCount:ULONG;
+  end;
+
+  PWS_XML_UTF16_TEXT = ^WS_XML_UTF16_TEXT;
+
+
+//  XML Node structure
+//
+//   Represents base64 encoded data. (e.g. The three bytes { 0, 0, 0 } represent the text "AAAA".)
+//
+  WS_XML_BASE64_TEXT = record
+    text:WS_XML_TEXT;
+    bytes:PByte;
+    length:ULONG;
+  end;
+
+  PWS_XML_BASE64_TEXT = ^WS_XML_BASE64_TEXT;
+
+
+//  XML Node structure
+//
+//   A boolean that represents the text "true" or "false".
+//
+  WS_XML_BOOL_TEXT = record
+    text:WS_XML_TEXT;
+    value:BOOL;
+  end;
+
+  PWS_XML_BOOL_TEXT = ^WS_XML_BOOL_TEXT;
+
+
+//  XML Node structure
+//
+//   Represents a signed 32 bit integer.  (e.g. The value 255 represents the text "255")
+//
+  WS_XML_INT32_TEXT = record
+    text:WS_XML_TEXT;
+    value:longint;
+  end;
+
+  PWS_XML_INT32_TEXT = ^WS_XML_INT32_TEXT;
+
+
+//  XML Node structure
+//
+//   Represents a signed 64 bit integer.  (e.g. The value 255 represents the text "255")
+//
+  WS_XML_INT64_TEXT = record
+    text:WS_XML_TEXT;
+    value:int64;
+  end;
+
+  PWS_XML_INT64_TEXT = ^WS_XML_INT64_TEXT;
+
+
+//  XML Node structure
+//
+//   Represents an unsigned 64 bit integer.  (e.g. The value 255 represents the text "255")
+//
+  WS_XML_UINT64_TEXT = record
+    text:WS_XML_TEXT;
+    value:int64;    //Is there an unsigned Int64 in Delphi ?
+  end;
+
+  PWS_XML_UINT64_TEXT = ^WS_XML_UINT64_TEXT;
+
+
+//  XML Node structure
+//
+//   Represents a 4 byte floating point value.  (e.g. The value 0.0 represents the text "0")
+//
+  WS_XML_FLOAT_TEXT = record
+    text:WS_XML_TEXT;
+    value:single;
+  end;
+
+  PWS_XML_FLOAT_TEXT = ^WS_XML_FLOAT_TEXT;
+
+
+//  XML Node structure
+//
+//   Represents an 8 byte floating point value.  (e.g. The value 0.0 represents the text "0")
+//
+  WS_XML_DOUBLE_TEXT = record
+    text:WS_XML_TEXT;
+    value:double;
+  end;
+
+  PWS_XML_DOUBLE_TEXT = ^WS_XML_DOUBLE_TEXT;
+
+
+//  XML Node structure
+//
+//   Represents a 12 byte fixed point value.  (e.g. The value 1.23 represents the text "1.23")
+//
+  WS_XML_DECIMAL_TEXT = record
+    text:WS_XML_TEXT;
+    value:currency;     //not sure Delphi Currency is then same as C++ DECIMAL - Extended is 10 bytes
+  end;
+
+  PWS_XML_DECIMAL_TEXT = ^WS_XML_DECIMAL_TEXT;
+
+
+//  XML Node structure
+//
+//   Represents a guid formatted as the text "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx".
+//
+  WS_XML_GUID_TEXT = record
+    text:WS_XML_TEXT;
+    value:TGUID;
+  end;
+
+  PWS_XML_GUID_TEXT = ^WS_XML_GUID_TEXT;
+
+
+//  XML Node structure
+//
+//   Represents a guid formatted as the text "urn:uuid:xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx".
+//
+  WS_XML_UNIQUE_ID_TEXT = record
+    text:WS_XML_TEXT;
+    value:TGUID;
   end;
 
 
@@ -290,6 +607,8 @@ type
     chars:PWideChar;
   end;
 
+  PWS_STRING = ^WS_STRING;
+
 
 //  Utilities structure
 //  A structure used to serialize and deserialize an array of bytes.
@@ -297,6 +616,8 @@ type
     length:ULONG;
     bytes:PByte;
   end;
+
+  PWS_BYTES = ^WS_BYTES;
 
 
 //  XML Reader structure
@@ -307,6 +628,8 @@ type
     inputType : WS_XML_READER_INPUT_TYPE;
   end;
 
+  PWS_XML_READER_INPUT = ^WS_XML_READER_INPUT;
+
 
 //  XML Reader structure
 //
@@ -316,21 +639,14 @@ type
     encodingType : WS_XML_READER_ENCODING_TYPE;
   end;
 
+  PWS_XML_READER_ENCODING = ^WS_XML_READER_ENCODING;
 
 
 //  POINTER DEFINITIONS
-
-  PWS_XML_STRING = pointer;          //TODO : définir la structure plus précisément
-  PWS_XML_CANONICALIZATION_PROPERTY = ^WS_XML_CANONICALIZATION_PROPERTY;
-  PWS_XML_READER_INPUT = ^WS_XML_READER_INPUT;
-  PWS_XML_READER_ENCODING = ^WS_XML_READER_ENCODING;
   PWS_XML_WRITER_ENCODING = pointer; //TODO
-  PWS_XML_WRITER_PROPERTY = pointer; //TODO
   PWS_XML_READER_PROPERTY = pointer; //TODO
-  PWS_STRING = ^WS_STRING;
   PWS_ERROR_PROPERTY = pointer;      //TODO
   PWS_ASYNC_CONTEXT = pointer;       //TODO
-  PWS_BYTES = ^WS_BYTES;
   PWS_HEAP_PROPERTY = pointer;       //TODO
 
 
@@ -447,6 +763,57 @@ function WsStartWriterCanonicalization(
 //
 function WsEndWriterCanonicalization(writer : PWS_XML_WRITER;
                                      error : PWS_ERROR):HRESULT; stdcall;
+
+
+//  XML Buffer function
+//
+//   Creates an XML Buffer which can be used to process xml data in-memory.  It can be
+//  navigated through, written to, and read from.
+//
+function WsCreateXmlBuffer(heap : PWS_HEAP;
+                           properties : PWS_XML_BUFFER_PROPERTY;
+                           propertyCount : ULONG;
+                           buffer : PPWS_XML_BUFFER;
+                           error : PWS_ERROR):HRESULT; stdcall;
+
+
+//  XML Buffer function
+//
+//   Removes the node at the specified position from the xml buffer.  If positioned
+//  on an element it will remove the element including all of its children and its
+//  corresponding end element, otherwise it will remove a single node.
+//
+//   The use of any API with a WS_XML_READER or WS_XML_WRITER that
+//  currently depends on this position or a child of this position will fail. The
+//   WS_XML_READER or WS_XML_WRITER must be repositioned
+//  before using further.
+//
+//   It will return WS_E_INVALID_OPERATION if the node is positioned on an end
+//  element or the root of the document.
+//
+//   Calling WsSetReaderPosition or WsSetWriterPosition after calling WsRemoveNode will fail.
+//
+function WsRemoveNode(nodePosition : PWS_XML_NODE_POSITION;
+                      error : PWS_ERROR):HRESULT; stdcall;
+
+
+//  XML Buffer function
+//
+//   Writes a WS_XML_BUFFER to a writer.
+//
+function WsWriteXmlBuffer(writer : PWS_XML_WRITER;
+                          xmlBuffer : PWS_XML_BUFFER;
+                          error : PWS_ERROR):HRESULT; stdcall;
+
+
+//  XML Buffer function
+//
+//   Reads the current node from a reader into a WS_XML_BUFFER.
+//
+function WsReadXmlBuffer(reader : PWS_XML_READER;
+                         heap : PWS_HEAP;
+                         xmlBuffer : PPWS_XML_BUFFER;
+                         error : PWS_ERROR):HRESULT; stdcall;
 
 
 //  XML Buffer function
@@ -644,6 +1011,10 @@ function WsStartReaderCanonicalization; external WEBSERVICES_DLL name 'WsStartRe
 function WsEndReaderCanonicalization; external WEBSERVICES_DLL name 'WsEndReaderCanonicalization';
 function WsStartWriterCanonicalization; external WEBSERVICES_DLL name 'WsStartWriterCanonicalization';
 function WsEndWriterCanonicalization; external WEBSERVICES_DLL name 'WsEndWriterCanonicalization';
+function WsCreateXmlBuffer; external WEBSERVICES_DLL name 'WsCreateXmlBuffer';
+function WsRemoveNode; external WEBSERVICES_DLL name 'WsRemoveNode';
+function WsWriteXmlBuffer; external WEBSERVICES_DLL name 'WsWriteXmlBuffer';
+function WsReadXmlBuffer; external WEBSERVICES_DLL name 'WsReadXmlBuffer';
 function WsWriteXmlBufferToBytes; external WEBSERVICES_DLL name 'WsWriteXmlBufferToBytes';
 function WsReadXmlBufferFromBytes; external WEBSERVICES_DLL name 'WsReadXmlBufferFromBytes';
 function WsCreateError; external WEBSERVICES_DLL name 'WsCreateError';
