@@ -84,7 +84,9 @@ type
   WS_CHARSET = integer;
   WS_XML_WRITER_ENCODING_TYPE = integer;
   WS_XML_WRITER_OUTPUT_TYPE = integer;
+  WS_CALLBACK_MODEL = integer;
   WS_ERROR_PROPERTY_ID = integer;
+  WS_DATETIME_FORMAT = integer;
 
 const
 //  XML Reader enum
@@ -280,7 +282,7 @@ const
 //  XML Writer enum
 //
 //   Indicates the type of WS_XML_WRITER_ENCODING structure.
-//  
+//
   //type = WS_XML_WRITER_ENCODING_TYPE
   WS_XML_WRITER_ENCODING_TYPE_TEXT       = 1;
   WS_XML_WRITER_ENCODING_TYPE_BINARY     = 2;
@@ -297,6 +299,15 @@ const
   WS_XML_WRITER_OUTPUT_TYPE_STREAM     = 2;
 
 
+//  Async Model enum
+//
+//   Used to specify the threading behavior of a callback (for example, a WS_ASYNC_CALLBACK).
+//
+  //type = WS_CALLBACK_MODEL
+  WS_SHORT_CALLBACK     = 0;
+  WS_LONG_CALLBACK      = 1;
+
+
 //  Errors enum
 //
 //   A set of property values associated with the error.  They are set
@@ -308,8 +319,28 @@ const
   WS_ERROR_PROPERTY_LANGID                  = 2;
 
 
+//  Utilities enum
+//
+//   Specifies the textual format of a WS_DATETIME.
+//
+  //type = WS_DATETIME_FORMAT
+  WS_DATETIME_FORMAT_UTC       = 0;
+  WS_DATETIME_FORMAT_LOCAL     = 1;
+  WS_DATETIME_FORMAT_NONE      = 2;
+
+
+
 type
-//  STRUCT DEFINITIONS
+//  STRUCT DEFINITIONS (BASE)
+
+//  Utilities structure
+//  A structure used to serialize and deserialize an array of bytes.
+  WS_BYTES = record
+    length:ULONG;
+    bytes:PByte;
+  end;
+
+  PWS_BYTES = ^WS_BYTES;
 
 
 //  XML Node structure
@@ -326,6 +357,95 @@ type
   end;
 
   PWS_XML_STRING = ^WS_XML_STRING;
+
+
+//  CALLBACK DEFINITIONS
+
+//  Async Model callback
+//
+//   The type of a callback used in the Async Model.
+//
+  WS_ASYNC_CALLBACK=procedure(errorCode : HRESULT;
+                              callbackModel : WS_CALLBACK_MODEL;
+                              callbackState : pointer); stdcall;
+
+
+//  Async Model structure
+//
+//   Used with the Async Model to specify the async callback and
+//  a pointer which will be passed to the async callback.
+//
+  WS_ASYNC_CONTEXT = record
+    callback:WS_ASYNC_CALLBACK;
+    callbackState:pointer;
+  end;
+
+  PWS_ASYNC_CONTEXT = ^WS_ASYNC_CONTEXT;
+
+
+//  XML Reader callback
+//
+//   A user-defined callback used by the WS_XML_READER
+//   to read from some source into a buffer.
+//
+  WS_READ_CALLBACK = function(callbackState : pointer;
+                              bytes : pointer;
+                              maxSize : ULONG;
+                              ActualSize : PULONG;
+                              asyncContext : PWS_ASYNC_CONTEXT;
+                              error : PWS_ERROR):HRESULT; stdcall;
+
+
+//  XML Writer callback
+//
+//   A user-defined callback used by the WS_XML_WRITER
+//   to write a buffer to some destination.
+//
+  WS_WRITE_CALLBACK = function(callbackState : pointer;
+                               buffer : PWS_BYTES;
+                               count : ULONG;
+                               asyncContext : PWS_ASYNC_CONTEXT;
+                               error : PWS_ERROR):HRESULT; stdcall;
+
+
+//  XML Writer callback
+//
+//   A user-defined callback used by WsPushBytes to request that data be written.
+//
+  WS_PUSH_BYTES_CALLBACK = function(callbackState : pointer;
+                                    writeCallback : WS_WRITE_CALLBACK;
+                                    writeCallbackState : pointer;
+                                    asyncContext : PWS_ASYNC_CONTEXT;
+                                    error : PWS_ERROR):HRESULT; stdcall;
+
+
+//  XML Writer callback
+//
+//   A user-defined callback used by WsPullBytes to request
+//  the data that should be written.
+//
+  WS_PULL_BYTES_CALLBACK = function(callbackState : pointer;
+                                    bytes : pointer;
+                                    maxSize : ULONG;
+                                    ActualSize : PULONG;
+                                    asyncContext : PWS_ASYNC_CONTEXT;
+                                    error : PWS_ERROR):HRESULT; stdcall;
+
+
+//  XML Writer callback
+//
+//   A user-defined callback used in WS_XML_WRITER_BINARY_ENCODING
+//   that determines whether the string can be written in an optimized form.
+//
+  WS_DYNAMIC_STRING_CALLBACK = function(callbackState : pointer;
+                                        str : PWS_XML_STRING;
+                                        found : Pboolean;
+                                        id : PULONG;
+                                        error : PWS_ERROR):HRESULT; stdcall;
+
+
+type
+//  STRUCT DEFINITIONS
 
 
 //  XML Node structure
@@ -452,6 +572,7 @@ type
   end;
 
   PWS_XML_TEXT = ^WS_XML_TEXT;
+  PPWS_XML_TEXT = ^PWS_XML_TEXT;
 
 
 //  XML Node structure
@@ -597,27 +718,164 @@ type
     value:TGUID;
   end;
 
-
-//  Utilities structure
-//
-//   An array of unicode characters and a length.
-//
-  WS_STRING = record
-    length:ULONG;
-    chars:PWideChar;
-  end;
-
-  PWS_STRING = ^WS_STRING;
+  PWS_XML_UNIQUE_ID_TEXT = ^WS_XML_UNIQUE_ID_TEXT;
 
 
 //  Utilities structure
-//  A structure used to serialize and deserialize an array of bytes.
-  WS_BYTES = record
-    length:ULONG;
-    bytes:PByte;
+//
+//   This structure is used to represent dates and times.
+//
+//   Represents dates and times with values ranging from 12:00:00 midnight,
+//  January 1, 0001 Anno Domini (Common Era) through 11:59:59 P.M.,
+//  December 31, 9999 A.D. (C.E.) to an accuracy of 100 nanoseconds.
+//
+//   The functions WsDateTimeToFileTime and WsFileTimeToDateTime
+//   can be used to convert a WS_DATETIME to and from a FILETIME.
+//
+  WS_DATETIME = record
+    ticks:int64;  //Theorically unsigned! Is there an unsigned Int64 in Delphi ?
+    format:WS_DATETIME_FORMAT;
   end;
 
-  PWS_BYTES = ^WS_BYTES;
+
+//  XML Node structure
+//
+//   Represents a datetime formatted as an
+//   (http://www.w3.org/TR/xmlschema-2/#dateTime) xsd:dateTime.
+//
+//   Negative datetime values are not supported.
+//
+  WS_XML_DATETIME_TEXT = record
+   text:WS_XML_TEXT;
+   value:WS_DATETIME;
+  end;
+
+
+//  Utilities structure
+//
+//   Represents a signed 64-bit time interval in 100 nanosecond units.
+//
+  WS_TIMESPAN = record
+    ticks:int64;
+  end;
+
+
+//  XML Node structure
+//
+//   Represents a time span formatted as the text "[+|-][d?.]HH:mm:ss[.fffffff]"
+//
+//  .d is a series of digits representing the day.
+//
+//  .HH is a two digit number representing the hour of the day, from to 0 to 23.
+//
+//  .mm is a two digit number representing the minute of the hour, from to 0 to 59.
+//
+//  .ss is a two digit number representing the second of the minute, from to 0 to 59.
+//
+//  .fffffff is up to 7 decimal digits representing the fraction of a second.
+//
+  WS_XML_TIMESPAN_TEXT = record
+    text:WS_XML_TEXT;
+    value:WS_TIMESPAN;
+  end;
+
+
+//  XML Node structure
+//
+//   Represents a qname formatted as the text "prefix:localName"
+//
+  WS_XML_QNAME_TEXT = record
+    text:WS_XML_TEXT;
+    prefix:PWS_XML_STRING;
+    localName:PWS_XML_STRING;
+    ns:PWS_XML_STRING;
+  end;
+
+
+//  XML Node structure
+//
+//   Represents a list of text values separated by a single whitespace character.
+//
+//   (e.g. The list { { WS_XML_TEXT_TYPE_INT32 }, 123},
+//  { { WS_XML_TEXT_TYPE_BOOL }, 1 } represents the text "123 true")
+//
+  WS_XML_LIST_TEXT = record
+    text:WS_XML_TEXT;
+    itemCount:ULONG;
+    items:PPWS_XML_TEXT;
+  end;
+
+
+//  XML Node structure
+//
+//   An xml node is unit of data in xml.  This structure is the base type
+//  for all the different kinds of nodes.
+//
+  WS_XML_NODE = record
+    nodeType : WS_XML_NODE_TYPE;
+  end;
+
+  PWS_XML_NODE = ^WS_XML_NODE;
+  PPWS_XML_NODE = ^PWS_XML_NODE;
+
+
+//  XML Node structure
+//
+//   Represents an attribute (e.g. <a:purchaseOrder xmlns:a="http://tempuri.org" id="5">)
+//
+  WS_XML_ATTRIBUTE = record
+    singleQuote:Byte;
+    isXmlNs:Byte;
+    prefix:PWS_XML_STRING;
+    localName:PWS_XML_STRING;
+    ns:PWS_XML_STRING;
+    value:PWS_XML_TEXT;
+  end;
+
+  PWS_XML_ATTRIBUTE = ^WS_XML_ATTRIBUTE;
+  PPWS_XML_ATTRIBUTE = ^PWS_XML_ATTRIBUTE;
+
+
+//  XML Node structure
+//
+//   Represents a start element in xml (e.g.
+//  "<a:purchaseOrder xmlns:a="http://tempuri.org" id="5">")
+//
+  WS_XML_ELEMENT_NODE = record
+    node:WS_XML_NODE;
+    prefix:PWS_XML_STRING;
+    localName:PWS_XML_STRING;
+    ns:PWS_XML_STRING;
+    attributeCount:ULONG;
+    attributes:PPWS_XML_ATTRIBUTE;
+    isEmpty:BOOL;
+  end;
+
+  PWS_XML_ELEMENT_NODE = ^WS_XML_ELEMENT_NODE;
+
+
+//  XML Node structure
+//
+//   Represents an element, attribute, or CDATA content.
+//
+  WS_XML_TEXT_NODE = record
+    node:WS_XML_NODE;
+    text:PWS_XML_TEXT;
+  end;
+
+  PWS_XML_TEXT_NODE = ^WS_XML_TEXT_NODE;
+
+
+//  XML Node structure
+//
+//   Represents a comment.  (e.g. "<!--The message follows-->")
+//
+  WS_XML_COMMENT_NODE = record
+    node:WS_XML_NODE;
+    value:WS_XML_STRING;
+  end;
+
+  PWS_XML_COMMENT_NODE = ^WS_XML_COMMENT_NODE;
 
 
 //  XML Reader structure
@@ -625,10 +883,34 @@ type
 //   Specifies where the reader should obtain the bytes that comprise the xml document.
 //
   WS_XML_READER_INPUT = record
-    inputType : WS_XML_READER_INPUT_TYPE;
+    inputType:WS_XML_READER_INPUT_TYPE;
   end;
 
   PWS_XML_READER_INPUT = ^WS_XML_READER_INPUT;
+
+
+//  XML Reader structure
+//
+//   Specifies that the source of the xml input is a buffer.
+//
+  WS_XML_READER_BUFFER_INPUT = record
+    input:WS_XML_READER_INPUT;
+    encodedData:pointer;
+    encodedDataSize:ULONG;
+  end;
+
+  PWS_XML_READER_BUFFER_INPUT = ^WS_XML_READER_BUFFER_INPUT;
+
+
+//  XML Reader structure
+//
+//   Specifies that the source of the xml should be obtained from a callback.
+//
+  WS_XML_READER_STREAM_INPUT = record
+    input:WS_XML_READER_INPUT;
+    readCallback:WS_READ_CALLBACK;
+    readCallbackState:pointer;
+  end;
 
 
 //  XML Reader structure
@@ -642,81 +924,56 @@ type
   PWS_XML_READER_ENCODING = ^WS_XML_READER_ENCODING;
 
 
+//  XML Reader structure
+//
+//   Used to indicate that the reader should interpret the bytes it reads as textual xml.
+//
+  WS_XML_READER_TEXT_ENCODING = record
+    encoding : WS_XML_READER_ENCODING;
+    charSet : WS_CHARSET;
+  end;
+
+
+//  XML Reader structure
+//
+//   Used to indicate that the reader should interpret the bytes it reads as binary xml.
+//
+  WS_XML_READER_BINARY_ENCODING = record
+    encoding : WS_XML_READER_ENCODING;
+    staticDictionary : PWS_XML_DICTIONARY;
+    dynamicDictionary : PWS_XML_DICTIONARY;
+  end;
+
+
+//  Utilities structure
+//
+//   An array of unicode characters and a length.
+//
+  WS_STRING = record
+    length:ULONG;
+    chars:PWideChar;
+  end;
+
+  PWS_STRING = ^WS_STRING;
+
+
+//  XML Writer structure
+//
+//   Specifies where the writer should emit the bytes that comprise the xml document.
+//
+  WS_XML_WRITER_OUTPUT = record
+    outputType : WS_XML_WRITER_OUTPUT_TYPE;
+  end;
+
+  PWS_XML_WRITER_OUTPUT = ^WS_XML_WRITER_OUTPUT;
+
+
 //  POINTER DEFINITIONS
   PWS_XML_WRITER_ENCODING = pointer; //TODO
   PWS_XML_READER_PROPERTY = pointer; //TODO
   PWS_ERROR_PROPERTY = pointer;      //TODO
-  PWS_ASYNC_CONTEXT = pointer;       //TODO
   PWS_HEAP_PROPERTY = pointer;       //TODO
 
-
-
-//  CALLBACK DEFINITIONS
-
-//  XML Reader callback
-//
-//   A user-defined callback used by the WS_XML_READER
-//   to read from some source into a buffer.
-//
-WS_READ_CALLBACK = function(
-  callbackState : pointer;
-  bytes : pointer;
-  maxSize : ULONG;
-  ActualSize : PULONG;
-  asyncContext : PWS_ASYNC_CONTEXT;
-  error : PWS_ERROR):HRESULT; stdcall;
-
-
-//  XML Writer callback
-//
-//   A user-defined callback used by the WS_XML_WRITER
-//   to write a buffer to some destination.
-//
-WS_WRITE_CALLBACK = function(
-  callbackState : pointer;
-  buffer : PWS_BYTES;
-  count : ULONG;
-  asyncContext : PWS_ASYNC_CONTEXT;
-  error : PWS_ERROR):HRESULT; stdcall;
-
-
-//  XML Writer callback
-//
-//   A user-defined callback used by WsPushBytes to request that data be written.
-//
-WS_PUSH_BYTES_CALLBACK = function(
-  callbackState : pointer;
-  writeCallback : WS_WRITE_CALLBACK;
-  writeCallbackState : pointer;
-  asyncContext : PWS_ASYNC_CONTEXT;
-  error : PWS_ERROR):HRESULT; stdcall;
-
-
-//  XML Writer callback
-//
-//   A user-defined callback used by WsPullBytes to request
-//  the data that should be written.
-//
-WS_PULL_BYTES_CALLBACK = function(
-  callbackState : pointer;
-  bytes : pointer;
-  maxSize : ULONG;
-  ActualSize : PULONG;
-  asyncContext : PWS_ASYNC_CONTEXT;
-  error : PWS_ERROR):HRESULT; stdcall;
-
-
-//  XML Writer callback
-//
-//   A user-defined callback used in WS_XML_WRITER_BINARY_ENCODING
-//   that determines whether the string can be written in an optimized form.
-//
-WS_DYNAMIC_STRING_CALLBACK = function(
-  callbackState : pointer;
-  str : PWS_XML_STRING;
-  found : Pboolean;
-  id : PULONG;
-  error : PWS_ERROR):HRESULT; stdcall;
 
 
 //  FUNCTION DEFINITIONS
@@ -795,6 +1052,276 @@ function WsCreateXmlBuffer(heap : PWS_HEAP;
 //
 function WsRemoveNode(nodePosition : PWS_XML_NODE_POSITION;
                       error : PWS_ERROR):HRESULT; stdcall;
+
+
+//  XML Reader function
+//
+//   Creates an instance of a WS_XML_READER.  Use WsSetInput or WsSetInputToBuffer
+//   to choose the encoding of the reader and to indicate the source of the input.
+//
+function WsCreateReader(properties : PWS_XML_READER_PROPERTY;
+                        propertyCount : ULONG;
+                        reader : PPWS_XML_READER;
+                        error : PWS_ERROR):HRESULT; stdcall;
+
+
+//  XML Reader function
+//
+//   Sets the encoding and input sources for the reader.
+//
+function WsSetInput(reader : PWS_XML_READER;
+                    encoding : PWS_XML_READER_ENCODING;
+                    input : PWS_XML_READER_INPUT;
+                    properties : PWS_XML_READER_PROPERTY;
+                    propertyCount : ULONG;
+                    error : PWS_ERROR):HRESULT; stdcall;
+
+
+//  XML Reader function
+//
+//   Sets the reader to use a specified xml buffer as the input source.
+//
+function WsSetInputToBuffer(reader : PWS_XML_READER;
+                            buffer : PWS_XML_BUFFER;
+                            properties : PWS_XML_READER_PROPERTY;
+                            propertyCount : ULONG;
+                            error : PWS_ERROR):HRESULT; stdcall;
+
+
+//  XML Reader function
+//
+//   Releases the memory associated with the WS_XML_READER object.
+//
+procedure WsFreeReader(reader : PWS_XML_READER); stdcall;
+
+
+//  XML Reader function
+//  Returns a property of the specified xml reader.
+function WsGetReaderProperty(reader : PWS_XML_READER;
+                             id : WS_XML_READER_PROPERTY_ID;
+                             value : pointer;
+                             valueSize : ULONG;
+                             error : PWS_ERROR):HRESULT; stdcall;
+
+
+//  XML Reader function
+//
+//   Returns the (WS_XML_NODE) node that the (WS_XML_READER) reader is currently positioned on.
+//
+function WsGetReaderNode(xmlReader : PWS_XML_READER;
+                         node : PPWS_XML_NODE;
+                         error : PWS_ERROR):HRESULT; stdcall;
+
+
+//  XML Reader function
+//
+//   Ensures that the reader has at least a specified amount of data available to it for reading.
+//
+function WsFillReader(reader : PWS_XML_READER;
+                      minSize : ULONG;
+                      asyncContext : PWS_ASYNC_CONTEXT;
+                      error : PWS_ERROR):HRESULT; stdcall;
+
+
+//  XML Reader function
+//
+//   Advances the reader past a start element skipping any whitespace in front of it.
+//
+function WsReadStartElement(reader : PWS_XML_READER;
+                            error : PWS_ERROR):HRESULT; stdcall;
+
+
+//  XML Reader function
+//
+//   Advances the reader to the next start element skipping whitespace and comments if necessary.  Optionally,
+//  it may also verify the localName and namespace of the element.
+//
+function WsReadToStartElement(reader : PWS_XML_READER;
+                              localName : PWS_XML_STRING;
+                              ns : PWS_XML_STRING;
+                              found : PBOOL;
+                              error : PWS_ERROR):HRESULT; stdcall;
+
+
+//  XML Reader function
+//
+//   Moves the reader to the specified attribute so that its content may be read using ReadValue, ReadChars, or ReadBytes.
+//
+function WsReadStartAttribute(reader : PWS_XML_READER;
+                              attributeIndex : ULONG;
+                              error : PWS_ERROR):HRESULT; stdcall;
+
+
+//  XML Reader function
+//
+//   Moves the reader back to the element node containing the attribute that was read.
+//
+function WsReadEndAttribute(reader : PWS_XML_READER;
+                            error : PWS_ERROR):HRESULT; stdcall;
+
+
+//  XML Reader function
+//
+//   Advances the reader to the next (WS_XML_NODE) node in the input stream.
+//
+function WsReadNode(reader : PWS_XML_READER;
+                    error : PWS_ERROR):HRESULT; stdcall;
+
+
+//  XML Reader function
+//
+//   Advances the reader in the input stream.  If the current node is an element,
+//  all of the children of that element are skipped, and the reader is positioned
+//  on the node following its end element.  Otherwise, the reader is positioned
+//  on the next node in the same manner as WsReadNode.
+//
+function WsSkipNode(reader : PWS_XML_READER;
+                    error : PWS_ERROR):HRESULT; stdcall;
+
+
+//  XML Reader function
+//
+//   Checks that the current (WS_XML_NODE) node of reader is an end element,
+//  and advances the reader to the next (WS_XML_NODE) node.
+//
+function WsReadEndElement(reader : PWS_XML_READER;
+                          error : PWS_ERROR):HRESULT; stdcall;
+
+
+//  XML Reader function
+//
+//   Searches the attributes of the current element for an attribute with the
+//  specified name and namespace and returns its index which may be passed
+//  to WsReadStartAttribute.
+//
+function WsFindAttribute(reader : PWS_XML_READER;
+                         localName : PWS_XML_STRING;
+                         ns : PWS_XML_STRING;
+                         required : BOOL;
+                         attributeIndex : PULONG;
+                         error : PWS_ERROR):HRESULT; stdcall;
+
+
+//  XML Reader function
+//
+//   Reads text from the reader and parses it according to the specified value type.
+//
+function WsReadValue(reader : PWS_XML_READER;
+                     valueType : WS_VALUE_TYPE;
+                     value : pointer;
+                     valueSize : ULONG;
+                     error : PWS_ERROR):HRESULT; stdcall;
+
+
+//  XML Reader function
+//
+//   Reads a specified number of text characters from the reader.
+//
+function WsReadChars(reader : PWS_XML_READER;
+                     chars : PWideChar;
+                     maxCharCount : ULONG;
+                     actualCharCount : PULONG;
+                     error : PWS_ERROR):HRESULT; stdcall;
+
+
+//  XML Reader function
+//
+//   Reads a specified number of text characters from the reader and returns them encoded in UTF-8.
+//
+function WsReadCharsUtf8(reader : PWS_XML_READER;
+                         bytes : PByte;
+                         maxByteCount : ULONG;
+                         actualByteCount : PULONG;
+                         error : PWS_ERROR):HRESULT; stdcall;
+
+
+//  XML Reader function
+//
+//   Reads text from the reader and decodes the characters as bytes according to the base64 specification.
+//
+function WsReadBytes(reader : PWS_XML_READER;
+                     bytes : pointer;
+                     maxByteCount : ULONG;
+                     actualByteCount : PULONG;
+                     error : PWS_ERROR):HRESULT; stdcall;
+
+
+//  XML Reader function
+//
+//   Reads a series of elements from the reader and interprets their
+//  content according to the specified value type.
+//
+function WsReadArray(reader : PWS_XML_READER;
+                     localName : PWS_XML_STRING;
+                     ns : PWS_XML_STRING;
+                     valueType: WS_VALUE_TYPE;
+                     array_ : pointer;    //array is a reserved word in Pascal
+                     arraySize : ULONG;
+                     itemOffset : ULONG;
+                     itemCount : ULONG;
+                     actualItemCount : PULONG;
+                     error : PWS_ERROR):HRESULT; stdcall;
+
+
+//  XML Reader function
+//
+//   Returns the current position of the reader.  This can only be used on a reader
+//  that is set to an XmlBuffer.
+//
+function WsGetReaderPosition(reader : PWS_XML_READER;
+                             nodePosition : PWS_XML_NODE_POSITION;
+                             error : PWS_ERROR):HRESULT; stdcall;
+
+
+//  XML Reader function
+//
+//   Sets the current position of the reader.  The position must have been obtained by a call to
+//   WsGetReaderPosition or WsGetWriterPosition.
+//
+function WsSetReaderPosition(reader : PWS_XML_READER;
+                             nodePosition : PWS_XML_NODE_POSITION;
+                             error : PWS_ERROR):HRESULT; stdcall;
+
+
+//  XML Reader function
+//
+//   Moves the current position of the reader as specified by the moveTo parameter.
+//
+function WsMoveReader(reader : PWS_XML_READER;
+                      moveTo : WS_MOVE_TO;
+                      found : PBOOL;
+                      error : PWS_ERROR):HRESULT; stdcall;
+
+
+//  XML Writer function
+//
+//   Creates an instance of a WS_XML_WRITER.  Use WsSetOutput or WsSetOutputToBuffer
+//   to choose the encoding of the writer and to indicate where to direct the output.
+//
+function WsCreateWriter(properties : PWS_XML_WRITER_PROPERTY;
+                        propertyCount : ULONG;
+                        writer : PPWS_XML_WRITER;
+                        error : PWS_ERROR):HRESULT; stdcall;
+
+
+//  XML Writer function
+//
+//   Releases the memory associated with the WS_XML_WRITER object.
+//
+procedure WsFreeWriter(writer : PWS_XML_WRITER); stdcall;
+
+
+//  XML Writer function
+//
+//   Sets the encoding and output callbacks for the writer.  The callbacks are used to
+//  provides buffers to the writer and to perform asynchronous i/o.
+//
+function WsSetOutput(writer : PWS_XML_WRITER;
+                     encoding : PWS_XML_WRITER_ENCODING;
+                     output : PWS_XML_WRITER_OUTPUT;
+                     properties : PWS_XML_WRITER_PROPERTY;
+                     propertyCount : ULONG;
+                     error : PWS_ERROR):HRESULT; stdcall;
 
 
 //  XML Buffer function
@@ -904,64 +1431,6 @@ function WsCreateHeap(maxSize : size_t;
 procedure WsFreeHeap(heap : PWS_HEAP); stdcall;
 
 
-//  XML Reader function
-//
-//   Creates an instance of a WS_XML_READER.  Use WsSetInput or WsSetInputToBuffer
-//   to choose the encoding of the reader and to indicate the source of the input.
-//
-function WsCreateReader(properties : PWS_XML_READER_PROPERTY;
-                        propertyCount : ULONG;
-                        reader : PPWS_XML_READER;
-                        error : PWS_ERROR):HRESULT; stdcall;
-
-
-//  XML Reader function
-//
-//   Sets the encoding and input sources for the reader.
-//
-function WsSetInput(reader : PWS_XML_READER;
-                    encoding : PWS_XML_READER_ENCODING;
-                    input : PWS_XML_READER_INPUT;
-                    properties : PWS_XML_READER_PROPERTY;
-                    propertyCount : ULONG;
-                    error : PWS_ERROR):HRESULT; stdcall;
-
-
-//  XML Reader function
-//
-//   Releases the memory associated with the WS_XML_READER object.
-//
-procedure WsFreeReader(reader : PWS_XML_READER); stdcall;
-
-
-//  XML Reader function
-//
-//   Ensures that the reader has at least a specified amount of data available to it for reading.
-//
-function WsFillReader(reader : PWS_XML_READER;
-                      minSize : ULONG;
-                      asyncContext : PWS_ASYNC_CONTEXT;
-                      error : PWS_ERROR):HRESULT; stdcall;
-
-
-//  XML Writer function
-//
-//   Creates an instance of a WS_XML_WRITER.  Use WsSetOutput or WsSetOutputToBuffer
-//   to choose the encoding of the writer and to indicate where to direct the output.
-//
-function WsCreateWriter(properties : PWS_XML_WRITER_PROPERTY;
-                        propertyCount : ULONG;
-                        writer : PPWS_XML_WRITER;
-                        error : PWS_ERROR):HRESULT; stdcall;
-
-
-//  XML Writer function
-//
-//   Releases the memory associated with the WS_XML_WRITER object.
-//
-procedure WsFreeWriter(writer : PWS_XML_WRITER); stdcall;
-
-
 //  ERROR DEFINITIONS
 const
   WS_S_ASYNC                            = $003D0000;
@@ -1013,6 +1482,33 @@ function WsStartWriterCanonicalization; external WEBSERVICES_DLL name 'WsStartWr
 function WsEndWriterCanonicalization; external WEBSERVICES_DLL name 'WsEndWriterCanonicalization';
 function WsCreateXmlBuffer; external WEBSERVICES_DLL name 'WsCreateXmlBuffer';
 function WsRemoveNode; external WEBSERVICES_DLL name 'WsRemoveNode';
+function WsCreateReader; external WEBSERVICES_DLL name 'WsCreateReader';
+function WsSetInput; external WEBSERVICES_DLL name 'WsSetInput';
+function WsSetInputToBuffer; external WEBSERVICES_DLL name 'WsSetInputToBuffer';
+procedure WsFreeReader; external WEBSERVICES_DLL name 'WsFreeReader';
+function WsGetReaderProperty; external WEBSERVICES_DLL name 'WsGetReaderProperty';
+function WsGetReaderNode; external WEBSERVICES_DLL name 'WsGetReaderNode';
+function WsFillReader; external WEBSERVICES_DLL name 'WsFillReader';
+function WsReadStartElement; external WEBSERVICES_DLL name 'WsReadStartElement';
+function WsReadToStartElement; external WEBSERVICES_DLL name 'WsReadToStartElement';
+function WsReadStartAttribute; external WEBSERVICES_DLL name 'WsReadStartAttribute';
+function WsReadEndAttribute; external WEBSERVICES_DLL name 'WsReadEndAttribute';
+function WsReadNode; external WEBSERVICES_DLL name 'WsReadNode';
+function WsSkipNode; external WEBSERVICES_DLL name 'WsSkipNode';
+function WsReadEndElement; external WEBSERVICES_DLL name 'WsReadEndElement';
+function WsFindAttribute; external WEBSERVICES_DLL name 'WsFindAttribute';
+function WsReadValue; external WEBSERVICES_DLL name 'WsReadValue';
+function WsReadChars; external WEBSERVICES_DLL name 'WsReadChars';
+function WsReadCharsUtf8; external WEBSERVICES_DLL name 'WsReadCharsUtf8';
+function WsReadBytes; external WEBSERVICES_DLL name 'WsReadBytes';
+function WsReadArray; external WEBSERVICES_DLL name 'WsReadArray';
+function WsGetReaderPosition; external WEBSERVICES_DLL name 'WsGetReaderPosition';
+function WsSetReaderPosition; external WEBSERVICES_DLL name 'WsSetReaderPosition';
+function WsMoveReader; external WEBSERVICES_DLL name 'WsMoveReader';
+function WsCreateWriter; external WEBSERVICES_DLL name 'WsCreateWriter';
+procedure WsFreeWriter; external WEBSERVICES_DLL name 'WsFreeWriter';
+function WsSetOutput; external WEBSERVICES_DLL name 'WsSetOutput';
+
 function WsWriteXmlBuffer; external WEBSERVICES_DLL name 'WsWriteXmlBuffer';
 function WsReadXmlBuffer; external WEBSERVICES_DLL name 'WsReadXmlBuffer';
 function WsWriteXmlBufferToBytes; external WEBSERVICES_DLL name 'WsWriteXmlBufferToBytes';
@@ -1023,12 +1519,6 @@ function WsGetErrorProperty; external WEBSERVICES_DLL name 'WsGetErrorProperty';
 procedure WsFreeError; external WEBSERVICES_DLL name 'WsFreeError';
 function WsCreateHeap; external WEBSERVICES_DLL name 'WsCreateHeap';
 procedure WsFreeHeap; external WEBSERVICES_DLL name 'WsFreeHeap';
-function WsCreateReader; external WEBSERVICES_DLL name 'WsCreateReader';
-function WsSetInput; external WEBSERVICES_DLL name 'WsSetInput';
-procedure WsFreeReader; external WEBSERVICES_DLL name 'WsFreeReader';
-function WsFillReader; external WEBSERVICES_DLL name 'WsFillReader';
-function WsCreateWriter; external WEBSERVICES_DLL name 'WsCreateWriter';
-procedure WsFreeWriter; external WEBSERVICES_DLL name 'WsFreeWriter';
 
 
 end.
