@@ -44,10 +44,9 @@ type
   {$ELSE}
   size_t = integer;
   {$ENDIF}
-  PULONG = ^ULONG;
-  PBoolean = ^Boolean;
+  PPWideChar = ^PWideChar;
   PPointer = ^Pointer;
-  
+
 
   //WS_ERROR (for example) is an opaque type used to reference to an error object.
   //It is not defined in this pascal code. See :
@@ -85,7 +84,65 @@ type
   WS_XML_WRITER_ENCODING_TYPE = integer;
   WS_XML_WRITER_OUTPUT_TYPE = integer;
   WS_CALLBACK_MODEL = integer;
+  WS_ENCODING = integer;
+  WS_CHANNEL_STATE = integer;
+  WS_RECEIVE_OPTION = integer;
+  WS_CHANNEL_BINDING = integer;
+  WS_CHANNEL_TYPE = integer;                 //longword ?
+  WS_TRANSFER_MODE = integer;                //longword ?
+  WS_HTTP_PROXY_SETTING_MODE = integer;      //longword ?
+  WS_CHANNEL_PROPERTY_ID = integer;
+  WS_COOKIE_MODE = integer;
+  WS_OPERATION_CONTEXT_PROPERTY_ID = integer;
+  WS_ENDPOINT_IDENTITY_TYPE = integer;
+  WS_ENDPOINT_ADDRESS_EXTENSION_TYPE = integer;
   WS_ERROR_PROPERTY_ID = integer;
+  WS_EXCEPTION_CODE = integer;               //longword ?
+  WS_FAULT_ERROR_PROPERTY_ID = integer;
+  WS_FAULT_DISCLOSURE = integer;
+  WS_HEAP_PROPERTY_ID = integer;
+  WS_LISTENER_STATE = integer;
+  WS_LISTENER_PROPERTY_ID = integer;
+  WS_IP_VERSION = integer;
+  WS_MESSAGE_STATE = integer;
+  WS_MESSAGE_INITIALIZATION = integer;
+  WS_REPEATING_HEADER_OPTION = integer;
+  WS_HEADER_TYPE = integer;
+  WS_ADDRESSING_VERSION = integer;
+  WS_ENVELOPE_VERSION = integer;
+  WS_MESSAGE_PROPERTY_ID = integer;
+  WS_SECURITY_BINDING_TYPE = integer;
+  WS_HTTP_HEADER_AUTH_TARGET = integer;
+  WS_WINDOWS_INTEGRATED_AUTH_PACKAGE = integer;
+  WS_SECURITY_HEADER_VERSION = integer;      //longword ?
+  WS_TRUST_VERSION = integer;                //longword ?
+  WS_REQUEST_SECURITY_TOKEN_ACTION = integer;
+  WS_SECURE_CONVERSATION_VERSION = integer;  //longword ?
+  WS_SECURE_PROTOCOL = integer;              //longword ?
+  WS_SECURITY_TIMESTAMP_USAGE = integer;
+  WS_SECURITY_HEADER_LAYOUT = integer;
+  WS_SECURITY_ALGORITHM_PROPERTY_ID = integer;
+  WS_SECURITY_ALGORITHM_ID = integer;
+  WS_PROTECTION_LEVEL = integer;
+  WS_SECURITY_PROPERTY_ID = integer;
+  WS_SECURITY_KEY_TYPE = integer;
+  WS_SECURITY_ALGORITHM_SUITE_NAME = integer;
+  WS_SECURITY_TOKEN_REFERENCE_MODE = integer;
+  WS_SECURITY_KEY_ENTROPY_MODE = integer;
+  WS_EXTENDED_PROTECTION_POLICY = integer;
+  WS_EXTENDED_PROTECTION_SCENARIO = integer;
+  WS_SECURITY_BINDING_PROPERTY_ID = integer;
+  WS_CERT_CREDENTIAL_TYPE = integer;
+  WS_WINDOWS_INTEGRATED_AUTH_CREDENTIAL_TYPE = integer;
+  WS_USERNAME_CREDENTIAL_TYPE = integer;
+  WS_SECURITY_TOKEN_PROPERTY_ID = integer;
+  WS_SECURITY_KEY_HANDLE_TYPE = integer;
+  WS_MESSAGE_SECURITY_USAGE = integer;
+  WS_SECURITY_CONTEXT_PROPERTY_ID = integer;
+  WS_XML_SECURITY_TOKEN_PROPERTY_ID = integer;
+  WS_SAML_AUTHENTICATOR_TYPE = integer;
+  WS_REQUEST_SECURITY_TOKEN_PROPERTY_ID = integer;
+  WS_TYPE : integer;
   WS_DATETIME_FORMAT = integer;
 
 const
@@ -308,6 +365,228 @@ const
   WS_LONG_CALLBACK      = 1;
 
 
+//  Channel enum
+//
+//   An enumeration of the different encodings (message formats).
+  //type = WS_ENCODING
+  WS_ENCODING_XML_BINARY_1             = 0;
+  WS_ENCODING_XML_BINARY_SESSION_1     = 1;
+  WS_ENCODING_XML_MTOM_UTF8            = 2;
+  WS_ENCODING_XML_MTOM_UTF16BE         = 3;
+  WS_ENCODING_XML_MTOM_UTF16LE         = 4;
+  WS_ENCODING_XML_UTF8                 = 5;
+  WS_ENCODING_XML_UTF16BE              = 6;
+  WS_ENCODING_XML_UTF16LE              = 7;
+  WS_ENCODING_RAW                      = 8;
+
+
+//  Channel enum
+//  An enumeration of the different states that a channel can be in.
+  //type = WS_CHANNEL_STATE
+  WS_CHANNEL_STATE_CREATED       = 0;
+  WS_CHANNEL_STATE_OPENING       = 1;
+  WS_CHANNEL_STATE_ACCEPTING     = 2;
+  WS_CHANNEL_STATE_OPEN          = 3;
+  WS_CHANNEL_STATE_FAULTED       = 4;
+  WS_CHANNEL_STATE_CLOSING       = 5;
+  WS_CHANNEL_STATE_CLOSED        = 6;
+
+
+//  Channel enum
+//
+//   Specifies whether a message is required or not when receiving from a channel.
+//
+  //type = WS_RECEIVE_OPTION
+  WS_RECEIVE_REQUIRED_MESSAGE     = 1;
+  WS_RECEIVE_OPTIONAL_MESSAGE     = 2;
+
+
+//  Channel enum
+//
+//   The channel binding indicates the protocol stack to use for the channel.
+//
+  //type = WS_CHANNEL_BINDING
+  WS_HTTP_CHANNEL_BINDING          = 0;
+  WS_TCP_CHANNEL_BINDING           = 1;
+  WS_UDP_CHANNEL_BINDING           = 2;
+  WS_CUSTOM_CHANNEL_BINDING        = 3;
+  WS_NAMEDPIPE_CHANNEL_BINDING     = 4;
+
+
+//  Channel enum
+//
+//   The channel type indicates the basic characteristics of the channel, such as whether it is
+//  sessionful, and what directions of communication are supported.
+//
+  //type = WS_CHANNEL_TYPE
+
+  WS_CHANNEL_TYPE_INPUT              = $1;
+  WS_CHANNEL_TYPE_OUTPUT             = $2;
+  WS_CHANNEL_TYPE_SESSION            = $4;
+  WS_CHANNEL_TYPE_INPUT_SESSION      = WS_CHANNEL_TYPE_INPUT or WS_CHANNEL_TYPE_SESSION;
+  WS_CHANNEL_TYPE_OUTPUT_SESSION     = WS_CHANNEL_TYPE_OUTPUT or WS_CHANNEL_TYPE_SESSION;
+  WS_CHANNEL_TYPE_DUPLEX             = WS_CHANNEL_TYPE_INPUT or WS_CHANNEL_TYPE_OUTPUT;
+  WS_CHANNEL_TYPE_DUPLEX_SESSION     = WS_CHANNEL_TYPE_INPUT or WS_CHANNEL_TYPE_OUTPUT or WS_CHANNEL_TYPE_SESSION;
+  WS_CHANNEL_TYPE_REQUEST            = $8;
+  WS_CHANNEL_TYPE_REPLY              = $10;
+
+
+//  Channel enum
+//
+//   The transfer mode indicates whether messages that are sent or received are streamed or buffered.
+//
+  //type = WS_TRANSFER_MODE
+  WS_STREAMED_INPUT_TRANSFER_MODE      = $1;
+  WS_STREAMED_OUTPUT_TRANSFER_MODE     = $2;
+  WS_BUFFERED_TRANSFER_MODE            = $0;
+  WS_STREAMED_TRANSFER_MODE            = WS_STREAMED_INPUT_TRANSFER_MODE or WS_STREAMED_OUTPUT_TRANSFER_MODE;
+
+
+//  Channel enum
+//
+//   Proxy setting indicates HTTP proxy setting for the channel with binding WS_HTTP_CHANNEL_BINDING.
+//  This is specified as part of WS_CHANNEL_PROPERTY_HTTP_PROXY_SETTING_MODE channel property.
+//
+  //type = WS_HTTP_PROXY_SETTING_MODE
+  WS_HTTP_PROXY_SETTING_MODE_AUTO       = $1;
+  WS_HTTP_PROXY_SETTING_MODE_NONE       = $2;
+  WS_HTTP_PROXY_SETTING_MODE_CUSTOM     = $3;
+
+
+//  Channel enum
+//
+//   Each channel property is identified by an ID and has an associated
+//  value.  If a property is not specified when the channel is created,
+//  then its default value is used.
+//
+  //type =  WS_CHANNEL_PROPERTY_ID
+  WS_CHANNEL_PROPERTY_MAX_BUFFERED_MESSAGE_SIZE                = 0;
+  WS_CHANNEL_PROPERTY_MAX_STREAMED_MESSAGE_SIZE                = 1;
+  WS_CHANNEL_PROPERTY_MAX_STREAMED_START_SIZE                  = 2;
+  WS_CHANNEL_PROPERTY_MAX_STREAMED_FLUSH_SIZE                  = 3;
+  WS_CHANNEL_PROPERTY_ENCODING                                 = 4;
+  WS_CHANNEL_PROPERTY_ENVELOPE_VERSION                         = 5;
+  WS_CHANNEL_PROPERTY_ADDRESSING_VERSION                       = 6;
+  WS_CHANNEL_PROPERTY_MAX_SESSION_DICTIONARY_SIZE              = 7;
+  WS_CHANNEL_PROPERTY_STATE                                    = 8;
+  WS_CHANNEL_PROPERTY_ASYNC_CALLBACK_MODEL                     = 9;
+  WS_CHANNEL_PROPERTY_IP_VERSION                               = 10;
+  WS_CHANNEL_PROPERTY_RESOLVE_TIMEOUT                          = 11;
+  WS_CHANNEL_PROPERTY_CONNECT_TIMEOUT                          = 12;
+  WS_CHANNEL_PROPERTY_SEND_TIMEOUT                             = 13;
+  WS_CHANNEL_PROPERTY_RECEIVE_RESPONSE_TIMEOUT                 = 14;
+  WS_CHANNEL_PROPERTY_RECEIVE_TIMEOUT                          = 15;
+  WS_CHANNEL_PROPERTY_CLOSE_TIMEOUT                            = 16;
+  WS_CHANNEL_PROPERTY_ENABLE_TIMEOUTS                          = 17;
+  WS_CHANNEL_PROPERTY_TRANSFER_MODE                            = 18;
+  WS_CHANNEL_PROPERTY_MULTICAST_INTERFACE                      = 19;
+  WS_CHANNEL_PROPERTY_MULTICAST_HOPS                           = 20;
+  WS_CHANNEL_PROPERTY_REMOTE_ADDRESS                           = 21;
+  WS_CHANNEL_PROPERTY_REMOTE_IP_ADDRESS                        = 22;
+  WS_CHANNEL_PROPERTY_HTTP_CONNECTION_ID                       = 23;
+  WS_CHANNEL_PROPERTY_CUSTOM_CHANNEL_CALLBACKS                 = 24;
+  WS_CHANNEL_PROPERTY_CUSTOM_CHANNEL_PARAMETERS                = 25;
+  WS_CHANNEL_PROPERTY_CUSTOM_CHANNEL_INSTANCE                  = 26;
+  WS_CHANNEL_PROPERTY_TRANSPORT_URL                            = 27;
+  WS_CHANNEL_PROPERTY_NO_DELAY                                 = 28;
+  WS_CHANNEL_PROPERTY_SEND_KEEP_ALIVES                         = 29;
+  WS_CHANNEL_PROPERTY_KEEP_ALIVE_TIME                          = 30;
+  WS_CHANNEL_PROPERTY_KEEP_ALIVE_INTERVAL                      = 31;
+  WS_CHANNEL_PROPERTY_MAX_HTTP_SERVER_CONNECTIONS              = 32;
+  WS_CHANNEL_PROPERTY_IS_SESSION_SHUT_DOWN                     = 33;
+  WS_CHANNEL_PROPERTY_CHANNEL_TYPE                             = 34;
+  WS_CHANNEL_PROPERTY_TRIM_BUFFERED_MESSAGE_SIZE               = 35;
+  WS_CHANNEL_PROPERTY_ENCODER                                  = 36;
+  WS_CHANNEL_PROPERTY_DECODER                                  = 37;
+  WS_CHANNEL_PROPERTY_PROTECTION_LEVEL                         = 38;
+  WS_CHANNEL_PROPERTY_COOKIE_MODE                              = 39;
+  WS_CHANNEL_PROPERTY_HTTP_PROXY_SETTING_MODE                  = 40;
+  WS_CHANNEL_PROPERTY_CUSTOM_HTTP_PROXY                        = 41;
+  WS_CHANNEL_PROPERTY_HTTP_MESSAGE_MAPPING                     = 42;
+  WS_CHANNEL_PROPERTY_ENABLE_HTTP_REDIRECT                     = 43;
+  WS_CHANNEL_PROPERTY_HTTP_REDIRECT_CALLBACK_CONTEXT           = 44;
+  WS_CHANNEL_PROPERTY_FAULTS_AS_ERRORS                         = 45;
+  WS_CHANNEL_PROPERTY_ALLOW_UNSECURED_FAULTS                   = 46;
+  WS_CHANNEL_PROPERTY_HTTP_SERVER_SPN                          = 47;
+  WS_CHANNEL_PROPERTY_HTTP_PROXY_SPN                           = 48;
+  WS_CHANNEL_PROPERTY_MAX_HTTP_REQUEST_HEADERS_BUFFER_SIZE     = 49;
+
+
+//  Channel enum
+//
+//   A set of flags that control how mapped headers appear in an HTTP request or response.
+//
+  WS_HTTP_HEADER_MAPPING_COMMA_SEPARATOR         = $1;
+  WS_HTTP_HEADER_MAPPING_SEMICOLON_SEPARATOR     = $2;
+  WS_HTTP_HEADER_MAPPING_QUOTED_VALUE            = $4;
+
+
+//  Channel enum
+//
+//   A set of flags that control how HTTP responses
+//  are mapped to the message object.
+//
+  WS_HTTP_RESPONSE_MAPPING_STATUS_CODE     = $1;
+  WS_HTTP_RESPONSE_MAPPING_STATUS_TEXT     = $2;
+
+
+//  Channel enum
+//
+//   A set of flags that control how HTTP requests
+//  are mapped to the message object.
+//
+  WS_HTTP_REQUEST_MAPPING_VERB     = $2;
+
+
+//  Channel enum
+//
+//   An enumeration used to specify how to handle HTTP cookies.
+//
+  //type = WS_COOKIE_MODE
+  WS_MANUAL_COOKIE_MODE     = 1;
+  WS_AUTO_COOKIE_MODE       = 2;
+
+
+//  Context enum
+//
+//   Each property represents a property available on the Context. Not all properties may be available
+//  at a given point on a context. All context properties are available through WsGetOperationContextProperty.
+//
+  //type = WS_OPERATION_CONTEXT_PROPERTY_ID
+  WS_OPERATION_CONTEXT_PROPERTY_CHANNEL                  = 0;
+  WS_OPERATION_CONTEXT_PROPERTY_CONTRACT_DESCRIPTION     = 1;
+  WS_OPERATION_CONTEXT_PROPERTY_HOST_USER_STATE          = 2;
+  WS_OPERATION_CONTEXT_PROPERTY_CHANNEL_USER_STATE       = 3;
+  WS_OPERATION_CONTEXT_PROPERTY_INPUT_MESSAGE            = 4;
+  WS_OPERATION_CONTEXT_PROPERTY_OUTPUT_MESSAGE           = 5;
+  WS_OPERATION_CONTEXT_PROPERTY_HEAP                     = 6;
+  WS_OPERATION_CONTEXT_PROPERTY_LISTENER                 = 7;
+  WS_OPERATION_CONTEXT_PROPERTY_ENDPOINT_ADDRESS         = 8;
+
+
+//  Endpoint Identity enum
+//
+//   The type of the endpoint identity, used as a selector for subtypes of
+//   WS_ENDPOINT_IDENTITY.
+//
+  //type = WS_ENDPOINT_IDENTITY_TYPE
+  WS_DNS_ENDPOINT_IDENTITY_TYPE         = 1;
+  WS_UPN_ENDPOINT_IDENTITY_TYPE         = 2;
+  WS_SPN_ENDPOINT_IDENTITY_TYPE         = 3;
+  WS_RSA_ENDPOINT_IDENTITY_TYPE         = 4;
+  WS_CERT_ENDPOINT_IDENTITY_TYPE        = 5;
+  WS_UNKNOWN_ENDPOINT_IDENTITY_TYPE     = 6;
+
+
+//  Endpoint Identity enum
+//
+//   This identifies a type of extension within the extensions field of the
+//   WS_ENDPOINT_ADDRESS.
+//
+  //type = WS_ENDPOINT_ADDRESS_EXTENSION_TYPE
+  WS_ENDPOINT_ADDRESS_EXTENSION_METADATA_ADDRESS     = 1;
+
+
 //  Errors enum
 //
 //   A set of property values associated with the error.  They are set
@@ -317,6 +596,722 @@ const
   WS_ERROR_PROPERTY_STRING_COUNT            = 0;
   WS_ERROR_PROPERTY_ORIGINAL_ERROR_CODE     = 1;
   WS_ERROR_PROPERTY_LANGID                  = 2;
+
+
+//  Errors enum
+//
+//   An enumeration of structured exception codes thrown by this component.  These
+//  exceptions are fatal and should not be handled by the application.
+//
+  //type = WS_EXCEPTION_CODE
+  WS_EXCEPTION_CODE_USAGE_FAILURE        = $C03D0000;
+  WS_EXCEPTION_CODE_INTERNAL_FAILURE     = $c03d0001;
+
+
+//  Faults enum
+//
+//   A set of values used with WsSetFaultErrorProperty and
+//   WsGetFaultErrorProperty.
+//
+  //type = WS_FAULT_ERROR_PROPERTY_ID
+  WS_FAULT_ERROR_PROPERTY_FAULT      = 0;
+  WS_FAULT_ERROR_PROPERTY_ACTION     = 1;
+  WS_FAULT_ERROR_PROPERTY_HEADER     = 2;
+
+
+//  Faults enum
+//
+//   Controls how much error information is included in a fault.
+//
+  //type = WS_FAULT_DISCLOSURE;
+  WS_MINIMAL_FAULT_DISCLOSURE     = 0;
+  WS_FULL_FAULT_DISCLOSURE        = 1;
+
+
+//  Heap enum
+//
+//   Each heap property is identified by an ID and has an associated value.
+//
+  //type = WS_HEAP_PROPERTY_ID
+  WS_HEAP_PROPERTY_MAX_SIZE           = 0;
+  WS_HEAP_PROPERTY_TRIM_SIZE          = 1;
+  WS_HEAP_PROPERTY_REQUESTED_SIZE     = 2;
+  WS_HEAP_PROPERTY_ACTUAL_SIZE        = 3;
+
+
+//  Listener enum
+//  And enumeration of the different states that a listener can be in.
+//
+  //type = WS_LISTENER_STATE
+  WS_LISTENER_STATE_CREATED     = 0;
+  WS_LISTENER_STATE_OPENING     = 1;
+  WS_LISTENER_STATE_OPEN        = 2;
+  WS_LISTENER_STATE_FAULTED     = 3;
+  WS_LISTENER_STATE_CLOSING     = 4;
+  WS_LISTENER_STATE_CLOSED      = 5;
+
+
+//  Listener enum
+//
+//   Each listener property is of type WS_LISTENER_PROPERTY and is
+//  is identified by an ID and has an associated value.  If a property
+//  is not specified when the listener is created, then its default value is used.
+//
+  //type = WS_LISTENER_PROPERTY_ID
+  WS_LISTENER_PROPERTY_LISTEN_BACKLOG                     = 0;
+  WS_LISTENER_PROPERTY_IP_VERSION                         = 1;
+  WS_LISTENER_PROPERTY_STATE                              = 2;
+  WS_LISTENER_PROPERTY_ASYNC_CALLBACK_MODEL               = 3;
+  WS_LISTENER_PROPERTY_CHANNEL_TYPE                       = 4;
+  WS_LISTENER_PROPERTY_CHANNEL_BINDING                    = 5;
+  WS_LISTENER_PROPERTY_CONNECT_TIMEOUT                    = 6;
+  WS_LISTENER_PROPERTY_IS_MULTICAST                       = 7;
+  WS_LISTENER_PROPERTY_MULTICAST_INTERFACES               = 8;
+  WS_LISTENER_PROPERTY_MULTICAST_LOOPBACK                 = 9;
+  WS_LISTENER_PROPERTY_CLOSE_TIMEOUT                      = 10;
+  WS_LISTENER_PROPERTY_TO_HEADER_MATCHING_OPTIONS         = 11;
+  WS_LISTENER_PROPERTY_TRANSPORT_URL_MATCHING_OPTIONS     = 12;
+  WS_LISTENER_PROPERTY_CUSTOM_LISTENER_CALLBACKS          = 13;
+  WS_LISTENER_PROPERTY_CUSTOM_LISTENER_PARAMETERS         = 14;
+  WS_LISTENER_PROPERTY_CUSTOM_LISTENER_INSTANCE           = 15;
+  WS_LISTENER_PROPERTY_DISALLOWED_USER_AGENT              = 16;
+
+
+//  Listener enum
+//
+//   Specifies an IP version.
+//
+  //type = WS_IP_VERSION
+  WS_IP_VERSION_4        = 1;
+  WS_IP_VERSION_6        = 2;
+  WS_IP_VERSION_AUTO     = 3;
+
+
+//  Listener enum
+//
+//   A set of flags used to specify how to match a URL.
+//
+  WS_MATCH_URL_DNS_HOST                     = $1;
+  WS_MATCH_URL_DNS_FULLY_QUALIFIED_HOST     = $2;
+  WS_MATCH_URL_NETBIOS_HOST                 = $4;
+  WS_MATCH_URL_LOCAL_HOST                   = $8;
+  WS_MATCH_URL_HOST_ADDRESSES               = $10;
+  WS_MATCH_URL_THIS_HOST                    = WS_MATCH_URL_DNS_HOST or WS_MATCH_URL_DNS_FULLY_QUALIFIED_HOST or WS_MATCH_URL_NETBIOS_HOST or WS_MATCH_URL_LOCAL_HOST or WS_MATCH_URL_HOST_ADDRESSES;
+  WS_MATCH_URL_PORT                         = $20;
+  WS_MATCH_URL_EXACT_PATH                   = $40;
+  WS_MATCH_URL_PREFIX_PATH                  = $80;
+  WS_MATCH_URL_NO_QUERY                     = $100;
+
+
+//  Message enum
+//
+//   The different states that a message can be in.
+//
+  //type = WS_MESSAGE_STATE
+  WS_MESSAGE_STATE_EMPTY           = 1;
+  WS_MESSAGE_STATE_INITIALIZED     = 2;
+  WS_MESSAGE_STATE_READING         = 3;
+  WS_MESSAGE_STATE_WRITING         = 4;
+  WS_MESSAGE_STATE_DONE            = 5;
+
+
+//  Message enum
+//
+//   The following values specify what headers the
+//   WsInitializeMessage
+//   should add to the message.
+//
+  //type = WS_MESSAGE_INITIALIZATION
+  WS_BLANK_MESSAGE         = 0;
+  WS_DUPLICATE_MESSAGE     = 1;
+  WS_REQUEST_MESSAGE       = 2;
+  WS_REPLY_MESSAGE         = 3;
+  WS_FAULT_MESSAGE         = 4;
+
+
+//  Message enum
+//
+//   This enum is used to specify whether a header is expected
+//  to appear more than once in a message.
+//
+  //type = WS_REPEATING_HEADER_OPTION
+  WS_REPEATING_HEADER     = 1;
+  WS_SINGLETON_HEADER     = 2;
+
+
+//  Message enum
+//
+//   Identifies a type of header.
+//
+  //type = WS_HEADER_TYPE
+  WS_ACTION_HEADER         = 1;
+  WS_TO_HEADER             = 2;
+  WS_MESSAGE_ID_HEADER     = 3;
+  WS_RELATES_TO_HEADER     = 4;
+  WS_FROM_HEADER           = 5;
+  WS_REPLY_TO_HEADER       = 6;
+  WS_FAULT_TO_HEADER       = 7;
+
+
+//  Message enum
+//
+//   A set of flags representing the SOAP mustUnderstand and relay attributes of a header.
+//
+  WS_MUST_UNDERSTAND_HEADER_ATTRIBUTE     = $1;
+  WS_RELAY_HEADER_ATTRIBUTE               = $2;
+
+
+//  Message enum
+//
+//   The following values identify the version of the specification used for
+//  the addressing headers.
+  //type = WS_ADDRESSING_VERSION
+  WS_ADDRESSING_VERSION_0_9           = 1;
+  WS_ADDRESSING_VERSION_1_0           = 2;
+  WS_ADDRESSING_VERSION_TRANSPORT     = 3;
+
+
+//  Message enum
+//
+//   Identifies the version of the specification used for the envelope
+//  structure.
+//
+  //type = WS_ENVELOPE_VERSION
+  WS_ENVELOPE_VERSION_SOAP_1_1     = 1;
+  WS_ENVELOPE_VERSION_SOAP_1_2     = 2;
+  WS_ENVELOPE_VERSION_NONE         = 3;
+
+
+//  Message enum
+//
+//   Each message property is identified by an ID and has an associated
+//  value.
+//
+  //type = WS_MESSAGE_PROPERTY_ID
+  WS_MESSAGE_PROPERTY_STATE                                = 0;
+  WS_MESSAGE_PROPERTY_HEAP                                 = 1;
+  WS_MESSAGE_PROPERTY_ENVELOPE_VERSION                     = 2;
+  WS_MESSAGE_PROPERTY_ADDRESSING_VERSION                   = 3;
+  WS_MESSAGE_PROPERTY_HEADER_BUFFER                        = 4;
+  WS_MESSAGE_PROPERTY_HEADER_POSITION                      = 5;
+  WS_MESSAGE_PROPERTY_BODY_READER                          = 6;
+  WS_MESSAGE_PROPERTY_BODY_WRITER                          = 7;
+  WS_MESSAGE_PROPERTY_IS_ADDRESSED                         = 8;
+  WS_MESSAGE_PROPERTY_HEAP_PROPERTIES                      = 9;
+  WS_MESSAGE_PROPERTY_XML_READER_PROPERTIES                = 10;
+  WS_MESSAGE_PROPERTY_XML_WRITER_PROPERTIES                = 11;
+  WS_MESSAGE_PROPERTY_IS_FAULT                             = 12;
+  WS_MESSAGE_PROPERTY_MAX_PROCESSED_HEADERS                = 13;
+  WS_MESSAGE_PROPERTY_USERNAME                             = 14;
+  WS_MESSAGE_PROPERTY_ENCODED_CERT                         = 15;
+  WS_MESSAGE_PROPERTY_TRANSPORT_SECURITY_WINDOWS_TOKEN     = 16;
+  WS_MESSAGE_PROPERTY_HTTP_HEADER_AUTH_WINDOWS_TOKEN       = 17;
+  WS_MESSAGE_PROPERTY_MESSAGE_SECURITY_WINDOWS_TOKEN       = 18;
+  WS_MESSAGE_PROPERTY_SAML_ASSERTION                       = 19;
+  WS_MESSAGE_PROPERTY_SECURITY_CONTEXT                     = 20;
+  WS_MESSAGE_PROPERTY_PROTECTION_LEVEL                     = 21;
+
+
+//  Security Bindings enum
+//
+//   The type of the security binding, used as a selector for subtypes of
+//   WS_SECURITY_BINDING.  In general, the type name of the
+//  security binding (one of the values defined here) specifies how the
+//  security token used with that security binding is obtained and used.
+//
+  //type = WS_SECURITY_BINDING_TYPE
+  WS_SSL_TRANSPORT_SECURITY_BINDING_TYPE                = 1;
+  WS_TCP_SSPI_TRANSPORT_SECURITY_BINDING_TYPE           = 2;
+  WS_HTTP_HEADER_AUTH_SECURITY_BINDING_TYPE             = 3;
+  WS_USERNAME_MESSAGE_SECURITY_BINDING_TYPE             = 4;
+  WS_KERBEROS_APREQ_MESSAGE_SECURITY_BINDING_TYPE       = 5;
+  WS_XML_TOKEN_MESSAGE_SECURITY_BINDING_TYPE            = 6;
+  WS_SAML_MESSAGE_SECURITY_BINDING_TYPE                 = 7;
+  WS_SECURITY_CONTEXT_MESSAGE_SECURITY_BINDING_TYPE     = 8;
+  WS_NAMEDPIPE_SSPI_TRANSPORT_SECURITY_BINDING_TYPE     = 9;
+
+
+//  Security Binding Settings enum
+//
+//   Defines the options for performing client authentication using HTTP
+//  authentication headers.
+//
+  WS_HTTP_HEADER_AUTH_SCHEME_NONE          = $1;
+  WS_HTTP_HEADER_AUTH_SCHEME_BASIC         = $2;
+  WS_HTTP_HEADER_AUTH_SCHEME_DIGEST        = $4;
+  WS_HTTP_HEADER_AUTH_SCHEME_NTLM          = $8;
+  WS_HTTP_HEADER_AUTH_SCHEME_NEGOTIATE     = $10;
+  WS_HTTP_HEADER_AUTH_SCHEME_PASSPORT      = $20;
+
+
+//  Security Binding Settings enum
+//
+//   Defines the target for the HTTP header authentication security binding.
+//
+  //type = WS_HTTP_HEADER_AUTH_TARGET
+  WS_HTTP_HEADER_AUTH_TARGET_SERVICE     = 1;
+  WS_HTTP_HEADER_AUTH_TARGET_PROXY       = 2;
+
+
+//  Security Binding Settings enum
+//
+//   Defines the specific SSP package to be used for Windows Integrated
+//  Authentication.
+//
+  //type = WS_WINDOWS_INTEGRATED_AUTH_PACKAGE
+  WS_WINDOWS_INTEGRATED_AUTH_PACKAGE_KERBEROS     = 1;
+  WS_WINDOWS_INTEGRATED_AUTH_PACKAGE_NTLM         = 2;
+  WS_WINDOWS_INTEGRATED_AUTH_PACKAGE_SPNEGO       = 3;
+
+
+//  Security Channel Settings enum
+//
+//   Defines the WS-Security specification version to be used with message
+//  security and mixed-mode security.
+//
+  //type = WS_SECURITY_HEADER_VERSION
+  WS_SECURITY_HEADER_VERSION_1_0     = $1;
+  WS_SECURITY_HEADER_VERSION_1_1     = $2;
+
+
+//  Security Binding Settings enum
+//
+//   Defines the WS-Trust specification version to be used with message
+//  security and mixed-mode security.
+//
+  //type = WS_TRUST_VERSION
+  WS_TRUST_VERSION_FEBRUARY_2005     = $1;
+  WS_TRUST_VERSION_1_3               = $2;
+
+
+//  Security Binding Settings enum
+//
+//   Defines which set of actions to use when negotiating security tokens using WS-Trust.
+//
+  //type = WS_REQUEST_SECURITY_TOKEN_ACTION
+  WS_REQUEST_SECURITY_TOKEN_ACTION_ISSUE             = 1;
+  WS_REQUEST_SECURITY_TOKEN_ACTION_NEW_CONTEXT       = 2;
+  WS_REQUEST_SECURITY_TOKEN_ACTION_RENEW_CONTEXT     = 3;
+
+
+//  Security Channel Settings enum
+//
+//   Defines the WS-SecureCoversation specification version to be used with message
+//  security and mixed-mode security.
+//
+  //type = WS_SECURE_CONVERSATION_VERSION
+  WS_SECURE_CONVERSATION_VERSION_FEBRUARY_2005     = $1;
+  WS_SECURE_CONVERSATION_VERSION_1_3               = $2;
+
+
+//  Security Channel Settings enum
+//
+//   Defines secure protocol that can be used by WS_SSL_TRANSPORT_SECURITY_BINDING binding.
+//
+  //type = WS_SECURE_PROTOCOL
+  WS_SECURE_PROTOCOL_SSL2       = $1;
+  WS_SECURE_PROTOCOL_SSL3       = $2;
+  WS_SECURE_PROTOCOL_TLS1_0     = $4;
+  WS_SECURE_PROTOCOL_TLS1_1     = $8;
+  WS_SECURE_PROTOCOL_TLS1_2     = $10;
+
+
+//  Security Channel Settings enum
+//
+//  With message security and mixed-mode security, this defines when a
+//  timestamp element should be generated and demanded in the WS-Security
+//  header.
+//
+  //type = WS_SECURITY_TIMESTAMP_USAGE
+  WS_SECURITY_TIMESTAMP_USAGE_ALWAYS            = 1;
+  WS_SECURITY_TIMESTAMP_USAGE_NEVER             = 2;
+  WS_SECURITY_TIMESTAMP_USAGE_REQUESTS_ONLY     = 3;
+
+
+//  Security Channel Settings enum
+//
+//  Defines the layout rules applied to the elements of the WS-Security
+//  security header.  This setting is relevant to message security
+//  bindings and mixed-mode security bindings.
+//
+  //type = WS_SECURITY_HEADER_LAYOUT
+  WS_SECURITY_HEADER_LAYOUT_STRICT                       = 1;
+  WS_SECURITY_HEADER_LAYOUT_LAX                          = 2;
+  WS_SECURITY_HEADER_LAYOUT_LAX_WITH_TIMESTAMP_FIRST     = 3;
+  WS_SECURITY_HEADER_LAYOUT_LAX_WITH_TIMESTAMP_LAST      = 4;
+
+
+//  Security Channel Settings enum
+//
+//  Identifies the properties representing security algorithm knobs.
+//
+  //type = WS_SECURITY_ALGORITHM_PROPERTY_ID
+  //empty typedef enum
+
+
+//  Security Channel Settings enum
+//
+//   Defines the security algorithms to be used with WS-Security.
+//  These values are relevant to message security bindings
+//  and mixed-mode security bindings.
+//
+  //type = WS_SECURITY_ALGORITHM_ID
+  WS_SECURITY_ALGORITHM_DEFAULT                                      = 0;
+  WS_SECURITY_ALGORITHM_CANONICALIZATION_EXCLUSIVE                   = 1;
+  WS_SECURITY_ALGORITHM_CANONICALIZATION_EXCLUSIVE_WITH_COMMENTS     = 2;
+  WS_SECURITY_ALGORITHM_DIGEST_SHA1                                  = 3;
+  WS_SECURITY_ALGORITHM_DIGEST_SHA_256                               = 4;
+  WS_SECURITY_ALGORITHM_DIGEST_SHA_384                               = 5;
+  WS_SECURITY_ALGORITHM_DIGEST_SHA_512                               = 6;
+  WS_SECURITY_ALGORITHM_SYMMETRIC_SIGNATURE_HMAC_SHA1                = 7;
+  WS_SECURITY_ALGORITHM_SYMMETRIC_SIGNATURE_HMAC_SHA_256             = 8;
+  WS_SECURITY_ALGORITHM_SYMMETRIC_SIGNATURE_HMAC_SHA_384             = 9;
+  WS_SECURITY_ALGORITHM_SYMMETRIC_SIGNATURE_HMAC_SHA_512             = 10;
+  WS_SECURITY_ALGORITHM_ASYMMETRIC_SIGNATURE_RSA_SHA1                = 11;
+  WS_SECURITY_ALGORITHM_ASYMMETRIC_SIGNATURE_DSA_SHA1                = 12;
+  WS_SECURITY_ALGORITHM_ASYMMETRIC_SIGNATURE_RSA_SHA_256             = 13;
+  WS_SECURITY_ALGORITHM_ASYMMETRIC_SIGNATURE_RSA_SHA_384             = 14;
+  WS_SECURITY_ALGORITHM_ASYMMETRIC_SIGNATURE_RSA_SHA_512             = 15;
+  WS_SECURITY_ALGORITHM_ASYMMETRIC_KEYWRAP_RSA_1_5                   = 16;
+  WS_SECURITY_ALGORITHM_ASYMMETRIC_KEYWRAP_RSA_OAEP                  = 17;
+  WS_SECURITY_ALGORITHM_KEY_DERIVATION_P_SHA1                        = 18;
+
+
+//  Security Channel Settings enum
+//
+//  Defines the required integrity and confidentiality levels for sent and
+//  received messages.  With transport and mixed-mode security bindings,
+//  this setting applies to each message as a whole.  With message
+//  security, the protection level is specified at the granularity of a
+//  message header or body.  The default value defined applies only to
+//  transport and mixed-mode security.
+//
+  //type = WS_PROTECTION_LEVEL
+  WS_PROTECTION_LEVEL_NONE                 = 1;
+  WS_PROTECTION_LEVEL_SIGN                 = 2;
+  WS_PROTECTION_LEVEL_SIGN_AND_ENCRYPT     = 3;
+
+
+//  Security Channel Settings enum
+//
+//   Identifies the properties representing channel-wide security knobs.
+//
+  //type = WS_SECURITY_PROPERTY_ID
+  WS_SECURITY_PROPERTY_TRANSPORT_PROTECTION_LEVEL       = 1;
+  WS_SECURITY_PROPERTY_ALGORITHM_SUITE                  = 2;
+  WS_SECURITY_PROPERTY_ALGORITHM_SUITE_NAME             = 3;
+  WS_SECURITY_PROPERTY_MAX_ALLOWED_LATENCY              = 4;
+  WS_SECURITY_PROPERTY_TIMESTAMP_VALIDITY_DURATION      = 5;
+  WS_SECURITY_PROPERTY_MAX_ALLOWED_CLOCK_SKEW           = 6;
+  WS_SECURITY_PROPERTY_TIMESTAMP_USAGE                  = 7;
+  WS_SECURITY_PROPERTY_SECURITY_HEADER_LAYOUT           = 8;
+  WS_SECURITY_PROPERTY_SECURITY_HEADER_VERSION          = 9;
+  WS_SECURITY_PROPERTY_EXTENDED_PROTECTION_POLICY       = 10;
+  WS_SECURITY_PROPERTY_EXTENDED_PROTECTION_SCENARIO     = 11;
+  WS_SECURITY_PROPERTY_SERVICE_IDENTITIES               = 12;
+
+
+//  Security Binding Settings enum
+//
+//  The key type of a security token.  It is used as the return type when
+//  a security token is queried about its key.  It is also used to specify
+//  the required key type when requesting a security token from a security
+//  token service.
+//
+  //type = WS_SECURITY_KEY_TYPE
+  WS_SECURITY_KEY_TYPE_NONE           = 1;
+  WS_SECURITY_KEY_TYPE_SYMMETRIC      = 2;
+  WS_SECURITY_KEY_TYPE_ASYMMETRIC     = 3;
+
+
+//  Security Binding Settings enum
+//
+//   A suite of security algorithms used for tasks such as signing and encryting.
+//  The values in this enumeration correspond to the suites defined in
+//   (http://schemas.xmlsoap.org/ws/2005/07/securitypolicy/) WS-SecurityPolicy 1.1
+//   section 7.1.
+//
+  //type = WS_SECURITY_ALGORITHM_SUITE_NAME
+  WS_SECURITY_ALGORITHM_SUITE_NAME_BASIC256                  = 1;
+  WS_SECURITY_ALGORITHM_SUITE_NAME_BASIC192                  = 2;
+  WS_SECURITY_ALGORITHM_SUITE_NAME_BASIC128                  = 3;
+  WS_SECURITY_ALGORITHM_SUITE_NAME_BASIC256_RSA15            = 4;
+  WS_SECURITY_ALGORITHM_SUITE_NAME_BASIC192_RSA15            = 5;
+  WS_SECURITY_ALGORITHM_SUITE_NAME_BASIC128_RSA15            = 6;
+  WS_SECURITY_ALGORITHM_SUITE_NAME_BASIC256_SHA256           = 7;
+  WS_SECURITY_ALGORITHM_SUITE_NAME_BASIC192_SHA256           = 8;
+  WS_SECURITY_ALGORITHM_SUITE_NAME_BASIC128_SHA256           = 9;
+  WS_SECURITY_ALGORITHM_SUITE_NAME_BASIC256_SHA256_RSA15     = 10;
+  WS_SECURITY_ALGORITHM_SUITE_NAME_BASIC192_SHA256_RSA15     = 11;
+  WS_SECURITY_ALGORITHM_SUITE_NAME_BASIC128_SHA256_RSA15     = 12;
+
+
+//  Security Binding Settings enum
+//
+//  With message and mixed-mode security bindings, the mechanism to use to
+//  refer to a security token from signatures, encrypted items and derived
+//  tokens.  The security runtime can use the right reference on its own
+//  most of the time, and this needs to be explicitly set only when a
+//  specific reference mechanism is required, typically for interop with
+//  another platform that supports only that reference form.
+//
+  //type = WS_SECURITY_TOKEN_REFERENCE_MODE
+  WS_SECURITY_TOKEN_REFERENCE_MODE_LOCAL_ID                = 1;
+  WS_SECURITY_TOKEN_REFERENCE_MODE_XML_BUFFER              = 2;
+  WS_SECURITY_TOKEN_REFERENCE_MODE_CERT_THUMBPRINT         = 3;
+  WS_SECURITY_TOKEN_REFERENCE_MODE_SECURITY_CONTEXT_ID     = 4;
+  WS_SECURITY_TOKEN_REFERENCE_MODE_SAML_ASSERTION_ID       = 5;
+
+
+//  Security Binding Settings enum
+//
+//   Defines failures related to certificate validation. Can be used with WS_SECURITY_BINDING_PROPERTY_CERT_FAILURES_TO_IGNORE to
+//  specify which certificate verification failures should be ignored.
+//
+  WS_CERT_FAILURE_CN_MISMATCH            = $1;
+  WS_CERT_FAILURE_INVALID_DATE           = $2;
+  WS_CERT_FAILURE_UNTRUSTED_ROOT         = $4;
+  WS_CERT_FAILURE_WRONG_USAGE            = $8;
+  WS_CERT_FAILURE_REVOCATION_OFFLINE     = $10;
+
+
+//  Security Binding Settings enum
+//
+//  Defines how randomness should be contributed to the issued key during
+//  a security token negotiation done with message and mixed-mode security.
+//
+  //type = WS_SECURITY_KEY_ENTROPY_MODE
+  WS_SECURITY_KEY_ENTROPY_MODE_CLIENT_ONLY     = 1;
+  WS_SECURITY_KEY_ENTROPY_MODE_SERVER_ONLY     = 2;
+  WS_SECURITY_KEY_ENTROPY_MODE_COMBINED        = 3;
+
+
+//  Extended Protection enum
+//
+//   Defines if Extended Protection data should be validated. This property is only available on the server,
+//  and can only be set when WS_HTTP_CHANNEL_BINDING with WS_SSL_TRANSPORT_SECURITY_BINDING and either WS_KERBEROS_APREQ_MESSAGE_SECURITY_BINDING
+//   or WS_HTTP_HEADER_AUTH_SECURITY_BINDING is used.
+//
+  //type = WS_EXTENDED_PROTECTION_POLICY
+  WS_EXTENDED_PROTECTION_POLICY_NEVER              = 1;
+  WS_EXTENDED_PROTECTION_POLICY_WHEN_SUPPORTED     = 2;
+  WS_EXTENDED_PROTECTION_POLICY_ALWAYS             = 3;
+
+
+//  Extended Protection enum
+//
+//   Defines how Extended Protection is validated. For most configurations, the runtime can automatically determine what needs to
+//  be validated based on the presence of the WS_SSL_TRANSPORT_SECURITY_BINDING. However, if the SSL connection is terminated at
+//  an intermediary such as a proxy prior to reaching the server then the validation method must change, and this scenario cannot be automatically detected.
+//
+//   Only available on the server.
+//
+  //type = WS_EXTENDED_PROTECTION_SCENARIO
+  WS_EXTENDED_PROTECTION_SCENARIO_BOUND_SERVER       = 1;
+  WS_EXTENDED_PROTECTION_SCENARIO_TERMINATED_SSL     = 2;
+
+
+//  Security Binding Settings enum
+//
+//   Identifies the properties used to specify security
+//  binding settings.  Security binding settings are present
+//  in (WS_SECURITY_BINDING) security bindings
+//   that are used, in turn, in a (WS_SECURITY_DESCRIPTION) security description.
+//
+//   Note that the related enum WS_SECURITY_TOKEN_PROPERTY_ID
+//   defines the keys for extracting fields from a security token instance.
+//  Thus, WS_SECURITY_BINDING_PROPERTY enables specifying security binding
+//  settings at channel / listener creation time to influence how a
+//  security token is created and used, whereas WS_SECURITY_TOKEN_PROPERTY_ID
+//  enables extracting fields out of a security token -- typically a
+//  security token from a received message when the channel and security
+//  are 'live'.
+//
+  //type = WS_SECURITY_BINDING_PROPERTY_ID
+  WS_SECURITY_BINDING_PROPERTY_REQUIRE_SSL_CLIENT_CERT                     = 1;
+  WS_SECURITY_BINDING_PROPERTY_WINDOWS_INTEGRATED_AUTH_PACKAGE             = 2;
+  WS_SECURITY_BINDING_PROPERTY_REQUIRE_SERVER_AUTH                         = 3;
+  WS_SECURITY_BINDING_PROPERTY_ALLOW_ANONYMOUS_CLIENTS                     = 4;
+  WS_SECURITY_BINDING_PROPERTY_ALLOWED_IMPERSONATION_LEVEL                 = 5;
+  WS_SECURITY_BINDING_PROPERTY_HTTP_HEADER_AUTH_SCHEME                     = 6;
+  WS_SECURITY_BINDING_PROPERTY_HTTP_HEADER_AUTH_TARGET                     = 7;
+  WS_SECURITY_BINDING_PROPERTY_HTTP_HEADER_AUTH_BASIC_REALM                = 8;
+  WS_SECURITY_BINDING_PROPERTY_HTTP_HEADER_AUTH_DIGEST_REALM               = 9;
+  WS_SECURITY_BINDING_PROPERTY_HTTP_HEADER_AUTH_DIGEST_DOMAIN              = 10;
+  WS_SECURITY_BINDING_PROPERTY_SECURITY_CONTEXT_KEY_SIZE                   = 11;
+  WS_SECURITY_BINDING_PROPERTY_SECURITY_CONTEXT_KEY_ENTROPY_MODE           = 12;
+  WS_SECURITY_BINDING_PROPERTY_MESSAGE_PROPERTIES                          = 13;
+  WS_SECURITY_BINDING_PROPERTY_SECURITY_CONTEXT_MAX_PENDING_CONTEXTS       = 14;
+  WS_SECURITY_BINDING_PROPERTY_SECURITY_CONTEXT_MAX_ACTIVE_CONTEXTS        = 15;
+  WS_SECURITY_BINDING_PROPERTY_SECURE_CONVERSATION_VERSION                 = 16;
+  WS_SECURITY_BINDING_PROPERTY_SECURITY_CONTEXT_SUPPORT_RENEW              = 17;
+  WS_SECURITY_BINDING_PROPERTY_SECURITY_CONTEXT_RENEWAL_INTERVAL           = 18;
+  WS_SECURITY_BINDING_PROPERTY_SECURITY_CONTEXT_ROLLOVER_INTERVAL          = 19;
+  WS_SECURITY_BINDING_PROPERTY_CERT_FAILURES_TO_IGNORE                     = 20;
+  WS_SECURITY_BINDING_PROPERTY_DISABLE_CERT_REVOCATION_CHECK               = 21;
+  WS_SECURITY_BINDING_PROPERTY_DISALLOWED_SECURE_PROTOCOLS                 = 22;
+  WS_SECURITY_BINDING_PROPERTY_CERTIFICATE_VALIDATION_CALLBACK_CONTEXT     = 23;
+
+
+//  Security Credentials enum
+//
+//  The type of the certificate credential, used as a selector for
+//  subtypes of WS_CERT_CREDENTIAL.
+//
+  //type = WS_CERT_CREDENTIAL_TYPE
+  WS_SUBJECT_NAME_CERT_CREDENTIAL_TYPE     = 1;
+  WS_THUMBPRINT_CERT_CREDENTIAL_TYPE       = 2;
+  WS_CUSTOM_CERT_CREDENTIAL_TYPE           = 3;
+
+
+//  Security Credentials enum
+//
+//  The type of the Windows Integrated Authentication credential, used as
+//  a selector for subtypes of WS_WINDOWS_INTEGRATED_AUTH_CREDENTIAL.
+//
+  //type = WS_WINDOWS_INTEGRATED_AUTH_CREDENTIAL_TYPE
+  WS_STRING_WINDOWS_INTEGRATED_AUTH_CREDENTIAL_TYPE      = 1;
+  WS_DEFAULT_WINDOWS_INTEGRATED_AUTH_CREDENTIAL_TYPE     = 2;
+  WS_OPAQUE_WINDOWS_INTEGRATED_AUTH_CREDENTIAL_TYPE      = 3;
+
+
+//  Security Credentials enum
+//
+//  The type of the username/password credential, used as a selector for
+//  subtypes of WS_USERNAME_CREDENTIAL.
+//
+  //type = WS_USERNAME_CREDENTIAL_TYPE
+  WS_STRING_USERNAME_CREDENTIAL_TYPE     = 1;
+
+
+//  Security Processing Results enum
+//
+//   Defines the keys for the fields and properties that can be extracted
+//  from a security token.  Not all properties are valid for all security
+//  token types.  The function WsGetSecurityTokenProperty uses
+//  the values defined here as keys.
+//
+//   See also WS_SECURITY_BINDING_PROPERTY.
+//
+  //type WS_SECURITY_TOKEN_PROPERTY_ID
+  WS_SECURITY_TOKEN_PROPERTY_KEY_TYPE                     = 1;
+  WS_SECURITY_TOKEN_PROPERTY_VALID_FROM_TIME              = 2;
+  WS_SECURITY_TOKEN_PROPERTY_VALID_TILL_TIME              = 3;
+  WS_SECURITY_TOKEN_PROPERTY_SERIALIZED_XML               = 4;
+  WS_SECURITY_TOKEN_PROPERTY_ATTACHED_REFERENCE_XML       = 5;
+  WS_SECURITY_TOKEN_PROPERTY_UNATTACHED_REFERENCE_XML     = 6;
+  WS_SECURITY_TOKEN_PROPERTY_SYMMETRIC_KEY                = 7;
+
+
+//  Security Bindings enum
+//
+//  Types of security keys.
+//
+  //type = WS_SECURITY_KEY_HANDLE_TYPE
+  WS_RAW_SYMMETRIC_SECURITY_KEY_HANDLE_TYPE         = 1;
+  WS_NCRYPT_ASYMMETRIC_SECURITY_KEY_HANDLE_TYPE     = 2;
+  WS_CAPI_ASYMMETRIC_SECURITY_KEY_HANDLE_TYPE       = 3;
+
+
+//  Security Bindings enum
+//
+//  Defines how a message security binding attaches the security token
+//  corresponding to it to a message using WS-Security mechanisms.
+//
+  //type = WS_MESSAGE_SECURITY_USAGE
+  WS_SUPPORTING_MESSAGE_SECURITY_USAGE     = 1;
+
+
+//  Security Context enum
+//
+//   Identifies a property of a security context object.
+//
+  //type = WS_SECURITY_CONTEXT_PROPERTY_ID
+  WS_SECURITY_CONTEXT_PROPERTY_IDENTIFIER                         = 1;
+  WS_SECURITY_CONTEXT_PROPERTY_USERNAME                           = 2;
+  WS_SECURITY_CONTEXT_PROPERTY_MESSAGE_SECURITY_WINDOWS_TOKEN     = 3;
+  WS_SECURITY_CONTEXT_PROPERTY_SAML_ASSERTION                     = 4;
+
+
+//  Security Channel Settings enum
+//
+//   Identifies the properties for the creation of XML security tokens.
+//
+  //type = WS_XML_SECURITY_TOKEN_PROPERTY_ID
+  WS_XML_SECURITY_TOKEN_PROPERTY_ATTACHED_REFERENCE       = 1;
+  WS_XML_SECURITY_TOKEN_PROPERTY_UNATTACHED_REFERENCE     = 2;
+  WS_XML_SECURITY_TOKEN_PROPERTY_VALID_FROM_TIME          = 3;
+  WS_XML_SECURITY_TOKEN_PROPERTY_VALID_TILL_TIME          = 4;
+
+
+//  Security Bindings enum
+//
+//   The type ids of the SAML token authenticators used on the server side
+//  (i.e., relying party) to validate incoming SAML tokens.
+//
+  //type = WS_SAML_AUTHENTICATOR_TYPE
+  WS_CERT_SIGNED_SAML_AUTHENTICATOR_TYPE     = 1;
+
+
+//  Security Channel Settings enum
+//
+//   Identifies the properties for requesting a security token from an issuer.
+//
+  //type = WS_REQUEST_SECURITY_TOKEN_PROPERTY_ID
+  WS_REQUEST_SECURITY_TOKEN_PROPERTY_APPLIES_TO                      = 1;
+  WS_REQUEST_SECURITY_TOKEN_PROPERTY_TRUST_VERSION                   = 2;
+  WS_REQUEST_SECURITY_TOKEN_PROPERTY_SECURE_CONVERSATION_VERSION     = 3;
+  WS_REQUEST_SECURITY_TOKEN_PROPERTY_ISSUED_TOKEN_TYPE               = 4;
+  WS_REQUEST_SECURITY_TOKEN_PROPERTY_REQUEST_ACTION                  = 5;
+  WS_REQUEST_SECURITY_TOKEN_PROPERTY_EXISTING_TOKEN                  = 6;
+  WS_REQUEST_SECURITY_TOKEN_PROPERTY_ISSUED_TOKEN_KEY_TYPE           = 7;
+  WS_REQUEST_SECURITY_TOKEN_PROPERTY_ISSUED_TOKEN_KEY_SIZE           = 8;
+  WS_REQUEST_SECURITY_TOKEN_PROPERTY_ISSUED_TOKEN_KEY_ENTROPY        = 9;
+  WS_REQUEST_SECURITY_TOKEN_PROPERTY_LOCAL_REQUEST_PARAMETERS        = 10;
+  WS_REQUEST_SECURITY_TOKEN_PROPERTY_SERVICE_REQUEST_PARAMETERS      = 11;
+  WS_REQUEST_SECURITY_TOKEN_PROPERTY_MESSAGE_PROPERTIES              = 12;
+
+
+//  Serialization enum
+//
+//   An enumeration of the different types supported for serialization.
+//
+  //type = WS_TYPE
+  WS_BOOL_TYPE                 = 0;
+  WS_INT8_TYPE                 = 1;
+  WS_INT16_TYPE                = 2;
+  WS_INT32_TYPE                = 3;
+  WS_INT64_TYPE                = 4;
+  WS_UINT8_TYPE                = 5;
+  WS_UINT16_TYPE               = 6;
+  WS_UINT32_TYPE               = 7;
+  WS_UINT64_TYPE               = 8;
+  WS_FLOAT_TYPE                = 9;
+  WS_DOUBLE_TYPE               = 10;
+  WS_DECIMAL_TYPE              = 11;
+  WS_DATETIME_TYPE             = 12;
+  WS_TIMESPAN_TYPE             = 13;
+  WS_GUID_TYPE                 = 14;
+  WS_UNIQUE_ID_TYPE            = 15;
+  WS_STRING_TYPE               = 16;
+  WS_WSZ_TYPE                  = 17;
+  WS_BYTES_TYPE                = 18;
+  WS_XML_STRING_TYPE           = 19;
+  WS_XML_QNAME_TYPE            = 20;
+  WS_XML_BUFFER_TYPE           = 21;
+  WS_CHAR_ARRAY_TYPE           = 22;
+  WS_UTF8_ARRAY_TYPE           = 23;
+  WS_BYTE_ARRAY_TYPE           = 24;
+  WS_DESCRIPTION_TYPE          = 25;
+  WS_STRUCT_TYPE               = 26;
+  WS_CUSTOM_TYPE               = 27;
+  WS_ENDPOINT_ADDRESS_TYPE     = 28;
+  WS_FAULT_TYPE                = 29;
+  WS_VOID_TYPE                 = 30;
+  WS_ENUM_TYPE                 = 31;
+  WS_DURATION_TYPE             = 32;
+  WS_UNION_TYPE                = 33;
+  WS_ANY_ATTRIBUTES_TYPE       = 34;
 
 
 //  Utilities enum
@@ -357,6 +1352,7 @@ type
   end;
 
   PWS_XML_STRING = ^WS_XML_STRING;
+  PPWS_XML_STRING = ^PWS_XML_STRING;
 
 
 //  CALLBACK DEFINITIONS
@@ -439,7 +1435,7 @@ type
 //
   WS_DYNAMIC_STRING_CALLBACK = function(callbackState : pointer;
                                         str : PWS_XML_STRING;
-                                        found : Pboolean;
+                                        found : PBOOL;
                                         id : PULONG;
                                         error : PWS_ERROR):HRESULT; stdcall;
 
@@ -1171,7 +2167,6 @@ type
 
 
 
-
 //  POINTER DEFINITIONS
   PWS_ERROR_PROPERTY = pointer;      //TODO
   PWS_HEAP_PROPERTY = pointer;       //TODO
@@ -1758,7 +2753,171 @@ function WsWriteEndElement(writer : PWS_XML_WRITER;
                            error : PWS_ERROR):HRESULT; stdcall;
 
 
+//  XML Writer function
+//
+//   Writes the specified text the XML writer.
+//
+function WsWriteText(writer : PWS_XML_WRITER;
+                     text : PWS_XML_TEXT;
+                     error : PWS_ERROR):HRESULT; stdcall;
 
+
+//  XML Writer function
+//
+//   Starts a CDATA section in the writer.
+//
+function WsWriteStartCData(writer : PWS_XML_WRITER;
+                           error : PWS_ERROR):HRESULT; stdcall;
+
+
+//  XML Writer function
+//
+//   Ends a CDATA section in the writer.
+//
+function WsWriteEndCData(writer : PWS_XML_WRITER;
+                         error : PWS_ERROR):HRESULT; stdcall;
+
+
+//  XML Writer function
+//
+//   Writes the specified node to the XML Writer.
+//
+function WsWriteNode(writer : PWS_XML_WRITER;
+                     node : PWS_XML_NODE;
+                     error : PWS_ERROR):HRESULT; stdcall;
+
+
+//  XML Writer function
+//
+//   Returns a prefix to which the namespace is bound.
+//
+function WsGetPrefixFromNamespace(writer : PWS_XML_WRITER;
+                                  ns : PWS_XML_STRING;
+                                  required : BOOL;
+                                  prefix :PPWS_XML_STRING;
+                                  error : PWS_ERROR):HRESULT; stdcall;
+
+
+//  XML Writer function
+//
+//   Returns the current position of the writer.  This can only be used on a
+//  writer that is set to an XmlBuffer. When writing to a buffer, the position
+//  represents the xml node before which new data will be placed.
+//
+function WsGetWriterPosition(writer : PWS_XML_WRITER;
+                             nodePosition : PWS_XML_NODE_POSITION;
+                             error : PWS_ERROR):HRESULT; stdcall;
+
+
+//  XML Writer function
+//
+//   Sets the current position of the writer.  The position must have been obtained by a
+//  call to WsGetReaderPosition or WsGetWriterPosition.
+//
+function WsSetWriterPosition(writer : PWS_XML_WRITER;
+                             nodePosition : PWS_XML_NODE_POSITION;
+                             error : PWS_ERROR):HRESULT; stdcall;
+
+
+//  XML Writer function
+//
+//   Moves the current position of the writer as specified by the moveTo parameter.
+//
+function WsMoveWriter(writer : PWS_XML_WRITER;
+                      moveTo : WS_MOVE_TO;
+                      found : PBOOL;
+                      error : PWS_ERROR):HRESULT; stdcall;
+
+
+//  XML Node function
+//
+//   Removes leading and trailing whitespace from a sequence of characters.
+//
+function WsTrimXmlWhitespace(chars : PWideChar;
+                             charCount : ULONG;
+                             trimmedChars : PPWideChar;
+                             trimmedCount : PULONG;
+                             error : PWS_ERROR):HRESULT; stdcall;
+
+
+//  XML Node function
+//
+//   Verifies whether the input string is a valid XML NCName.
+//
+function WsVerifyXmlNCName(ncNameChars : PWideChar;
+                           ncNameCharCount : ULONG;
+                           error : PWS_ERROR):HRESULT; stdcall;
+
+
+//  XML Node function
+//
+//   Compares two WS_XML_STRING's for equality by performing an ordinal comparison
+//  of the character values.
+//
+function WsXmlStringEquals(string1 : PWS_XML_STRING;
+                           string2 : PWS_XML_STRING;
+                           error : PWS_ERROR):HRESULT; stdcall;
+
+
+//  XML Reader function
+//
+//   Returns the namespace to which the prefix is bound.
+//
+function WsGetNamespaceFromPrefix(reader : PWS_XML_READER;
+                                  prefix : PWS_XML_STRING;
+                                  required : BOOL;
+                                  ns : PPWS_XML_STRING;
+                                  error : PWS_ERROR):HRESULT; stdcall;
+
+
+//  XML Reader function
+//
+//   Reads a qualified name and separates it into its prefix, localName
+//  and namespace based on the current namespace scope of the XML_READER.
+//  If the ns parameter is specified, then the namespace that the prefix
+//  is bound to will be returned, or WS_E_INVALID_FORMAT
+//   will be returned. The strings are placed in the specified heap.
+//
+function WsReadQualifiedName(reader : PWS_XML_READER;
+                             heap : PWS_HEAP;
+                             prefix : PWS_XML_STRING;
+                             localName : PWS_XML_STRING;
+                             ns : PWS_XML_STRING;
+                             error : PWS_ERROR):HRESULT; stdcall;
+
+
+//  XML Reader function
+//
+//   Finds the nearest xml attribute in scope with the specified localName and returns its value.
+//  The returned value is placed on the specified heap.
+//
+function WsGetXmlAttribute(reader : PWS_XML_READER;
+                           localName : PWS_XML_STRING;
+                           heap : PWS_HEAP;
+                           valueChars : PPWideChar;
+                           valueCharCount : PULONG;
+                           error : PWS_ERROR):HRESULT; stdcall;
+
+
+//  XML Writer function
+//
+//   Copies the current node from the specified reader to the specified writer.
+//
+function WsCopyNode(writer : PWS_XML_WRITER;
+                    reader : PWS_XML_READER;
+                    error : PWS_ERROR):HRESULT; stdcall;
+
+
+//  Async Model function
+//
+//   WsAsyncExecute is a helper that can be used to implement an asynchronous operation.
+//
+function WsAsyncExecute(asyncState : PWS_ASYNC_STATE;
+                        operation : WS_ASYNC_FUNCTION;
+                        callbackModel : WS_CALLBACK_MODEL;
+                        callbackState : pointer;
+                        asyncContext : PWS_ASYNC_CONTEXT;
+                        error : PWS_ERROR):HRESULT; stdcall;
 
 
 //  Errors function
@@ -1911,6 +3070,23 @@ function WsWriteBytes; external WEBSERVICES_DLL name 'WsWriteBytes';
 function WsPushBytes; external WEBSERVICES_DLL name 'WsPushBytes';
 function WsPullBytes; external WEBSERVICES_DLL name 'WsPullBytes';
 function WsWriteEndElement; external WEBSERVICES_DLL name 'WsWriteEndElement';
+function WsWriteText; external WEBSERVICES_DLL name 'WsWriteText';
+function WsWriteStartCData; external WEBSERVICES_DLL name 'WsWriteStartCData';
+function WsWriteEndCData; external WEBSERVICES_DLL name 'WsWriteEndCData';
+function WsWriteNode; external WEBSERVICES_DLL name 'WsWriteNode';
+function WsGetPrefixFromNamespace; external WEBSERVICES_DLL name 'WsGetPrefixFromNamespace';
+function WsGetWriterPosition; external WEBSERVICES_DLL name 'WsGetWriterPosition';
+function WsSetWriterPosition; external WEBSERVICES_DLL name 'WsSetWriterPosition';
+function WsMoveWriter; external WEBSERVICES_DLL name 'WsMoveWriter';
+function WsTrimXmlWhitespace; external WEBSERVICES_DLL name 'WsTrimXmlWhitespace';
+function WsVerifyXmlNCName; external WEBSERVICES_DLL name 'WsVerifyXmlNCName';
+function WsXmlStringEquals; external WEBSERVICES_DLL name 'WsXmlStringEquals';
+function WsGetNamespaceFromPrefix; external WEBSERVICES_DLL name 'WsGetNamespaceFromPrefix';
+function WsReadQualifiedName; external WEBSERVICES_DLL name 'WsReadQualifiedName';
+function WsGetXmlAttribute; external WEBSERVICES_DLL name 'WsGetXmlAttribute';
+function WsCopyNode; external WEBSERVICES_DLL name 'WsCopyNode';
+function WsAsyncExecute; external WEBSERVICES_DLL name 'WsAsyncExecute';
+
 
 function WsWriteXmlBuffer; external WEBSERVICES_DLL name 'WsWriteXmlBuffer';
 function WsReadXmlBuffer; external WEBSERVICES_DLL name 'WsReadXmlBuffer';
