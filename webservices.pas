@@ -86,16 +86,16 @@ type
   WS_CHANNEL_STATE = integer;
   WS_RECEIVE_OPTION = integer;
   WS_CHANNEL_BINDING = integer;
-  WS_CHANNEL_TYPE = integer;                 //longword ?
-  WS_TRANSFER_MODE = integer;                //longword ?
-  WS_HTTP_PROXY_SETTING_MODE = integer;      //longword ?
+  WS_CHANNEL_TYPE = integer;                 //or longword
+  WS_TRANSFER_MODE = integer;                //or longword
+  WS_HTTP_PROXY_SETTING_MODE = integer;      //or longword
   WS_CHANNEL_PROPERTY_ID = integer;
   WS_COOKIE_MODE = integer;
   WS_OPERATION_CONTEXT_PROPERTY_ID = integer;
   WS_ENDPOINT_IDENTITY_TYPE = integer;
   WS_ENDPOINT_ADDRESS_EXTENSION_TYPE = integer;
   WS_ERROR_PROPERTY_ID = integer;
-  WS_EXCEPTION_CODE = integer;               //longword ?
+  WS_EXCEPTION_CODE = integer;               // or longword
   WS_FAULT_ERROR_PROPERTY_ID = integer;
   WS_FAULT_DISCLOSURE = integer;
   WS_HEAP_PROPERTY_ID = integer;
@@ -112,11 +112,11 @@ type
   WS_SECURITY_BINDING_TYPE = integer;
   WS_HTTP_HEADER_AUTH_TARGET = integer;
   WS_WINDOWS_INTEGRATED_AUTH_PACKAGE = integer;
-  WS_SECURITY_HEADER_VERSION = integer;      //longword ?
-  WS_TRUST_VERSION = integer;                //longword ?
+  WS_SECURITY_HEADER_VERSION = integer;      //or longword
+  WS_TRUST_VERSION = integer;                //or longword
   WS_REQUEST_SECURITY_TOKEN_ACTION = integer;
-  WS_SECURE_CONVERSATION_VERSION = integer;  //longword ?
-  WS_SECURE_PROTOCOL = integer;              //longword ?
+  WS_SECURE_CONVERSATION_VERSION = integer;  //or longword
+  WS_SECURE_PROTOCOL = integer;              //or longword
   WS_SECURITY_TIMESTAMP_USAGE = integer;
   WS_SECURITY_HEADER_LAYOUT = integer;
   WS_SECURITY_ALGORITHM_PROPERTY_ID = integer;
@@ -167,70 +167,103 @@ type
   WS_BINDING_TEMPLATE_TYPE = integer;
 
 
-//  STRUCT DEFINITIONS (BASE)
+//  PASCAL POINTER DEFINITIONS
 
-//  Utilities structure
-//  A structure used to serialize and deserialize an array of bytes.
-  WS_BYTES = record
-    length:ULONG;
-    bytes:PByte;
-  end;
+  PWS_XML_DICTIONARY             = ^WS_XML_DICTIONARY;
+  PWS_XML_STRING                 = ^WS_XML_STRING;
+  PPWS_XML_STRING                = ^PWS_XML_STRING;
+  PWS_XML_QNAME                  = ^WS_XML_QNAME;
+  PWS_XML_NODE_POSITION          = ^WS_XML_NODE_POSITION;
+  PWS_XML_READER_PROPERTY        = ^WS_XML_READER_PROPERTY;
+  PWS_XML_CANONICALIZATION_INCLUSIVE_PREFIXES = ^WS_XML_CANONICALIZATION_INCLUSIVE_PREFIXES;
+  PWS_XML_CANONICALIZATION_PROPERTY = ^WS_XML_CANONICALIZATION_PROPERTY;
+  PWS_XML_WRITER_PROPERTY        = ^WS_XML_WRITER_PROPERTY;
+  PWS_XML_BUFFER_PROPERTY        = ^WS_XML_BUFFER_PROPERTY;
+  PWS_XML_TEXT                   = ^WS_XML_TEXT;
+  PPWS_XML_TEXT                  = ^PWS_XML_TEXT;
+  PWS_XML_UTF8_TEXT              = ^WS_XML_UTF8_TEXT;
+  PWS_XML_UTF16_TEXT             = ^WS_XML_UTF16_TEXT;
+  PWS_XML_BASE64_TEXT            = ^WS_XML_BASE64_TEXT;
+  PWS_XML_BOOL_TEXT              = ^WS_XML_BOOL_TEXT;
+  PWS_XML_INT32_TEXT             = ^WS_XML_INT32_TEXT;
+  PWS_XML_INT64_TEXT             = ^WS_XML_INT64_TEXT;
+  PWS_XML_UINT64_TEXT            = ^WS_XML_UINT64_TEXT;
+  PWS_XML_FLOAT_TEXT             = ^WS_XML_FLOAT_TEXT;
+  PWS_XML_DOUBLE_TEXT            = ^WS_XML_DOUBLE_TEXT;
+  PWS_XML_DECIMAL_TEXT           = ^WS_XML_DECIMAL_TEXT;
+  PWS_XML_GUID_TEXT              = ^WS_XML_GUID_TEXT;
+  PWS_XML_UNIQUE_ID_TEXT         = ^WS_XML_UNIQUE_ID_TEXT;
+  PWS_DATETIME                   = ^WS_DATETIME;
+  PWS_XML_DATETIME_TEXT          = ^WS_XML_DATETIME_TEXT;
+  PWS_TIMESPAN                   = ^WS_TIMESPAN;
+  PWS_XML_TIMESPAN_TEXT          = ^WS_XML_TIMESPAN_TEXT;
+  PWS_XML_QNAME_TEXT             = ^WS_XML_QNAME_TEXT;
+  PWS_XML_LIST_TEXT              = ^WS_XML_LIST_TEXT;
+  PWS_XML_ELEMENT_NODE           = ^WS_XML_ELEMENT_NODE;
+  PWS_XML_TEXT_NODE              = ^WS_XML_TEXT_NODE;
+  PWS_XML_NODE                   = ^WS_XML_NODE;
+  PPWS_XML_NODE                  = ^PWS_XML_NODE;
+  PWS_XML_ATTRIBUTE              = ^WS_XML_ATTRIBUTE;
+  PPWS_XML_ATTRIBUTE             = ^PWS_XML_ATTRIBUTE;
+  PWS_XML_COMMENT_NODE           = ^WS_XML_COMMENT_NODE;
+  PWS_XML_READER_INPUT           = ^WS_XML_READER_INPUT;
+  PWS_XML_READER_BUFFER_INPUT    = ^WS_XML_READER_BUFFER_INPUT;
+  PWS_XML_READER_STREAM_INPUT    = ^WS_XML_READER_STREAM_INPUT;
+  PWS_XML_READER_ENCODING        = ^WS_XML_READER_ENCODING;
+  PWS_XML_READER_TEXT_ENCODING   = ^WS_XML_READER_TEXT_ENCODING;
+  PWS_XML_READER_BINARY_ENCODING = ^WS_XML_READER_BINARY_ENCODING;
+  PWS_STRING                     = ^WS_STRING;
+  PPWS_STRING                    = ^PWS_STRING;
+  PWS_XML_READER_MTOM_ENCODING   = ^WS_XML_READER_MTOM_ENCODING;
+  PWS_XML_READER_RAW_ENCODING    = ^WS_XML_READER_RAW_ENCODING;
+  PWS_XML_WRITER_ENCODING        = ^WS_XML_WRITER_ENCODING;
+  PWS_XML_WRITER_TEXT_ENCODING   = ^WS_XML_WRITER_TEXT_ENCODING;
+  PWS_XML_WRITER_BINARY_ENCODING = ^WS_XML_WRITER_BINARY_ENCODING;
+  PWS_XML_WRITER_MTOM_ENCODING   = ^WS_XML_WRITER_MTOM_ENCODING;
+  PWS_XML_WRITER_RAW_ENCODING    = ^WS_XML_WRITER_RAW_ENCODING;
+  PWS_XML_WRITER_OUTPUT          = ^WS_XML_WRITER_OUTPUT;
+  PWS_XML_WRITER_BUFFER_OUTPUT   = ^WS_XML_WRITER_BUFFER_OUTPUT;
+  PWS_XML_WRITER_STREAM_OUTPUT   = ^WS_XML_WRITER_STREAM_OUTPUT;
+  PWS_XML_WRITER_PROPERTIES      = ^WS_XML_WRITER_PROPERTIES;
+  PWS_XML_READER_PROPERTIES      = ^WS_XML_READER_PROPERTIES;
+  PWS_ASYNC_STATE                = ^WS_ASYNC_STATE;
+  PWS_ASYNC_OPERATION            = ^WS_ASYNC_OPERATION;
+  PWS_CHANNEL_PROPERTY           = ^WS_CHANNEL_PROPERTY;
+  PWS_CUSTOM_HTTP_PROXY          = ^WS_CUSTOM_HTTP_PROXY;
+  PWS_CHANNEL_PROPERTIES         = ^WS_CHANNEL_PROPERTIES;
+  PWS_CUSTOM_CHANNEL_CALLBACKS   = ^WS_CUSTOM_CHANNEL_CALLBACKS;
+  PWS_HTTP_HEADER_MAPPING        = ^WS_HTTP_HEADER_MAPPING;
+  PPWS_HTTP_HEADER_MAPPING       = ^PWS_HTTP_HEADER_MAPPING;
+  PWS_HTTP_MESSAGE_MAPPING       = ^WS_HTTP_MESSAGE_MAPPING;
+  PWS_ELEMENT_DESCRIPTION        = ^WS_ELEMENT_DESCRIPTION;
+  PWS_MESSAGE_DESCRIPTION        = ^WS_MESSAGE_DESCRIPTION;
+  PWS_CHANNEL_ENCODER            = ^WS_CHANNEL_ENCODER;
+  PWS_CHANNEL_DECODER            = ^WS_CHANNEL_DECODER;
+  PWS_HTTP_REDIRECT_CALLBACK_CONTEXT = ^WS_HTTP_REDIRECT_CALLBACK_CONTEXT;
+  PWS_ENDPOINT_IDENTITY          = ^WS_ENDPOINT_IDENTITY;
+  PWS_ENDPOINT_ADDRESS           = ^WS_ENDPOINT_ADDRESS;
+  PWS_DNS_ENDPOINT_IDENTITY      = ^WS_DNS_ENDPOINT_IDENTITY;
+  PWS_UPN_ENDPOINT_IDENTITY      = ^WS_UPN_ENDPOINT_IDENTITY;
+  PWS_SPN_ENDPOINT_IDENTITY      = ^WS_SPN_ENDPOINT_IDENTITY;
+  PWS_BYTES                      = ^WS_BYTES;
+  PWS_RSA_ENDPOINT_IDENTITY      = ^WS_RSA_ENDPOINT_IDENTITY;
+  PWS_CERT_ENDPOINT_IDENTITY     = ^WS_CERT_ENDPOINT_IDENTITY;
+  PWS_UNKNOWN_ENDPOINT_IDENTITY  = ^WS_UNKNOWN_ENDPOINT_IDENTITY;
+  PWS_ERROR_PROPERTY             = ^WS_ERROR_PROPERTY;
+  PWS_FAULT_REASON               = ^WS_FAULT_REASON;
+  PWS_FAULT_CODE                 = ^WS_FAULT_CODE;
+  PWS_FAULT                      = ^WS_FAULT;
+  PWS_FAULT_DETAIL_DESCRIPTION   = ^WS_FAULT_DETAIL_DESCRIPTION;
+  PWS_HEAP_PROPERTY              = ^WS_HEAP_PROPERTY;
+  PWS_HEAP_PROPERTIES            = ^WS_HEAP_PROPERTIES;
+  PWS_LISTENER_PROPERTY          = ^WS_LISTENER_PROPERTY;
+  PWS_DISALLOWED_USER_AGENT_SUBSTRINGS = ^WS_DISALLOWED_USER_AGENT_SUBSTRINGS;
+  PWS_LISTENER_PROPERTIES        = ^WS_LISTENER_PROPERTIES;
+  PWS_HOST_NAMES                 = ^WS_HOST_NAMES;
 
-  PWS_BYTES = ^WS_BYTES;
 
+  PWS_DURATION                   = ^WS_DURATION;
 
-//  XML Node structure
-//
-//   Represents a string that optionally has (WS_XML_DICTIONARY) dictionary
-//   information associated with it.  The xml APIs use WS_XML_STRINGs to identify prefixes,
-//  localNames and namespaces.
-//
-  WS_XML_STRING = record
-    length:ULONG;
-    bytes:PByte;
-    dictionary:pointer; //in fact, PWS_XML_DICTIONARY but not yet declared here
-    id:ULONG;
-  end;
-
-  PWS_XML_STRING = ^WS_XML_STRING;
-  PPWS_XML_STRING = ^PWS_XML_STRING;
-
-
-//  Utilities structure
-//
-//   An array of unicode characters and a length.
-//
-  WS_STRING = record
-    length:ULONG;
-    chars:PWideChar;
-  end;
-
-  PWS_STRING = ^WS_STRING;
-
-
-//  Endpoint Identity structure
-//
-//   The base type for all endpoint identities.
-//
-  WS_ENDPOINT_IDENTITY = record
-    identityType : WS_ENDPOINT_IDENTITY_TYPE;
-  end;
-
-  PWS_ENDPOINT_IDENTITY = ^WS_ENDPOINT_IDENTITY;
-
-
-//  Endpoint Address structure
-//
-//   Represents the network address of an endpoint.
-//
-  WS_ENDPOINT_ADDRESS = record
-    url : WS_STRING;
-    headers : PWS_XML_BUFFER;
-    extensions : PWS_XML_BUFFER;
-    identity : PWS_ENDPOINT_IDENTITY;
-  end;
-
-  PWS_ENDPOINT_ADDRESS = ^WS_ENDPOINT_ADDRESS;
 
 
 //  CALLBACK DEFINITIONS
@@ -326,7 +359,7 @@ type
   WS_ASYNC_FUNCTION = function(hr : HRESULT;
                                callbackModel : WS_CALLBACK_MODEL;
                                callbackState : pointer;
-                               next : pointer; //in fact PWS_ASYNC_OPERATION but not yet declared
+                               next : PWS_ASYNC_OPERATION;
                                asyncContext : PWS_ASYNC_CONTEXT;
                                error : PWS_ERROR):HRESULT; stdcall;
 
@@ -754,6 +787,92 @@ type
                                   error : PWS_ERROR):HRESULT; stdcall;
 
 
+//  Security Credentials callback
+//
+//  The callback to notify the client of the list of certificate issuers
+//  that are acceptable to the server.  With some protocols such as SSL,
+//  the server may optionally send such an issuer list to help the client
+//  choose a certificate.
+//
+//  This callback is an optional part of the WS_CUSTOM_CERT_CREDENTIAL.
+//  If the (possibly NULL) certificate returned by the WS_GET_CERT_CALLBACK is
+//  accepted by the server, then this callback is never invoked.  If the
+//  server rejects it and sends back an issuer list, then this callback
+//  will be invoked.  The client may then choose a certificate based on
+//  the issuer list and supply that certificate when the channel is opened
+//  next and WS_GET_CERT_CALLBACK is invoked again.
+//
+//  The parameters supplied during this callback are valid only for the
+//  duration of the callback.
+//
+  WS_CERT_ISSUER_LIST_NOTIFICATION_CALLBACK = function(
+                      certIssuerListNotificationCallbackState : pointer;
+                      issuerList : pointer;
+                      //Typed pointer is not required
+                      //struct _SecPkgContext_IssuerListInfoEx* (Schannel.h (include Schnlsp.h))
+                      error : PWS_ERROR):HRESULT; stdcall;
+
+
+//  Security Credentials callback
+//
+//  Application supplied callback for validating a username/password pair
+//  on the receiver side.  When a WS_USERNAME_MESSAGE_SECURITY_BINDING
+//  containing this callback is included in the security description, this callback
+//  is invoked for each received message at the server.  This callback is expected
+//  to return S_OKif the username/password pair was successfully validated, S_FALSE
+//  when the pair could not be validated and an error value if an unexpected error occurred.
+//  Returning any result other than S_OK from this callback will result in
+//  the associated receive message failing with a security error.
+//
+//  As with all security callbacks, the application should expect to
+//  receive this callback any time between channel/listener open and close,
+//  but it will never be invoked when a channel is not open.  In the
+//  current drop, this callback is always invoked synchronously.  In the
+//  next drop, this callback will be invoked synchronously for synchronous
+//  message receives and asynchronously for asynchronous message receives,
+//  but it will always be invoked (WS_SHORT_CALLBACK) short
+//  when it is invoked asynchronously.
+//
+  WS_VALIDATE_PASSWORD_CALLBACK = function(
+                      passwordValidatorCallbackState : pointer;
+                      username : PWS_STRING;
+                      password : PWS_STRING;
+                      asyncContext : PWS_ASYNC_CONTEXT;
+                      error : PWS_ERROR):HRESULT; stdcall;
+
+
+//  Security Bindings callback
+//
+//   Application supplied callback for validating a SAML assertion.  If a
+//  received SAML assertion passes the signature verification checks that
+//  ensure the SAML was issued by a trusted issuer, then this callback is
+//  invoked to enable the application to do additional validation on the
+//  XML form of the SAML assertion.  This callback is expected to return
+//  S_OK if the SAML assertion was successfully validated, S_FALSE when
+//  the assertion could not be validated and an error value if an
+//  unexpected error occurred.  Returning any result other than S_OK from
+//  this callback will result in the associated receive message failing
+//  with a security error.
+//
+//   As with all security callbacks, the application should expect to
+//  receive this callback any time between listener open and close, but it
+//  will never be invoked when a listener is not open.
+//
+  WS_VALIDATE_SAML_CALLBACK = function(samlValidatorCallbackState : pointer;
+                                       samlAssertion : PWS_XML_BUFFER;
+                                       error : PWS_ERROR):HRESULT; stdcall;
+
+
+//  Serialization callback
+//
+//   This callback is invoked to compare two durations.
+//
+  WS_DURATION_COMPARISON_CALLBACK = function(duration1 : PWS_DURATION;
+                                             duration2 : PWS_DURATION;
+                                             result : PINT;
+                                             error : PWS_ERROR):HRESULT; stdcall;
+
+
 //  STRUCT DEFINITIONS
 
 
@@ -769,7 +888,19 @@ type
     isConst:BOOL;
   end;
 
-  PWS_XML_DICTIONARY = ^WS_XML_DICTIONARY;
+
+//  XML Node structure
+//
+//   Represents a string that optionally has (WS_XML_DICTIONARY) dictionary
+//   information associated with it.  The xml APIs use WS_XML_STRINGs to identify prefixes,
+//  localNames and namespaces.
+//
+  WS_XML_STRING = record
+    length:ULONG;
+    bytes:PByte;
+    dictionary:PWS_XML_DICTIONARY;
+    id:ULONG;
+  end;
 
 
 //  XML Node structure
@@ -781,8 +912,6 @@ type
     localName:WS_XML_STRING;
     ns:WS_XML_STRING;
   end;
-
-  PWS_XML_QNAME = ^WS_XML_QNAME;
 
 
 //  XML Buffer structure
@@ -804,8 +933,6 @@ type
     node:pointer;
   end;
 
-  PWS_XML_NODE_POSITION = ^WS_XML_NODE_POSITION;
-
 
 //  XML Reader structure
 //
@@ -816,8 +943,6 @@ type
     value:pointer;
     valueSize:ULONG;
   end;
-
-  PWS_XML_READER_PROPERTY = ^WS_XML_READER_PROPERTY;
 
 
 //  XML Canonicalization structure
@@ -832,8 +957,6 @@ type
     prefixes:PWS_XML_STRING;
   end;
 
-  PWS_XML_CANONICALIZATION_INCLUSIVE_PREFIXES = ^WS_XML_CANONICALIZATION_INCLUSIVE_PREFIXES;
-
 
 //  XML Canonicalization structure
 //
@@ -844,8 +967,6 @@ type
     value:pointer;
     valueSize:ULONG;
   end;
-
-  PWS_XML_CANONICALIZATION_PROPERTY = ^WS_XML_CANONICALIZATION_PROPERTY;
 
 
 //  XML Writer structure
@@ -858,8 +979,6 @@ type
     valueSize:ULONG;
   end;
 
-  PWS_XML_WRITER_PROPERTY = ^WS_XML_WRITER_PROPERTY;
-
 
 //  XML Buffer structure
 //
@@ -871,8 +990,6 @@ type
     valueSize:ULONG;
   end;
 
-  PWS_XML_BUFFER_PROPERTY = ^WS_XML_BUFFER_PROPERTY;
-
 
 //  XML Node structure
 //
@@ -881,9 +998,6 @@ type
   WS_XML_TEXT = record
     textType:WS_XML_TEXT_TYPE;
   end;
-
-  PWS_XML_TEXT = ^WS_XML_TEXT;
-  PPWS_XML_TEXT = ^PWS_XML_TEXT;
 
 
 //  XML Node structure
@@ -894,8 +1008,6 @@ type
     text:WS_XML_TEXT;
     value:WS_XML_STRING;
   end;
-
-  PWS_XML_UTF8_TEXT = ^WS_XML_UTF8_TEXT;
 
 
 //  XML Node structure
@@ -908,8 +1020,6 @@ type
     byteCount:ULONG;
   end;
 
-  PWS_XML_UTF16_TEXT = ^WS_XML_UTF16_TEXT;
-
 
 //  XML Node structure
 //
@@ -921,8 +1031,6 @@ type
     length:ULONG;
   end;
 
-  PWS_XML_BASE64_TEXT = ^WS_XML_BASE64_TEXT;
-
 
 //  XML Node structure
 //
@@ -932,8 +1040,6 @@ type
     text:WS_XML_TEXT;
     value:BOOL;
   end;
-
-  PWS_XML_BOOL_TEXT = ^WS_XML_BOOL_TEXT;
 
 
 //  XML Node structure
@@ -945,8 +1051,6 @@ type
     value:longint;
   end;
 
-  PWS_XML_INT32_TEXT = ^WS_XML_INT32_TEXT;
-
 
 //  XML Node structure
 //
@@ -956,8 +1060,6 @@ type
     text:WS_XML_TEXT;
     value:int64;
   end;
-
-  PWS_XML_INT64_TEXT = ^WS_XML_INT64_TEXT;
 
 
 //  XML Node structure
@@ -969,8 +1071,6 @@ type
     value:int64;    //Is there an unsigned Int64 in Delphi ?
   end;
 
-  PWS_XML_UINT64_TEXT = ^WS_XML_UINT64_TEXT;
-
 
 //  XML Node structure
 //
@@ -980,8 +1080,6 @@ type
     text:WS_XML_TEXT;
     value:single;
   end;
-
-  PWS_XML_FLOAT_TEXT = ^WS_XML_FLOAT_TEXT;
 
 
 //  XML Node structure
@@ -993,8 +1091,6 @@ type
     value:double;
   end;
 
-  PWS_XML_DOUBLE_TEXT = ^WS_XML_DOUBLE_TEXT;
-
 
 //  XML Node structure
 //
@@ -1004,8 +1100,6 @@ type
     text:WS_XML_TEXT;
     value:currency;     //not sure Delphi Currency is then same as C++ DECIMAL - Extended is 10 bytes
   end;
-
-  PWS_XML_DECIMAL_TEXT = ^WS_XML_DECIMAL_TEXT;
 
 
 //  XML Node structure
@@ -1017,8 +1111,6 @@ type
     value:TGUID;
   end;
 
-  PWS_XML_GUID_TEXT = ^WS_XML_GUID_TEXT;
-
 
 //  XML Node structure
 //
@@ -1028,8 +1120,6 @@ type
     text:WS_XML_TEXT;
     value:TGUID;
   end;
-
-  PWS_XML_UNIQUE_ID_TEXT = ^WS_XML_UNIQUE_ID_TEXT;
 
 
 //  Utilities structure
@@ -1048,8 +1138,6 @@ type
     format:WS_DATETIME_FORMAT;
   end;
 
-  PWS_DATETIME = ^WS_DATETIME;
-
 
 //  XML Node structure
 //
@@ -1063,8 +1151,6 @@ type
    value:WS_DATETIME;
   end;
 
-  PWS_XML_DATETIME_TEXT = ^WS_XML_DATETIME_TEXT;
-
 
 //  Utilities structure
 //
@@ -1073,8 +1159,6 @@ type
   WS_TIMESPAN = record
     ticks:int64;
   end;
-
-  PWS_TIMESPAN = ^WS_TIMESPAN;
 
 
 //  XML Node structure
@@ -1096,8 +1180,6 @@ type
     value:WS_TIMESPAN;
   end;
 
-  PWS_XML_TIMESPAN_TEXT = ^WS_XML_TIMESPAN_TEXT;
-
 
 //  XML Node structure
 //
@@ -1109,8 +1191,6 @@ type
     localName:PWS_XML_STRING;
     ns:PWS_XML_STRING;
   end;
-
-  PWS_XML_QNAME_TEXT = ^WS_XML_QNAME_TEXT;
 
 
 //  XML Node structure
@@ -1126,8 +1206,6 @@ type
     items:PPWS_XML_TEXT;
   end;
 
-  PWS_XML_LIST_TEXT = ^WS_XML_LIST_TEXT;
-
 
 //  XML Node structure
 //
@@ -1137,9 +1215,6 @@ type
   WS_XML_NODE = record
     nodeType : WS_XML_NODE_TYPE;
   end;
-
-  PWS_XML_NODE = ^WS_XML_NODE;
-  PPWS_XML_NODE = ^PWS_XML_NODE;
 
 
 //  XML Node structure
@@ -1154,9 +1229,6 @@ type
     ns:PWS_XML_STRING;
     value:PWS_XML_TEXT;
   end;
-
-  PWS_XML_ATTRIBUTE = ^WS_XML_ATTRIBUTE;
-  PPWS_XML_ATTRIBUTE = ^PWS_XML_ATTRIBUTE;
 
 
 //  XML Node structure
@@ -1174,8 +1246,6 @@ type
     isEmpty:BOOL;
   end;
 
-  PWS_XML_ELEMENT_NODE = ^WS_XML_ELEMENT_NODE;
-
 
 //  XML Node structure
 //
@@ -1185,8 +1255,6 @@ type
     node:WS_XML_NODE;
     text:PWS_XML_TEXT;
   end;
-
-  PWS_XML_TEXT_NODE = ^WS_XML_TEXT_NODE;
 
 
 //  XML Node structure
@@ -1198,8 +1266,6 @@ type
     value:WS_XML_STRING;
   end;
 
-  PWS_XML_COMMENT_NODE = ^WS_XML_COMMENT_NODE;
-
 
 //  XML Reader structure
 //
@@ -1208,8 +1274,6 @@ type
   WS_XML_READER_INPUT = record
     inputType:WS_XML_READER_INPUT_TYPE;
   end;
-
-  PWS_XML_READER_INPUT = ^WS_XML_READER_INPUT;
 
 
 //  XML Reader structure
@@ -1222,8 +1286,6 @@ type
     encodedDataSize:ULONG;
   end;
 
-  PWS_XML_READER_BUFFER_INPUT = ^WS_XML_READER_BUFFER_INPUT;
-
 
 //  XML Reader structure
 //
@@ -1235,8 +1297,6 @@ type
     readCallbackState:pointer;
   end;
 
-  PWS_XML_READER_STREAM_INPUT = ^WS_XML_READER_STREAM_INPUT;
-
 
 //  XML Reader structure
 //
@@ -1245,8 +1305,6 @@ type
   WS_XML_READER_ENCODING = record
     encodingType : WS_XML_READER_ENCODING_TYPE;
   end;
-
-  PWS_XML_READER_ENCODING = ^WS_XML_READER_ENCODING;
 
 
 //  XML Reader structure
@@ -1257,8 +1315,6 @@ type
     encoding : WS_XML_READER_ENCODING;
     charSet : WS_CHARSET;
   end;
-
-  PWS_XML_READER_TEXT_ENCODING = ^WS_XML_READER_TEXT_ENCODING;
 
 
 //  XML Reader structure
@@ -1271,7 +1327,15 @@ type
     dynamicDictionary : PWS_XML_DICTIONARY;
   end;
 
-  PWS_XML_READER_BINARY_ENCODING = ^WS_XML_READER_BINARY_ENCODING;
+
+//  Utilities structure
+//
+//   An array of unicode characters and a length.
+//
+  WS_STRING = record
+    length:ULONG;
+    chars:PWideChar;
+  end;
 
 
 //  XML Reader structure
@@ -1287,8 +1351,6 @@ type
     startUri : WS_STRING;
   end;
 
-  PWS_XML_READER_MTOM_ENCODING = ^WS_XML_READER_MTOM_ENCODING;
-
 
 //  XML Reader structure
 //
@@ -1297,8 +1359,6 @@ type
   WS_XML_READER_RAW_ENCODING = record
     encoding : WS_XML_READER_ENCODING;
   end;
-
-  PWS_XML_READER_RAW_ENCODING = ^WS_XML_READER_RAW_ENCODING;
 
 
 //  XML Writer structure
@@ -1309,8 +1369,6 @@ type
     encodingType : WS_XML_WRITER_ENCODING_TYPE;
   end;
 
-  PWS_XML_WRITER_ENCODING = ^WS_XML_WRITER_ENCODING;
-
 
 //  XML Writer structure
 //
@@ -1320,8 +1378,6 @@ type
     encoding : WS_XML_WRITER_ENCODING;
     charSet : WS_CHARSET;
   end;
-
-  PWS_XML_WRITER_TEXT_ENCODING = ^WS_XML_WRITER_TEXT_ENCODING;
 
 
 //  XML Writer structure
@@ -1334,8 +1390,6 @@ type
     dynamicStringCallback : WS_DYNAMIC_STRING_CALLBACK;
     dynamicStringCallbackState : pointer;
   end;
-
-  PWS_XML_WRITER_BINARY_ENCODING = ^WS_XML_WRITER_BINARY_ENCODING;
 
 
 //  XML Writer structure
@@ -1354,8 +1408,6 @@ type
     maxInlineByteCount : ULONG;
   end;
 
-  PWS_XML_WRITER_MTOM_ENCODING = ^WS_XML_WRITER_MTOM_ENCODING;
-
 
 //  XML Writer structure
 //
@@ -1364,8 +1416,6 @@ type
   WS_XML_WRITER_RAW_ENCODING = record
     encoding : WS_XML_WRITER_ENCODING;
   end;
-
-  PWS_XML_WRITER_RAW_ENCODING = ^WS_XML_WRITER_RAW_ENCODING;
 
 
 //  XML Writer structure
@@ -1376,8 +1426,6 @@ type
     outputType : WS_XML_WRITER_OUTPUT_TYPE;
   end;
 
-  PWS_XML_WRITER_OUTPUT = ^WS_XML_WRITER_OUTPUT;
-
 
 //  XML Writer structure
 //
@@ -1386,8 +1434,6 @@ type
   WS_XML_WRITER_BUFFER_OUTPUT = record
     output : WS_XML_WRITER_OUTPUT;
   end;
-
-  PWS_XML_WRITER_BUFFER_OUTPUT = ^WS_XML_WRITER_BUFFER_OUTPUT;
 
 
 //  XML Writer structure
@@ -1400,8 +1446,6 @@ type
     writeCallbackState : pointer;
   end;
 
-  PWS_XML_WRITER_STREAM_OUTPUT = ^WS_XML_WRITER_STREAM_OUTPUT;
-
 
 //  XML Writer structure
 //
@@ -1412,8 +1456,6 @@ type
     propertyCount : ULONG;
   end;
 
-  PWS_XML_WRITER_PROPERTIES = ^WS_XML_WRITER_PROPERTIES;
-
 
 //  XML Reader structure
 //
@@ -1423,8 +1465,6 @@ type
     properties : PWS_XML_READER_PROPERTY;
     propertyCount : ULONG;
   end;
-
-  PWS_XML_READER_PROPERTIES = ^WS_XML_READER_PROPERTIES;
 
 
 //  Async Model structure
@@ -1439,8 +1479,6 @@ type
     internal4 : pointer;
   end;
 
-  PWS_ASYNC_STATE = ^WS_ASYNC_STATE;
-
 
 //  Async Model structure
 //
@@ -1450,8 +1488,6 @@ type
   WS_ASYNC_OPERATION = record
     function_ : WS_ASYNC_FUNCTION;    //function is a reserved word in Pascal
   end;
-
-  PWS_ASYNC_OPERATION = ^WS_ASYNC_OPERATION;
 
 
 //  Channel structure
@@ -1464,8 +1500,6 @@ type
     valueSize : ULONG;
   end;
 
-  PWS_CHANNEL_PROPERTY = ^WS_CHANNEL_PROPERTY;
-
 
 //  Channel structure
 //
@@ -1477,8 +1511,6 @@ type
     bypass : WS_STRING;
   end;
 
-  PWS_CUSTOM_HTTP_PROXY = ^WS_CUSTOM_HTTP_PROXY;
-
 
 //  Channel structure
 //
@@ -1488,8 +1520,6 @@ type
     properties : PWS_CHANNEL_PROPERTY;
     propertyCount : ULONG;
   end;
-
-  PWS_CHANNEL_PROPERTIES = ^WS_CHANNEL_PROPERTIES;
 
 
 //  Channel structure
@@ -1514,8 +1544,6 @@ type
     shutdownSessionChannelCallback : WS_SHUTDOWN_SESSION_CHANNEL_CALLBACK;
   end;
 
-  PWS_CUSTOM_CHANNEL_CALLBACKS = ^WS_CUSTOM_CHANNEL_CALLBACKS;
-
 
 //  Channel structure
 //
@@ -1525,9 +1553,6 @@ type
     headerName : WS_XML_STRING;
     headerMappingOptions : ULONG;
   end;
-
-  PWS_HTTP_HEADER_MAPPING = ^WS_HTTP_HEADER_MAPPING;
-  PPWS_HTTP_HEADER_MAPPING = ^PWS_HTTP_HEADER_MAPPING;
 
 
 //  Channel structure
@@ -1544,8 +1569,6 @@ type
     responseHeaderMappingCount : ULONG;
   end;
 
-  PWS_HTTP_MESSAGE_MAPPING = ^WS_HTTP_MESSAGE_MAPPING;
-
 
 //  Serialization structure
 //
@@ -1558,8 +1581,6 @@ type
     typeDescription : pointer;
   end;
 
-  PWS_ELEMENT_DESCRIPTION = ^WS_ELEMENT_DESCRIPTION;
-
 
 //  Channel structure
 //
@@ -1569,8 +1590,6 @@ type
     action : PWS_XML_STRING;
     bodyElementDescription : PWS_ELEMENT_DESCRIPTION;
   end;
-
-  PWS_MESSAGE_DESCRIPTION = ^WS_MESSAGE_DESCRIPTION;
 
 
 //  Channel structure
@@ -1588,8 +1607,6 @@ type
     freeEncoderCallback : WS_FREE_ENCODER_CALLBACK;
   end;
 
-  PWS_CHANNEL_ENCODER = ^WS_CHANNEL_ENCODER;
-
 
 //  Channel structure
 //
@@ -1606,8 +1623,6 @@ type
     freeDecoderCallback : WS_FREE_DECODER_CALLBACK;
   end;
 
-  PWS_CHANNEL_DECODER = ^WS_CHANNEL_DECODER;
-
 
 //  Channel structure
 //
@@ -1621,7 +1636,26 @@ type
     state : pointer;
   end;
 
-  PWS_HTTP_REDIRECT_CALLBACK_CONTEXT = ^WS_HTTP_REDIRECT_CALLBACK_CONTEXT;
+
+//  Endpoint Identity structure
+//
+//   The base type for all endpoint identities.
+//
+  WS_ENDPOINT_IDENTITY = record
+    identityType : WS_ENDPOINT_IDENTITY_TYPE;
+  end;
+
+
+//  Endpoint Address structure
+//
+//   Represents the network address of an endpoint.
+//
+  WS_ENDPOINT_ADDRESS = record
+    url : WS_STRING;
+    headers : PWS_XML_BUFFER;
+    extensions : PWS_XML_BUFFER;
+    identity : PWS_ENDPOINT_IDENTITY;
+  end;
 
 
 //  Endpoint Identity structure
@@ -1633,8 +1667,6 @@ type
     dns : WS_STRING;
   end;
 
-  PWS_DNS_ENDPOINT_IDENTITY = ^WS_DNS_ENDPOINT_IDENTITY;
-
 
 //  Endpoint Identity structure
 //
@@ -1644,8 +1676,6 @@ type
     identity : WS_ENDPOINT_IDENTITY;
     upn : WS_STRING;
   end;
-
-  PWS_UPN_ENDPOINT_IDENTITY = ^WS_UPN_ENDPOINT_IDENTITY;
 
 
 //  Endpoint Identity structure
@@ -1657,7 +1687,13 @@ type
     spn : WS_STRING;
   end;
 
-  PWS_SPN_ENDPOINT_IDENTITY = ^WS_SPN_ENDPOINT_IDENTITY;
+
+//  Utilities structure
+//  A structure used to serialize and deserialize an array of bytes.
+  WS_BYTES = record
+    length:ULONG;
+    bytes:PByte;
+  end;
 
 
 //  Endpoint Identity structure
@@ -1670,8 +1706,6 @@ type
     exponent : WS_BYTES;
   end;
 
-  PWS_RSA_ENDPOINT_IDENTITY = ^WS_RSA_ENDPOINT_IDENTITY;
-
 
 //  Endpoint Identity structure
 //
@@ -1681,8 +1715,6 @@ type
     identity : WS_ENDPOINT_IDENTITY;
     rawCertificateData : WS_BYTES;
   end;
-
-  PWS_CERT_ENDPOINT_IDENTITY = ^WS_CERT_ENDPOINT_IDENTITY;
 
 
 //  Endpoint Identity structure
@@ -1695,8 +1727,6 @@ type
     element : PWS_XML_BUFFER;
   end;
 
-  PWS_UNKNOWN_ENDPOINT_IDENTITY = ^WS_UNKNOWN_ENDPOINT_IDENTITY;
-
 
 //  Errors structure
 //
@@ -1707,8 +1737,6 @@ type
     value : pointer;
     valueSize : ULONG;
   end;
-
-  PWS_ERROR_PROPERTY = ^WS_ERROR_PROPERTY;
 
 
 //  Faults structure
@@ -1722,8 +1750,6 @@ type
     lang : WS_STRING;
   end;
 
-  PWS_FAULT_REASON = ^WS_FAULT_REASON;
-
 
 //  Faults structure
 //
@@ -1733,10 +1759,8 @@ type
 //
   WS_FAULT_CODE = record
     value : WS_XML_QNAME;
-    subCode : pointer;  //in fact, PWS_FAULT_CODE but not yet fully defined here
+    subCode : PWS_FAULT_CODE;
   end;
-
-  PWS_FAULT_CODE = ^WS_FAULT_CODE;
 
 
 //  Faults structure
@@ -1754,8 +1778,6 @@ type
     detail : PWS_XML_BUFFER;
   end;
 
-  PWS_FAULT = ^WS_FAULT;
-
 
 //  Faults structure
 //
@@ -1765,8 +1787,6 @@ type
     action : PWS_XML_STRING;
     detailElementDescription : PWS_ELEMENT_DESCRIPTION;
   end;
-
-  PWS_FAULT_DETAIL_DESCRIPTION = ^WS_FAULT_DETAIL_DESCRIPTION;
 
 
 //  Heap structure
@@ -1779,8 +1799,6 @@ type
     valueSize : ULONG;
   end;
 
-  PWS_HEAP_PROPERTY = ^WS_HEAP_PROPERTY;
-
 
 //  Heap structure
 //
@@ -1791,7 +1809,65 @@ type
     propertyCount : ULONG;
   end;
 
-  PWS_HEAP_PROPERTIES = ^WS_HEAP_PROPERTIES;
+
+//  Listener structure
+//
+//   Specifies a listener specific setting.
+//
+  WS_LISTENER_PROPERTY = record
+    id : WS_LISTENER_PROPERTY_ID;
+    value : pointer;
+    valueSize : ULONG;
+  end;
+
+
+//  Listener structure
+//
+//   Specifies the list of blocked UserAgent sub-string's. This is
+//  used with the WS_LISTENER_PROPERTY_DISALLOWED_USER_AGENT
+//   listener property.
+//
+  WS_DISALLOWED_USER_AGENT_SUBSTRINGS = record
+    subStringCount : ULONG;
+    subStrings : PPWS_STRING;
+  end;
+
+
+//  Listener structure
+//
+//   A structure that is used to specify a set of WS_LISTENER_PROPERTYs.
+//
+  WS_LISTENER_PROPERTIES = record
+    properties : PWS_LISTENER_PROPERTY;
+    propertyCount : ULONG;
+  end;
+
+
+//  Listener structure
+//
+//   A structure containing a list of host names.
+//
+  WS_HOST_NAMES = record
+    hostNames : PWS_STRING;
+    hostNameCount : ULONG;
+  end;
+
+
+//  Utilities structure
+//
+//   Represents a (http://www.w3.org/TR/xmlschema-2/#duration) xsd:duration.
+//
+  WS_DURATION = record
+    negative : BOOL;
+    years : ULONG;
+    months : ULONG;
+    days : ULONG;
+    hours : ULONG;
+    minutes : ULONG;
+    seconds : ULONG;
+    milliseconds : ULONG;
+    ticks : ULONG;
+  end;
 
 
 //  FUNCTION DEFINITIONS
