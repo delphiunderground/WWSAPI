@@ -31,7 +31,7 @@ unit webservices;
 interface
 
 uses
-  windows, wcrypt2;
+  windows, wcrypt2, ncrypt;
 
 type
   //size_t is also defined in delphi XE
@@ -58,6 +58,9 @@ type
   PPWS_XML_WRITER = ^PWS_XML_WRITER;
   PWS_XML_BUFFER = pointer;
   PPWS_XML_BUFFER = ^PWS_XML_BUFFER;
+  PWS_CHANNEL = pointer;
+  PPWS_CHANNEL = ^PWS_CHANNEL;
+  PWS_OPERATION_CONTEXT = pointer;
   PWS_ERROR = pointer;
   PPWS_ERROR = ^PWS_ERROR;
   PWS_HEAP = pointer;
@@ -260,10 +263,52 @@ type
   PWS_DISALLOWED_USER_AGENT_SUBSTRINGS = ^WS_DISALLOWED_USER_AGENT_SUBSTRINGS;
   PWS_LISTENER_PROPERTIES        = ^WS_LISTENER_PROPERTIES;
   PWS_HOST_NAMES                 = ^WS_HOST_NAMES;
+  PWS_CUSTOM_LISTENER_CALLBACKS  = ^WS_CUSTOM_LISTENER_CALLBACKS;
+  PWS_MESSAGE_PROPERTY           = ^WS_MESSAGE_PROPERTY;
+  PWS_MESSAGE_PROPERTIES         = ^WS_MESSAGE_PROPERTIES;
+  PWS_SECURITY_ALGORITHM_PROPERTY = ^WS_SECURITY_ALGORITHM_PROPERTY;
+  PWS_SECURITY_ALGORITHM_SUITE   = ^WS_SECURITY_ALGORITHM_SUITE;
+  PWS_SECURITY_PROPERTY          = ^WS_SECURITY_PROPERTY;
+  PWS_SECURITY_PROPERTIES        = ^WS_SECURITY_PROPERTIES;
+  PWS_SECURITY_BINDING_PROPERTY  = ^WS_SECURITY_BINDING_PROPERTY;
+  PWS_SECURITY_BINDING_PROPERTIES = ^WS_SECURITY_BINDING_PROPERTIES;
+  PWS_SERVICE_SECURITY_IDENTITIES = ^WS_SERVICE_SECURITY_IDENTITIES;
+  PWS_CERTIFICATE_VALIDATION_CALLBACK_CONTEXT = ^WS_CERTIFICATE_VALIDATION_CALLBACK_CONTEXT;
+  PWS_CERT_CREDENTIAL            = ^WS_CERT_CREDENTIAL;
+  PWS_SUBJECT_NAME_CERT_CREDENTIAL = ^WS_SUBJECT_NAME_CERT_CREDENTIAL;
+  PWS_THUMBPRINT_CERT_CREDENTIAL = ^WS_THUMBPRINT_CERT_CREDENTIAL;
+  PWS_CUSTOM_CERT_CREDENTIAL     = ^WS_CUSTOM_CERT_CREDENTIAL;
+  PWS_WINDOWS_INTEGRATED_AUTH_CREDENTIAL = ^WS_WINDOWS_INTEGRATED_AUTH_CREDENTIAL;
+  PWS_STRING_WINDOWS_INTEGRATED_AUTH_CREDENTIAL = ^WS_STRING_WINDOWS_INTEGRATED_AUTH_CREDENTIAL;
+  PWS_DEFAULT_WINDOWS_INTEGRATED_AUTH_CREDENTIAL = ^WS_DEFAULT_WINDOWS_INTEGRATED_AUTH_CREDENTIAL;
+  PWS_OPAQUE_WINDOWS_INTEGRATED_AUTH_CREDENTIAL = ^WS_OPAQUE_WINDOWS_INTEGRATED_AUTH_CREDENTIAL;
+  PWS_USERNAME_CREDENTIAL        = ^WS_USERNAME_CREDENTIAL;
+  PWS_STRING_USERNAME_CREDENTIAL = ^WS_STRING_USERNAME_CREDENTIAL;
+  PWS_SECURITY_KEY_HANDLE        = ^WS_SECURITY_KEY_HANDLE;
+  PWS_RAW_SYMMETRIC_SECURITY_KEY_HANDLE = ^WS_RAW_SYMMETRIC_SECURITY_KEY_HANDLE;
+  PWS_NCRYPT_ASYMMETRIC_SECURITY_KEY_HANDLE = ^WS_NCRYPT_ASYMMETRIC_SECURITY_KEY_HANDLE;
+  PWS_CAPI_ASYMMETRIC_SECURITY_KEY_HANDLE = ^WS_CAPI_ASYMMETRIC_SECURITY_KEY_HANDLE;
+  PWS_SECURITY_BINDING           = ^WS_SECURITY_BINDING;
+  PPWS_SECURITY_BINDING          = ^PWS_SECURITY_BINDING;
+  PWS_SSL_TRANSPORT_SECURITY_BINDING = ^WS_SSL_TRANSPORT_SECURITY_BINDING;
+  PWS_TCP_SSPI_TRANSPORT_SECURITY_BINDING = ^WS_TCP_SSPI_TRANSPORT_SECURITY_BINDING;
+  PWS_NAMEDPIPE_SSPI_TRANSPORT_SECURITY_BINDING = ^WS_NAMEDPIPE_SSPI_TRANSPORT_SECURITY_BINDING;
+  PWS_HTTP_HEADER_AUTH_SECURITY_BINDING = ^WS_HTTP_HEADER_AUTH_SECURITY_BINDING;
+  PWS_KERBEROS_APREQ_MESSAGE_SECURITY_BINDING = ^WS_KERBEROS_APREQ_MESSAGE_SECURITY_BINDING;
+  PWS_USERNAME_MESSAGE_SECURITY_BINDING = ^WS_USERNAME_MESSAGE_SECURITY_BINDING;
+  PWS_SECURITY_DESCRIPTION       = ^WS_SECURITY_DESCRIPTION;
+  PWS_SECURITY_CONTEXT_MESSAGE_SECURITY_BINDING = ^WS_SECURITY_CONTEXT_MESSAGE_SECURITY_BINDING;
+  PWS_SECURITY_CONTEXT_PROPERTY  = ^WS_SECURITY_CONTEXT_PROPERTY;
+  PWS_XML_SECURITY_TOKEN_PROPERTY = ^WS_XML_SECURITY_TOKEN_PROPERTY;
+  PWS_XML_TOKEN_MESSAGE_SECURITY_BINDING = ^WS_XML_TOKEN_MESSAGE_SECURITY_BINDING;
+
 
 
   PWS_DURATION                   = ^WS_DURATION;
 
+
+
+  PWS_SECURITY_TOKEN             = pointer;  //opaque handle representing a security token.
 
 
 //  CALLBACK DEFINITIONS
@@ -873,8 +918,154 @@ type
                                              error : PWS_ERROR):HRESULT; stdcall;
 
 
-//  STRUCT DEFINITIONS
+//  Serialization callback
+//
+//   This callback is invoked to read an value when WS_CUSTOM_TYPE
+//   has been specified.  This allows reading of XML constructs which do not easily
+//  map to the core serialization model.
+//
+  WS_READ_TYPE_CALLBACK = function(reader : PWS_XML_READER;
+                                   typeMapping : WS_TYPE_MAPPING;
+                                   descriptionData : pointer;
+                                   heap : PWS_HEAP;
+                                   value : pointer;
+                                   valueSize : ULONG;
+                                   error : PWS_ERROR):HRESULT; stdcall;
 
+
+//  Serialization callback
+//
+//   This callback is invoked to write an element when WS_CUSTOM_TYPE
+//   has been specified.  This allows writing of XML constructs which do not easily
+//  map to the core serialization model.
+//
+  WS_WRITE_TYPE_CALLBACK = function(writer : PWS_XML_WRITER;
+                                    typeMapping : WS_TYPE_MAPPING;
+                                    descriptionData : pointer;
+                                    value : pointer;
+                                    valueSize : ULONG;
+                                    error : PWS_ERROR):HRESULT; stdcall;
+
+
+//  Serialization callback
+//
+//   This callback is invoked before a value that is handled
+//  by a WS_CUSTOM_TYPE is serialized in order to
+//  determine if the value is the default value.  Support
+//  for default values is enabled by specifying
+//  when WS_FIELD_OPTIONAL in the WS_FIELD_DESCRIPTION.
+//
+  WS_IS_DEFAULT_VALUE_CALLBACK = function(descriptionData : pointer;
+                                          value : pointer;
+                                          defaultValue : pointer;
+                                          valueSize : ULONG;
+                                          isDefault : PBOOL;
+                                          error : PWS_ERROR):HRESULT; stdcall;
+
+
+//  Contract callback
+//
+//   It is invoked when a WS_MESSAGE is received on an endpoint configured
+//  with a WS_SERVICE_CONTRACT which has defaultMessageHandlerCallback set.
+//
+//   The incoming WS_MESSAGE, the serviceProxy along with other parameters
+//  is made available to the callback through WS_OPERATION_CONTEXT.
+//
+  WS_SERVICE_MESSAGE_RECEIVE_CALLBACK = function(context : PWS_OPERATION_CONTEXT;
+                                                 asyncContext : PWS_ASYNC_CONTEXT;
+                                                 error : PWS_ERROR):HRESULT; stdcall;
+
+
+//  Call cancellation callback
+//
+//   This callback is invoked by service model to notify a cancellation of an
+//  async service operation call as a result of an aborted shutdown of service host.
+//
+  WS_OPERATION_CANCEL_CALLBACK = procedure(reason : WS_SERVICE_CANCEL_REASON;
+                                           state : pointer); stdcall;
+
+
+//  Call cancellation callback
+//
+//   This callback is invoked by service model to allow application to cleanup
+//  state that was registered with cancellation callback.
+//
+  WS_OPERATION_FREE_STATE_CALLBACK = procedure(state : pointer); stdcall;
+
+
+//  Contract callback
+//
+//   This callback is invoked by service model to delegate to the service
+//  operation call. This callback is generated by (Web Service Compiler Tool) wsutil.exe
+//   for every service operation. It is defined on the WS_OPERATION_DESCRIPTION for each
+//  service operation.
+//
+  WS_SERVICE_STUB_CALLBACK = function(context : PWS_OPERATION_CONTEXT;
+                                      frame : pointer;
+                                      callback : pointer;
+                                      asyncContext : PWS_ASYNC_CONTEXT;
+                                      error : PWS_ERROR):HRESULT; stdcall;
+
+
+//  Service Host callback
+//
+//   This callback is invoked when a channel is accepted on an endpoint
+//  listener by service host.
+//
+//   For (Contract) session based service contract, this notification signifies session initiation.
+//  Thus an application state scoped for the session can be created within this callback.
+//
+  WS_SERVICE_ACCEPT_CHANNEL_CALLBACK = function(context : PWS_OPERATION_CONTEXT;
+                                                channelState : ppointer;
+                                                asyncContext : PWS_ASYNC_CONTEXT;
+                                                error : PWS_ERROR):HRESULT; stdcall;
+
+
+//  Service Host callback
+//
+//   This callback is invoked when a channel is closed/or aborted on an endpoint.
+//  This callback is called right before we are about to close the channel.
+//
+//   For normal operation when service host is running and the client cleanly
+//  closed the channel, this implies that we have received a session closure
+//  from the client and we are about to close the channel.
+//
+//   The other scenario is when service host is going through an Abort Shutdown
+//  or during the processing of the message an unrecoverable error condition is
+//  met, as a result of this we attempt to abort and then close the channel.
+//  In this case as well right before the abort we will call upon this callback.
+//
+//   For (Contract) session based service contract, this notification
+//  signifies session tear down. Thus an application state scoped for the session
+//  can be destroyed within this callback.
+//
+  WS_SERVICE_CLOSE_CHANNEL_CALLBACK = function(
+                             context : PWS_OPERATION_CONTEXT;
+                             asyncContext : PWS_ASYNC_CONTEXT):HRESULT; stdcall;
+
+
+//  Service Authorization callback
+//
+//   This callback is invoked when headers of the incoming message
+//  are received and the body is not processed.
+//
+  WS_SERVICE_SECURITY_CALLBACK = function(context : PWS_OPERATION_CONTEXT;
+                                          authorized : PBOOL;
+                                          error : PWS_ERROR):HRESULT; stdcall;
+
+
+//  Service Proxy callback
+//
+//   The callback is invoked when the headers of the input message are
+//  about to be sent through, or when an output message headers are just received.
+//
+  WS_PROXY_MESSAGE_CALLBACK = function(message_ : PWS_MESSAGE;
+                                       heap : PWS_HEAP;
+                                       state : pointer;
+                                       error : PWS_ERROR):HRESULT; stdcall;
+
+
+//  STRUCT DEFINITIONS
 
 //  XML Node structure
 //
@@ -1853,6 +2044,671 @@ type
   end;
 
 
+//  Listener structure
+//
+//   A structure that is used to specify a set of callbacks
+//  that form the implementation of a custom
+//  listener.
+//
+  WS_CUSTOM_LISTENER_CALLBACKS = record
+    createListenerCallback : WS_CREATE_LISTENER_CALLBACK;
+    freeListenerCallback : WS_FREE_LISTENER_CALLBACK;
+    resetListenerCallback : WS_RESET_LISTENER_CALLBACK;
+    openListenerCallback : WS_OPEN_LISTENER_CALLBACK;
+    closeListenerCallback : WS_CLOSE_LISTENER_CALLBACK;
+    abortListenerCallback : WS_ABORT_LISTENER_CALLBACK;
+    getListenerPropertyCallback : WS_GET_LISTENER_PROPERTY_CALLBACK;
+    setListenerPropertyCallback : WS_SET_LISTENER_PROPERTY_CALLBACK;
+    createChannelForListenerCallback : WS_CREATE_CHANNEL_FOR_LISTENER_CALLBACK;
+    acceptChannelCallback : WS_ACCEPT_CHANNEL_CALLBACK;
+  end;
+
+
+//  Message structure
+//
+//   Specifies a message specific setting.
+//
+  WS_MESSAGE_PROPERTY = record
+    id : WS_MESSAGE_PROPERTY_ID;
+    value : pointer;
+    valueSize : ULONG;
+  end;
+
+
+//  Message structure
+//
+//   A structure that is used to specify a set of WS_MESSAGE_PROPERTYs.
+//
+  WS_MESSAGE_PROPERTIES = record
+    properties : PWS_MESSAGE_PROPERTY;
+    propertyCount : ULONG;
+  end;
+
+
+//  Security Channel Settings structure
+//
+//   Specifies a crypto algorithm setting.
+//
+  WS_SECURITY_ALGORITHM_PROPERTY = record
+    id : WS_SECURITY_ALGORITHM_PROPERTY_ID;
+    value : pointer;
+    valueSize : ULONG;
+  end;
+
+
+//  Security Channel Settings structure
+//
+//  Defines the security algorithms and key lengths to be used with
+//  WS-Security.  This setting is relevant to message security bindings
+//  and mixed-mode security bindings.
+//
+  WS_SECURITY_ALGORITHM_SUITE = record
+    canonicalizationAlgorithm : WS_SECURITY_ALGORITHM_ID;
+    digestAlgorithm : WS_SECURITY_ALGORITHM_ID;
+    symmetricSignatureAlgorithm : WS_SECURITY_ALGORITHM_ID;
+    asymmetricSignatureAlgorithm : WS_SECURITY_ALGORITHM_ID;
+    encryptionAlgorithm : WS_SECURITY_ALGORITHM_ID;
+    keyDerivationAlgorithm : WS_SECURITY_ALGORITHM_ID;
+    symmetricKeyWrapAlgorithm : WS_SECURITY_ALGORITHM_ID;
+    asymmetricKeyWrapAlgorithm : WS_SECURITY_ALGORITHM_ID;
+    minSymmetricKeyLength : ULONG;
+    maxSymmetricKeyLength: ULONG;
+    minAsymmetricKeyLength : ULONG;
+    maxAsymmetricKeyLength : ULONG;
+    properties : PWS_SECURITY_ALGORITHM_PROPERTY;
+    propertyCount : ULONG;
+  end;
+
+
+//  Security Channel Settings structure
+//
+//   Specifies a channel-wide security setting.
+//
+  WS_SECURITY_PROPERTY = record
+    id : WS_SECURITY_PROPERTY_ID;
+    value : pointer;
+    valueSize : ULONG;
+  end;
+
+
+//  Security Channel Settings structure
+//
+//   Specifies an array of channel-wide security settings.
+//
+  WS_SECURITY_PROPERTIES = record
+    properties : PWS_SECURITY_PROPERTY;
+    propertyCount : ULONG;
+  end;
+
+
+//  Security Binding Settings structure
+//
+//   Specifies a security binding specific setting.
+//
+  WS_SECURITY_BINDING_PROPERTY = record
+    id : WS_SECURITY_BINDING_PROPERTY_ID;
+    value : pointer;
+    valueSize : ULONG;
+  end;
+
+
+//  Security Channel Settings structure
+//
+//   Specifies an array of security binding settings.
+//
+  WS_SECURITY_BINDING_PROPERTIES = record
+    properties : PWS_SECURITY_BINDING_PROPERTY;
+    propertyCount : ULONG;
+  end;
+
+
+//  Extended Protection structure
+//
+//   A list of Server Principal Names (SPNs) that are used to validate Extended Protection.
+//
+//   Only available on the server.
+//
+  WS_SERVICE_SECURITY_IDENTITIES = record
+    serviceIdentities : PWS_STRING;
+    serviceIdentityCount : ULONG;
+  end;
+
+
+//  Security Channel Settings structure
+//
+//   Specifies the callback function and state for validating the HTTP certificate.
+//
+//   See also WS_SECURITY_BINDING_PROPERTY_CERTIFICATE_VALIDATION_CALLBACK_CONTEXT.
+//
+  WS_CERTIFICATE_VALIDATION_CALLBACK_CONTEXT = record
+    callback : WS_CERTIFICATE_VALIDATION_CALLBACK;
+    state : pointer;
+  end;
+
+
+//  Security Credentials structure
+//
+//  The abstract base type for all certificate credential types.
+//
+  WS_CERT_CREDENTIAL = record
+    credentialType : WS_CERT_CREDENTIAL_TYPE;
+  end;
+
+
+//  Security Credentials structure
+//
+//  The type for specifying a certificate credential using the
+//  certificate's subject name, store location and store name.  The
+//  specified credential is loaded when the containing channel or listener
+//  is opened.
+//
+  WS_SUBJECT_NAME_CERT_CREDENTIAL = record
+    credential : WS_CERT_CREDENTIAL;
+    storeLocation : ULONG;
+    storeName : WS_STRING;
+    subjectName : WS_STRING;
+  end;
+
+
+//  Security Credentials structure
+//
+//  The type for specifying a certificate credential using the
+//  certificate's thumbprint, store location and store name.  The
+//  specified credential is loaded when the containing channel or listener
+//  is opened.
+//
+//  The thumbprint is the best option for specifying a certificate when
+//  subject name based specification is expected to be ambiguous due to
+//  the presence of multiple certificates with matching subject names in
+//  the cert store being specified.
+//
+  WS_THUMBPRINT_CERT_CREDENTIAL = record
+    credential : WS_CERT_CREDENTIAL;
+    storeLocation : ULONG;
+    storeName : WS_STRING;
+    thumbprint : WS_STRING;
+  end;
+
+
+//  Security Credentials structure
+//
+//  The type for specifying a certificate credential that is to be
+//  supplied by a callback to the application.  This callback is invoked
+//  to get the certificate during WsOpenChannel on the client
+//  side and during WsOpenListener on the server side.  It is
+//  always invoked (WS_SHORT_CALLBACK) short.
+//
+  WS_CUSTOM_CERT_CREDENTIAL = record
+    credential : WS_CERT_CREDENTIAL;
+    getCertCallback : WS_GET_CERT_CALLBACK;
+    getCertCallbackState : pointer;
+    certIssuerListNotificationCallback : WS_CERT_ISSUER_LIST_NOTIFICATION_CALLBACK;
+    certIssuerListNotificationCallbackState : pointer;
+  end;
+
+
+//  Security Credentials structure
+//
+//  The abstract base type for all credential types used with Windows
+//  Integrated Authentication.
+//
+  WS_WINDOWS_INTEGRATED_AUTH_CREDENTIAL = record
+    credentialType : WS_WINDOWS_INTEGRATED_AUTH_CREDENTIAL_TYPE;
+  end;
+
+
+//  Security Credentials structure
+//
+//   Type for supplying a Windows credential as username, password, domain strings.
+//
+  WS_STRING_WINDOWS_INTEGRATED_AUTH_CREDENTIAL = record
+    credential : WS_WINDOWS_INTEGRATED_AUTH_CREDENTIAL;
+    username : WS_STRING;
+    password : WS_STRING;
+    domain : WS_STRING;
+  end;
+
+
+//  Security Credentials structure
+//
+//   Type for supplying a Windows Integrated Authentication credential based on the current Windows identity.
+//  If this credential subtype is used for a security binding, the current thread token on the thread that calls
+//   WsOpenChannel or WsOpenServiceProxy is used as the Windows
+//  identity when sending messages or making service calls. WsAcceptChannel and WsOpenServiceHost do not support this credential type when called
+//  from an impersonating thread.
+//
+  WS_DEFAULT_WINDOWS_INTEGRATED_AUTH_CREDENTIAL = record
+    credential : WS_WINDOWS_INTEGRATED_AUTH_CREDENTIAL;
+  end;
+
+
+//  Security Credentials structure
+//
+//  Type for supplying a Windows Integrated Authentication credential as an opaque handle created by
+//  SspiPromptForCredentials and the related family of APIs.  This feature
+//  is available only on Windows 7 and later.
+//
+  WS_OPAQUE_WINDOWS_INTEGRATED_AUTH_CREDENTIAL = record
+    credential : WS_WINDOWS_INTEGRATED_AUTH_CREDENTIAL;
+    opaqueAuthIdentity : pointer;
+  end;
+
+
+//  Security Credentials structure
+//
+//  The abstract base type for all username/password credentials.
+//
+//  Note that WS_USERNAME_CREDENTIAL and its concrete subtypes
+//  are used with the WS-Security WS_USERNAME_MESSAGE_SECURITY_BINDING.
+//  They are best suitable for application-level username/password pairs, such as
+//  those used for online customer accounts.  The usernames and passwords specified
+//  are not interpreted by the security runtime, and are merely carried
+//  client-to-server for authentication by the specified server-side
+//  username/password validator specified by the application.
+//
+//  In contrast, the WS_WINDOWS_INTEGRATED_AUTH_CREDENTIAL and
+//  its concrete subtypes are used for Windows Integrated Authentication
+//  and the security bindings that use it.
+//
+  WS_USERNAME_CREDENTIAL = record
+    credentialType : WS_USERNAME_CREDENTIAL_TYPE;
+  end;
+
+
+//  Security Credentials structure
+//
+//  The type for supplying a username/password pair as strings.
+//
+  WS_STRING_USERNAME_CREDENTIAL = record
+    credential : WS_USERNAME_CREDENTIAL;
+    username : WS_STRING;
+    password : WS_STRING;
+  end;
+
+
+//  Security Bindings structure
+//
+//  The abstract base type for all types that specify a cryptographic key.
+//  Such a key is typically specified for a generic XML security token or
+//  a custom security token.
+//
+  WS_SECURITY_KEY_HANDLE = record
+    keyHandleType : WS_SECURITY_KEY_HANDLE_TYPE;
+  end;
+
+
+//  Security Bindings structure
+//
+//  The type for specifying a symmetric cryptographic key as raw bytes.
+//
+  WS_RAW_SYMMETRIC_SECURITY_KEY_HANDLE = record
+    keyHandle : WS_SECURITY_KEY_HANDLE;
+    rawKeyBytes : WS_BYTES;
+  end;
+
+
+//  Security Bindings structure
+//
+//  The type for specifying asymmetric cryptographic keys as a CryptoNG
+//  NCRYPT_KEY_HANDLE.
+//
+//  When this structure is used in an API (such as with
+//   (WsCreateXmlSecurityToken) XML token creation) and subsequent
+//   (WS_XML_TOKEN_MESSAGE_SECURITY_BINDING) use of that XML
+//  token for a channel), the application is responsible for making
+//  sure that the NCRYPT_KEY_HANDLE remains valid as long as the key is in
+//  use.  The application is also responsible for freeing the handle when
+//  it is no longer in use.
+//
+//  This type is supported only on Windows Vista and later platforms.
+//
+  WS_NCRYPT_ASYMMETRIC_SECURITY_KEY_HANDLE = record
+    keyHandle : WS_SECURITY_KEY_HANDLE;
+    asymmetricKey : NCRYPT_KEY_HANDLE;
+  end;
+
+
+//  Security Bindings structure
+//
+//  The type for specifying asymmetric cryptographic keys as CAPI 1.0 key
+//  handles.
+//
+//  When this structure is used in an API (such as
+//  with (WsCreateXmlSecurityToken) XML token creation and subsequent
+//   (WS_XML_TOKEN_MESSAGE_SECURITY_BINDING) use of that XML
+//  token for a channel), the application is responsible for making
+//  sure that the HCRYPTPROV remains valid as long as the key is in
+//  use.  The application is also responsible for freeing the handle when
+//  it is no longer in use.
+//
+//  This type is supported only on pre-Windows Vista platforms: for
+//  Windows Vista and later, please use WS_NCRYPT_ASYMMETRIC_SECURITY_KEY_HANDLE.
+//
+  WS_CAPI_ASYMMETRIC_SECURITY_KEY_HANDLE = record
+    keyHandle : WS_SECURITY_KEY_HANDLE;
+    provider : HCRYPTPROV;
+    keySpec : ULONG;
+  end;
+
+
+//  Security Bindings structure
+//
+//  The abstract base type for all security bindings.  One or more
+//  concrete subtypes of this are specified in the
+//   (WS_SECURITY_DESCRIPTION) security description that is
+//  supplied during channel and listener creation.  Each concrete subtype
+//  of this corresponds to a security protocol and a way of using it to
+//  provide authentication and/or protection to a channel.
+//
+//  Each security binding subtype instance in the security description
+//  contributes one security token at runtime.  Thus, the fields of this
+//  type can be viewed as specifying a security token, how to obtain it,
+//  how to use it for channel security, and how to modify its behavior
+//  using the optional settings.
+//
+  WS_SECURITY_BINDING = record
+    bindingType : WS_SECURITY_BINDING_TYPE;
+    properties : PWS_SECURITY_BINDING_PROPERTY;
+    propertyCount : ULONG;
+  end;
+
+
+//  Security Bindings structure
+//
+//   The security binding subtype for specifying the use of SSL/TLS
+//  protocol based transport security.
+//
+//   This security binding is supported only with the
+//   WS_HTTP_CHANNEL_BINDING.
+//
+//   With this security binding, the following security binding property may be specified:
+//
+//  . WS_SECURITY_BINDING_PROPERTY_CERT_FAILURES_TO_IGNORE (client side only)
+//
+//  . WS_SECURITY_BINDING_PROPERTY_DISABLE_CERT_REVOCATION_CHECK (client side only)
+//
+//  . WS_SECURITY_BINDING_PROPERTY_REQUIRE_SSL_CLIENT_CERT (server side only)
+//
+//
+  WS_SSL_TRANSPORT_SECURITY_BINDING = record
+    binding : WS_SECURITY_BINDING;
+    localCertCredential : PWS_CERT_CREDENTIAL;
+  end;
+
+
+//  Security Bindings structure
+//
+//   The security binding subtype for specifying the use of the Windows
+//  Integrated Authentication protocol (such as Kerberos, NTLM or SPNEGO)
+//  with the TCP transport. A specific SSP package may be chosen using
+//  the security binding property
+//   WS_SECURITY_BINDING_PROPERTY_WINDOWS_INTEGRATED_AUTH_PACKAGE;
+//  if that property is not specified, SPNEGO is used by default.  The use
+//  of NTLM is strongly discouraged due to its security weakness
+//  (specifically, lack of server authentication).  If NTLM is to be
+//  allowed, the security binding property WS_SECURITY_BINDING_PROPERTY_REQUIRE_SERVER_AUTH
+//   must be set to FALSE.
+//
+//   This security binding operates at the transport security level and is
+//  supported only with the WS_TCP_CHANNEL_BINDING.  The
+//  TCP/Windows SSPI combination uses the wire form defined by the
+//   (http://msdn.microsoft.com/en-us/library/cc219293.aspx) NegotiateStream
+//   protocol and the (http://msdn.microsoft.com/en-us/library/cc236723.aspx) .Net Message Framing specification.
+//
+//   On the client side, the security identity of the target server is
+//  specified using the identity field of the WS_ENDPOINT_ADDRESS
+//   parameter supplied during WsOpenChannel.  If the identity is a
+//   WS_SPN_ENDPOINT_IDENTITY or a WS_UPN_ENDPOINT_IDENTITY,
+//  that string identity value is used directly with the SSP.  If the identity is a
+//   WS_DNS_ENDPOINT_IDENTITY and the value of its dns field is
+//  'd1', or if no identity is specified in the WS_ENDPOINT_ADDRESS
+//   and the host component (according to Section 3.2.2 of
+//   (http://tools.ietf.org/html/rfc2396) RFC2396) the address URI
+//  is 'd1', then the form 'host/d1' is used as the server SPN.
+//  Specifying any other WS_ENDPOINT_IDENTITY subtype in
+//   WS_ENDPOINT_ADDRESS will cause WsOpenChannel to fail.
+//
+//   With this security binding, the following security binding properties may be specified:
+//
+//  . WS_SECURITY_BINDING_PROPERTY_WINDOWS_INTEGRATED_AUTH_PACKAGE
+//  . WS_SECURITY_BINDING_PROPERTY_REQUIRE_SERVER_AUTH (client side only)
+//
+//  . WS_SECURITY_BINDING_PROPERTY_ALLOW_ANONYMOUS_CLIENTS (server side only)
+//
+//  . WS_SECURITY_BINDING_PROPERTY_ALLOWED_IMPERSONATION_LEVEL (client side only)
+//
+  WS_TCP_SSPI_TRANSPORT_SECURITY_BINDING = record
+    binding : WS_SECURITY_BINDING;
+    clientCredential : PWS_WINDOWS_INTEGRATED_AUTH_CREDENTIAL;
+  end;
+
+
+//  Security Bindings structure
+//
+//   The security binding subtype for specifying the use of the Windows
+//  Integrated Authentication protocol (such as Kerberos, NTLM or SPNEGO)
+//  with the named pipe transport. A specific SSP package may be chosen using
+//  the security binding property WS_SECURITY_BINDING_PROPERTY_WINDOWS_INTEGRATED_AUTH_PACKAGE;
+//  if that property is not specified, SPNEGO is used by default.
+//
+//   This security binding operates at the transport security level and is
+//  supported only with the WS_NAMEDPIPE_CHANNEL_BINDING.  The
+//  NamedPipe/Windows SSPI combination uses the wire form defined by the
+//   (http://msdn.microsoft.com/en-us/library/cc219293.aspx) NegotiateStream
+//   protocol and the (http://msdn.microsoft.com/en-us/library/cc236723.aspx) .Net Message Framing specification.
+//
+//   On the client side, the security identity of the target server is
+//  specified using the identity field of the WS_ENDPOINT_ADDRESS
+//   parameter supplied during WsOpenChannel.
+//
+//   The (WS_NAMEDPIPE_CHANNEL_BINDING) named pipe binding supports only this one transport security binding and does not support any message security bindings.
+//
+//   With this security binding, the following security binding properties may be specified:
+//
+//  . WS_SECURITY_BINDING_PROPERTY_WINDOWS_INTEGRATED_AUTH_PACKAGE
+//  . WS_SECURITY_BINDING_PROPERTY_REQUIRE_SERVER_AUTH (client side only)
+//
+//  . WS_SECURITY_BINDING_PROPERTY_ALLOW_ANONYMOUS_CLIENTS (server side only)
+//
+//  . WS_SECURITY_BINDING_PROPERTY_ALLOWED_IMPERSONATION_LEVEL (client side only)
+//
+  WS_NAMEDPIPE_SSPI_TRANSPORT_SECURITY_BINDING = record
+    binding : WS_SECURITY_BINDING;
+    clientCredential : PWS_WINDOWS_INTEGRATED_AUTH_CREDENTIAL;
+  end;
+
+
+//  Security Bindings structure
+//
+//   The security binding subtype for specifying the use of HTTP header authentication against a target service or a HTTP proxy server
+//  based on the basic, digest ( (http://tools.ietf.org/html/rfc2617) RFC 2617) and the SPNEGO ( (http://tools.ietf.org/html/rfc4559) RFC4559) protocols.
+//  Since this security binding operates at the HTTP header level, it is supported only with the WS_HTTP_CHANNEL_BINDING.
+//  By default, this security binding is used for the target service. However WS_SECURITY_BINDING_PROPERTY_HTTP_HEADER_AUTH_TARGET
+//   security binding property can be specified to use it for a HTTP proxy server. This binding provides client authentication, but not message protection
+//  since the HTTP body is unaffected by this binding. While this security binding can be used alone, such usage is not recommended;
+//  more typically, HTTP header authentication is done in conjunction with transport level security provided by a security binding such as the
+//   WS_SSL_TRANSPORT_SECURITY_BINDING. To use this binding without SSL, the the security description property
+//   WS_SECURITY_PROPERTY_TRANSPORT_PROTECTION_LEVEL must be explicitly set to WS_PROTECTION_LEVEL_NONE.
+//
+//   With this security binding, the following security binding properties may be specified:
+//
+//  . WS_SECURITY_BINDING_PROPERTY_HTTP_HEADER_AUTH_SCHEME
+//  . WS_SECURITY_BINDING_PROPERTY_HTTP_HEADER_AUTH_TARGET (client side only)
+//
+//  . WS_SECURITY_BINDING_PROPERTY_HTTP_HEADER_AUTH_BASIC_REALM (server side only)
+//
+//  . WS_SECURITY_BINDING_PROPERTY_HTTP_HEADER_AUTH_DIGEST_REALM (server side only)
+//
+//  . WS_SECURITY_BINDING_PROPERTY_HTTP_HEADER_AUTH_DIGEST_DOMAIN (server side only)
+//
+  WS_HTTP_HEADER_AUTH_SECURITY_BINDING = record
+    binding : WS_SECURITY_BINDING;
+    clientCredential : PWS_WINDOWS_INTEGRATED_AUTH_CREDENTIAL;
+  end;
+
+
+//  Security Bindings structure
+//
+//   The security binding subtype for specifying the use of the Kerberos
+//  AP_REQ ticket as a direct (i.e., without establishing a session)
+//  security token with WS-Security.
+//
+//   Only one instance of this binding may be present in a (WS_SECURITY_DESCRIPTION) security description.
+//  This security binding is not supported with the (WS_NAMEDPIPE_CHANNEL_BINDING) named pipe binding.
+//
+//   With this security binding, the following security binding properties may be specified:
+//
+//  . WS_SECURITY_BINDING_PROPERTY_ALLOWED_IMPERSONATION_LEVEL (client side only)
+//
+//  . WS_SECURITY_BINDING_PROPERTY_ALLOW_ANONYMOUS_CLIENTS (server side only)
+//
+//   Client side on Vista and above, using this binding with HTTP will result in the message being sent using chunked transfer.
+//
+  WS_KERBEROS_APREQ_MESSAGE_SECURITY_BINDING = record
+    binding : WS_SECURITY_BINDING;
+    bindingUsage : WS_MESSAGE_SECURITY_USAGE;
+    clientCredential : PWS_WINDOWS_INTEGRATED_AUTH_CREDENTIAL;
+  end;
+
+
+//  Security Bindings structure
+//
+//   The security binding subtype for specifying the use of an application
+//  supplied username / password pair as a direct (i.e., one-shot)
+//  security token.  This security binding may be used only with message
+//  security.  It provides client authentication, but not traffic signing
+//  or encryption.  So, it is used in conjunction with another transport
+//  security or message security binding that provides message protection.
+//
+//   Only one instance of this binding may be present in a (WS_SECURITY_DESCRIPTION) security description and
+//  this security binding is not supported with the (WS_NAMEDPIPE_CHANNEL_BINDING) named pipe binding.
+//
+//   With this security binding, no security binding properties may be specified.
+//
+  WS_USERNAME_MESSAGE_SECURITY_BINDING = record
+    binding : WS_SECURITY_BINDING;
+    bindingUsage : WS_MESSAGE_SECURITY_USAGE;
+    clientCredential : PWS_USERNAME_CREDENTIAL;
+    passwordValidator : WS_VALIDATE_PASSWORD_CALLBACK;
+    passwordValidatorCallbackState : pointer;
+  end;
+
+
+//  Security Description structure
+//
+//   The top-level structure used to specify the security requirements for
+//  a (WsCreateChannel) channel (on the client side) or a
+//   (WsCreateListener) listener (on the server side).
+//
+  WS_SECURITY_DESCRIPTION = record
+    securityBindings : PPWS_SECURITY_BINDING;
+    securityBindingCount : ULONG;
+    properties : PWS_SECURITY_PROPERTY;
+    propertyCount : ULONG;
+  end;
+
+
+//  Security Bindings structure
+//
+//   The security binding subtype for specifying the use of a security context
+//  token negotiated between the client and server using
+//  WS-SecureConversation. This security binding may be used only with
+//  message security. It is used to establish a message-level security
+//  context. Another set of one or more security bindings, specified in the
+//  bootstrapSecurityDescription field, is used to the bootstrap the context.
+//
+//   Only one instance of this binding may be present in a (WS_SECURITY_DESCRIPTION) security description and
+//  this security binding is not supported with the (WS_NAMEDPIPE_CHANNEL_BINDING) named pipe binding.
+//
+//   When this binding is used, the channel must complete the receive of at least one
+//  message before it can be used to send messages.
+//
+//   With this security binding, the following security binding properties may be specified:
+//
+//  . WS_SECURITY_BINDING_PROPERTY_SECURITY_CONTEXT_KEY_SIZE
+//  . WS_SECURITY_BINDING_PROPERTY_SECURITY_CONTEXT_KEY_ENTROPY_MODE
+//  . WS_SECURITY_BINDING_PROPERTY_MESSAGE_PROPERTIES
+//  . WS_SECURITY_BINDING_PROPERTY_SECURE_CONVERSATION_VERSION
+//  . WS_SECURITY_BINDING_PROPERTY_SECURITY_CONTEXT_SUPPORT_RENEW
+//  . WS_SECURITY_BINDING_PROPERTY_SECURITY_CONTEXT_RENEWAL_INTERVAL
+//  . WS_SECURITY_BINDING_PROPERTY_SECURITY_CONTEXT_ROLLOVER_INTERVAL
+  WS_SECURITY_CONTEXT_MESSAGE_SECURITY_BINDING = record
+    binding : WS_SECURITY_BINDING;
+    bindingUsage : WS_MESSAGE_SECURITY_USAGE;
+    bootstrapSecurityDescription : PWS_SECURITY_DESCRIPTION;
+  end;
+
+
+//  Security Context structure
+//
+//   Defines a property of a WS_SECURITY_CONTEXT
+  WS_SECURITY_CONTEXT_PROPERTY = record
+    id : WS_SECURITY_CONTEXT_PROPERTY_ID;
+    value : pointer;
+    valueSize : ULONG;
+  end;
+
+
+//  Security Channel Settings structure
+//
+//   Specifies a property for an XML security token.
+//
+  WS_XML_SECURITY_TOKEN_PROPERTY = record
+    id : WS_XML_SECURITY_TOKEN_PROPERTY_ID;
+    value : pointer;
+    valueSize : ULONG;
+  end;
+
+
+//  Security Bindings structure
+//
+//   The security binding subtype for specifying the use of a security
+//  token that is already available to the application in XML form.  The
+//  security token that is supplied by the application in this binding is
+//  presented to a service in a WS-Security header according to the
+//  bindingUsage specified.  This security binding may be included in a
+//   (WS_SECURITY_DESCRIPTION) security description only on the
+//  client side.
+//
+//   This security binding is not supported with the (WS_NAMEDPIPE_CHANNEL_BINDING) named pipe binding.
+//
+//   Although this binding can be used with any token available in XML
+//  form, this is commonly used in (Federation) federation
+//  scenarios.  For example, a client side token provider such as
+//  CardSpace may be used to get a token from a security token service,
+//  and that token may then be presented to a Web Service using this
+//  security binding.
+//
+//   Security note: As with other security tokens and credentials, the
+//  application is in charge of the risk assessment decision to disclose a
+//  given XML token (supplied by the application in a
+//   (WS_SECURITY_DESCRIPTION) security description) to a given
+//  server (supplied by the application when
+//   (WsOpenChannel) opening the channel).  In particular, the
+//  application should consider the threat that the server might use the
+//  XML token it receives from the client, in turn, to pretend to be the
+//  client to a 3rd party.  For this threat, the following mitigations
+//  exist: (A) the server authentication process makes sure that the
+//  message (and hence the token) is sent only to a server that can speak
+//  for the address specified by the client application; (B) keyless
+//  (bearer) tokens are typically usable only at one server (e.g.,
+//  contoso.com gains little from passing on a contoso.com
+//  username/password token to another site -- the application security
+//  design should make sure this property holds); (C) symmetric keyed
+//  tokens are unusable at any server that doesn't share the same
+//  symmetric key; (D) asymmetric keyed tokens will sign the timestamp and
+//  the 'To' header, limiting their applicability to the intended 'To' for
+//  a narrow time duration.
+//
+//   With this security binding, no security binding properties may be specified:
+//
+  WS_XML_TOKEN_MESSAGE_SECURITY_BINDING = record
+    binding : WS_SECURITY_BINDING;
+    bindingUsage : WS_MESSAGE_SECURITY_USAGE;
+    xmlToken : PWS_SECURITY_TOKEN;
+  end;
+
+
 //  Utilities structure
 //
 //   Represents a (http://www.w3.org/TR/xmlschema-2/#duration) xsd:duration.
@@ -1871,7 +2727,6 @@ type
 
 
 //  FUNCTION DEFINITIONS
-
 
 //  XML Canonicalization function
 //
@@ -2615,6 +3470,19 @@ function WsAsyncExecute(asyncState : PWS_ASYNC_STATE;
                         callbackState : pointer;
                         asyncContext : PWS_ASYNC_CONTEXT;
                         error : PWS_ERROR):HRESULT; stdcall;
+
+
+//  Channel function
+//
+//   Create a channel used to initiate a message exchange to some endpoint.
+//
+function WsCreateChannel(channelType : WS_CHANNEL_TYPE;
+                         channelBinding : WS_CHANNEL_BINDING;
+                         properties : PWS_CHANNEL_PROPERTY;
+                         propertyCount : ULONG;
+                         securityDescription : PWS_SECURITY_DESCRIPTION;
+                         channel : PPWS_CHANNEL;
+                         error : PWS_ERROR):HRESULT; stdcall;
 
 
 //  Errors function
@@ -4494,6 +5362,7 @@ function WsReadQualifiedName; external WEBSERVICES_DLL name 'WsReadQualifiedName
 function WsGetXmlAttribute; external WEBSERVICES_DLL name 'WsGetXmlAttribute';
 function WsCopyNode; external WEBSERVICES_DLL name 'WsCopyNode';
 function WsAsyncExecute; external WEBSERVICES_DLL name 'WsAsyncExecute';
+function WsCreateChannel; external WEBSERVICES_DLL name 'WsCreateChannel';
 
 
 function WsWriteXmlBuffer; external WEBSERVICES_DLL name 'WsWriteXmlBuffer';
