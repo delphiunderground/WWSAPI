@@ -301,14 +301,88 @@ type
   PWS_SECURITY_CONTEXT_PROPERTY  = ^WS_SECURITY_CONTEXT_PROPERTY;
   PWS_XML_SECURITY_TOKEN_PROPERTY = ^WS_XML_SECURITY_TOKEN_PROPERTY;
   PWS_XML_TOKEN_MESSAGE_SECURITY_BINDING = ^WS_XML_TOKEN_MESSAGE_SECURITY_BINDING;
-
-
-
+  PWS_SAML_AUTHENTICATOR         = ^WS_SAML_AUTHENTICATOR;
+  PWS_CERT_SIGNED_SAML_AUTHENTICATOR = ^WS_CERT_SIGNED_SAML_AUTHENTICATOR;
+  PWS_SAML_MESSAGE_SECURITY_BINDING = ^WS_SAML_MESSAGE_SECURITY_BINDING;
+  PWS_REQUEST_SECURITY_TOKEN_PROPERTY = ^WS_REQUEST_SECURITY_TOKEN_PROPERTY;
+  PWS_ANY_ATTRIBUTE              = ^WS_ANY_ATTRIBUTE;
+  PWS_ANY_ATTRIBUTES             = ^WS_ANY_ATTRIBUTES;
+  PWS_BOOL_DESCRIPTION           = ^WS_BOOL_DESCRIPTION;
+  PWS_GUID_DESCRIPTION           = ^WS_GUID_DESCRIPTION;
+  PWS_DATETIME_DESCRIPTION       = ^WS_DATETIME_DESCRIPTION;
   PWS_DURATION                   = ^WS_DURATION;
+  PWS_DURATION_DESCRIPTION       = ^WS_DURATION_DESCRIPTION;
+  PWS_TIMESPAN_DESCRIPTION       = ^WS_TIMESPAN_DESCRIPTION;
+  PWS_UNIQUE_ID_DESCRIPTION      = ^WS_UNIQUE_ID_DESCRIPTION;
+  PWS_STRING_DESCRIPTION         = ^WS_STRING_DESCRIPTION;
+  PWS_XML_STRING_DESCRIPTION     = ^WS_XML_STRING_DESCRIPTION;
+  PWS_XML_QNAME_DESCRIPTION      = ^WS_XML_QNAME_DESCRIPTION;
+  PWS_CHAR_ARRAY_DESCRIPTION     = ^WS_CHAR_ARRAY_DESCRIPTION;
+  PWS_BYTE_ARRAY_DESCRIPTION     = ^WS_BYTE_ARRAY_DESCRIPTION;
+  PWS_UTF8_ARRAY_DESCRIPTION     = ^WS_UTF8_ARRAY_DESCRIPTION;
+  PWS_WSZ_DESCRIPTION            = ^WS_WSZ_DESCRIPTION;
+  PWS_INT8_DESCRIPTION           = ^WS_INT8_DESCRIPTION;
+  PWS_UINT8_DESCRIPTION          = ^WS_UINT8_DESCRIPTION;
+  PWS_INT16_DESCRIPTION          = ^WS_INT16_DESCRIPTION;
+  PWS_UINT16_DESCRIPTION         = ^WS_UINT16_DESCRIPTION;
+  PWS_INT32_DESCRIPTION          = ^WS_INT32_DESCRIPTION;
+  PWS_UINT32_DESCRIPTION         = ^WS_UINT32_DESCRIPTION;
+  PWS_INT64_DESCRIPTION          = ^WS_INT64_DESCRIPTION;
+  PWS_UINT64_DESCRIPTION         = ^WS_UINT64_DESCRIPTION;
+  PWS_FLOAT_DESCRIPTION          = ^WS_FLOAT_DESCRIPTION;
+  PWS_DOUBLE_DESCRIPTION         = ^WS_DOUBLE_DESCRIPTION;
+  PWS_DECIMAL_DESCRIPTION        = ^WS_DECIMAL_DESCRIPTION;
+  PWS_BYTES_DESCRIPTION          = ^WS_BYTES_DESCRIPTION;
+  PWS_ENUM_VALUE                 = ^WS_ENUM_VALUE;
+  PWS_ENUM_DESCRIPTION           = ^WS_ENUM_DESCRIPTION;
+  PWS_ITEM_RANGE                 = ^WS_ITEM_RANGE;
+  PWS_DEFAULT_VALUE              = ^WS_DEFAULT_VALUE;
+  PWS_FIELD_DESCRIPTION          = ^WS_FIELD_DESCRIPTION;
+  PPWS_FIELD_DESCRIPTION         = ^PWS_FIELD_DESCRIPTION;
+  PWS_UNION_FIELD_DESCRIPTION    = ^WS_UNION_FIELD_DESCRIPTION;
+  PPWS_UNION_FIELD_DESCRIPTION   = ^PWS_UNION_FIELD_DESCRIPTION;
+  PWS_STRUCT_DESCRIPTION         = ^WS_STRUCT_DESCRIPTION;
+  PPWS_STRUCT_DESCRIPTION        = ^PWS_STRUCT_DESCRIPTION;
+  PWS_UNION_DESCRIPTION          = ^WS_UNION_DESCRIPTION;
+  PWS_ENDPOINT_ADDRESS_DESCRIPTION = ^WS_ENDPOINT_ADDRESS_DESCRIPTION;
+  PWS_FAULT_DESCRIPTION          = ^WS_FAULT_DESCRIPTION;
+  PWS_VOID_DESCRIPTION           = ^WS_VOID_DESCRIPTION;
+  PWS_CUSTOM_TYPE_DESCRIPTION    = ^WS_CUSTOM_TYPE_DESCRIPTION;
+  PWS_ATTRIBUTE_DESCRIPTION      = ^WS_ATTRIBUTE_DESCRIPTION;
+  PWS_PARAMETER_DESCRIPTION      = ^WS_PARAMETER_DESCRIPTION;
+  PWS_OPERATION_DESCRIPTION      = ^WS_OPERATION_DESCRIPTION;
+  PPWS_OPERATION_DESCRIPTION     = ^PWS_OPERATION_DESCRIPTION;
+  PWS_CONTRACT_DESCRIPTION       = ^WS_CONTRACT_DESCRIPTION;
+  PWS_SERVICE_CONTRACT           = ^WS_SERVICE_CONTRACT;
+  PWS_SERVICE_PROPERTY           = ^WS_SERVICE_PROPERTY;
+  PWS_SERVICE_ENDPOINT_PROPERTY  = ^WS_SERVICE_ENDPOINT_PROPERTY;
+  PWS_SERVICE_PROPERTY_ACCEPT_CALLBACK = ^WS_SERVICE_PROPERTY_ACCEPT_CALLBACK;
+  PWS_SERVICE_METADATA_DOCUMENT  = ^WS_SERVICE_METADATA_DOCUMENT;
+  PPWS_SERVICE_METADATA_DOCUMENT = ^PWS_SERVICE_METADATA_DOCUMENT;
+  PWS_SERVICE_METADATA           = ^WS_SERVICE_METADATA;
+  PWS_SERVICE_PROPERTY_CLOSE_CALLBACK = ^WS_SERVICE_PROPERTY_CLOSE_CALLBACK;
+  PWS_SERVICE_ENDPOINT_METADATA  = ^WS_SERVICE_ENDPOINT_METADATA;
+  PWS_SERVICE_ENDPOINT           = ^WS_SERVICE_ENDPOINT;
+  PWS_PROXY_PROPERTY             = ^WS_PROXY_PROPERTY;
+  PWS_PROXY_MESSAGE_CALLBACK_CONTEXT = ^WS_PROXY_MESSAGE_CALLBACK_CONTEXT;
+  PWS_CALL_PROPERTY              = ^WS_CALL_PROPERTY;
+  PWS_URL                        = ^WS_URL;
+  PWS_HTTP_URL                   = ^WS_HTTP_URL;
+  PWS_HTTPS_URL                  = ^WS_HTTPS_URL;
+  PWS_NETTCP_URL                 = ^WS_NETTCP_URL;
+  PWS_SOAPUDP_URL                = ^WS_SOAPUDP_URL;
+  PWS_NETPIPE_URL                = ^WS_NETPIPE_URL;
+  PWS_UNIQUE_ID                  = ^WS_UNIQUE_ID;
+  PWS_BUFFERS                    = ^WS_BUFFERS;
+  PWS_METADATA_ENDPOINT          = ^WS_METADATA_ENDPOINT;
+  PWS_METADATA_ENDPOINTS         = ^WS_METADATA_ENDPOINTS;
+  PWS_METADATA_PROPERTY          = ^WS_METADATA_PROPERTY;
+
 
 
 
   PWS_SECURITY_TOKEN             = pointer;  //opaque handle representing a security token.
+  PWS_POLICY                     = pointer;  //opaque type used to reference a metadata input policy.
 
 
 //  CALLBACK DEFINITIONS
@@ -1289,7 +1363,7 @@ type
 //
   WS_XML_DECIMAL_TEXT = record
     text:WS_XML_TEXT;
-    value:currency;     //not sure Delphi Currency is then same as C++ DECIMAL - Extended is 10 bytes
+    value:currency;     //not sure Delphi Currency is the same as C++ DECIMAL
   end;
 
 
@@ -2709,6 +2783,151 @@ type
   end;
 
 
+//  Security Bindings structure
+//
+//   The abstract base type for all SAML authenticators used on the server
+//  side to validate incoming SAML tokens.
+//
+  WS_SAML_AUTHENTICATOR = record
+    authenticatorType : WS_SAML_AUTHENTICATOR_TYPE;
+  end;
+
+
+//  Security Bindings structure
+//
+//   The type for specifying a SAML token authenticator based on an array
+//  of expected issuer certificates.  When an authenticator of this type
+//  is used, an incoming SAML token will be accepted if only if it has a
+//  valid XML signature created with any one of the specified X.509
+//  certificates.  Thus, the specified X.509 certificates represent a
+//  'allow list' of trusted SAML issuers.
+//
+//   No revocation or chain trust checks are done by the runtime on the
+//  specified certificates: so, it is up to the application to make sure
+//  that the certificates are valid before they are specified in this
+//  structure.
+//
+//   As indicated above, the validation of the received SAML is limited to
+//  making sure that it was signed correctly by one of the specified
+//  certificates.  The application may then extract the SAML assertion
+//  using WsGetMessageProperty with the key
+//   WS_MESSAGE_PROPERTY_SAML_ASSERTION and do
+//  additional validator or processing.
+//
+  WS_CERT_SIGNED_SAML_AUTHENTICATOR = record
+    authenticator : WS_SAML_AUTHENTICATOR;
+    trustedIssuerCerts : PPCCERT_CONTEXT;
+    trustedIssuerCertCount : ULONG;
+    decryptionCert : PCERT_CONTEXT;
+    samlValidator : WS_VALIDATE_SAML_CALLBACK;
+    samlValidatorCallbackState : pointer;
+  end;
+
+
+//  Security Bindings structure
+//
+//   The security binding subtype for specifying the use of a SAML
+//  assertion as a message security token.  The SAML token is expected to
+//  be presented to a service in a WS-Security header according to the
+//  bindingUsage specified.  This security binding may be included in a
+//   (WS_SECURITY_DESCRIPTION) security description only on the
+//  server side.
+//
+//   Only one instance of this binding may be present in a (WS_SECURITY_DESCRIPTION) security description and
+//  this security binding is not supported with the (WS_NAMEDPIPE_CHANNEL_BINDING) named pipe binding.
+//
+//   For a (Federation) federated security scenario that
+//  involves getting a security token from an issuer and then presenting
+//  it to a service, one may use WsRequestSecurityToken
+//   together with the WS_XML_TOKEN_MESSAGE_SECURITY_BINDING on
+//  the client side, and this binding on the server side.
+//
+//   The extent of validation performed on the received SAML depends on the
+//  authenticator specified.  If additional validation is required, the
+//  application may get the received SAML assertion using
+//   WsGetMessageProperty with the key WS_MESSAGE_PROPERTY_SAML_ASSERTION
+//   and do further processing.
+//
+//   With this security binding, no security binding properties may be specified:
+//
+  WS_SAML_MESSAGE_SECURITY_BINDING = record
+    binding : WS_SECURITY_BINDING;
+    bindingUsage : WS_MESSAGE_SECURITY_USAGE;
+    authenticator : PWS_SAML_AUTHENTICATOR;
+  end;
+
+
+//  Security Channel Settings structure
+//
+//   Specifies a property for requesting a security token from an issuer.
+//
+  WS_REQUEST_SECURITY_TOKEN_PROPERTY = record
+    id : WS_REQUEST_SECURITY_TOKEN_PROPERTY_ID;
+    value : pointer;
+    valueSize : ULONG;
+  end;
+
+
+//  Serialization structure
+//
+//   This type is used to store an attribute
+//  that has not been directly mapped to a field.
+//
+  WS_ANY_ATTRIBUTE = record
+    localName : WS_XML_STRING;
+    ns : WS_XML_STRING;
+    value : PWS_XML_TEXT;
+  end;
+
+
+//  Serialization structure
+//
+//   This type is used to store a set of attributes
+//  that have not been directly mapped to field of
+//  a structure.
+//
+  WS_ANY_ATTRIBUTES = record
+    attributes : PWS_ANY_ATTRIBUTE;
+    attributeCount : ULONG;
+  end;
+
+
+//  Serialization structure
+//
+//   This type description is used with WS_BOOL_TYPE and is optional.
+//  It is used to specify constraints on the set of values
+//  which can be deserialized.
+//
+  WS_BOOL_DESCRIPTION = record
+    value : BOOL;
+  end;
+
+
+//  Serialization structure
+//
+//   This type description is used with WS_GUID_TYPE and is optional.
+//  It is used to specify constraints on the set of values
+//  which can be deserialized.
+//
+  WS_GUID_DESCRIPTION = record
+    value : TGUID;
+  end;
+
+
+//  Serialization structure
+//
+//   This type description is used with WS_DATETIME_TYPE and is optional.
+//  It is used to specify constraints on the set of values
+//  which can be deserialized.
+//
+//   Only the ticks field of the WS_DATETIME is compared.
+//
+  WS_DATETIME_DESCRIPTION = record
+    minValue : WS_DATETIME;
+    maxValue : WS_DATETIME;
+  end;
+
+
 //  Utilities structure
 //
 //   Represents a (http://www.w3.org/TR/xmlschema-2/#duration) xsd:duration.
@@ -2723,6 +2942,781 @@ type
     seconds : ULONG;
     milliseconds : ULONG;
     ticks : ULONG;
+  end;
+
+
+//  Serialization structure
+//
+//   This type description is used with WS_DURATION_TYPE and is optional.
+//  It is used to specify constraints on the set of values
+//  which can be deserialized.
+//
+  WS_DURATION_DESCRIPTION = record
+    minValue : WS_DURATION;
+    maxValue : WS_DURATION;
+    comparer : WS_DURATION_COMPARISON_CALLBACK;
+  end;
+
+
+//  Serialization structure
+//
+//   This type description is used with WS_TIMESPAN_TYPE and is optional.
+//  It is used to specify constraints on the set of values
+//  which can be deserialized.
+//
+  WS_TIMESPAN_DESCRIPTION = record
+    minValue : WS_TIMESPAN;
+    maxValue : WS_TIMESPAN;
+  end;
+
+
+//  Serialization structure
+//
+//   This type description is used with WS_UNIQUE_ID_TYPE and is optional.
+//  It is used to specify constraints on the set of values
+//  which can be deserialized.
+//
+  WS_UNIQUE_ID_DESCRIPTION = record
+    minCharCount : ULONG;
+    maxCharCount : ULONG;
+  end;
+
+
+//  Serialization structure
+//
+//   This type description is used with WS_STRING_TYPE and is optional.
+//  It is used to specify constraints on the set of values
+//  which can be deserialized.
+//
+  WS_STRING_DESCRIPTION = record
+    minCharCount : ULONG;
+    maxCharCount : ULONG;
+  end;
+
+
+//  Serialization structure
+//
+//   This type description is used with WS_XML_STRING_TYPE and is optional.
+//  It is used to specify constraints on the set of values
+//  which can be deserialized.
+//
+  WS_XML_STRING_DESCRIPTION = record
+    minByteCount : ULONG;
+    maxByteCount : ULONG;
+  end;
+
+
+//  Serialization structure
+//
+//   This type description is used with WS_XML_QNAME_TYPE and is optional.
+//  It is used to specify constraints on the set of values
+//  which can be deserialized.
+//
+  WS_XML_QNAME_DESCRIPTION = record
+    minLocalNameByteCount : ULONG;
+    maxLocalNameByteCount : ULONG;
+    minNsByteCount : ULONG;
+    maxNsByteCount : ULONG;
+  end;
+
+
+//  Serialization structure
+//
+//   This type description is used with WS_CHAR_ARRAY_TYPE and is optional.
+//  It is used to specify constraints on the set of values
+//  which can be deserialized.
+//
+  WS_CHAR_ARRAY_DESCRIPTION = record
+    minCharCount : ULONG;
+    maxCharCount : ULONG;
+  end;
+
+
+//  Serialization structure
+//
+//   This type description is used with WS_BYTE_ARRAY_TYPE and is optional.
+//  It is used to specify constraints on the set of values
+//  which can be deserialized.
+//
+  WS_BYTE_ARRAY_DESCRIPTION = record
+    minByteCount : ULONG;
+    maxByteCount : ULONG;
+  end;
+
+
+//  Serialization structure
+//
+//   This type description is used with WS_UTF8_ARRAY_TYPE and is optional.
+//  It is used to specify constraints on the set of values
+//  which can be deserialized.
+//
+  WS_UTF8_ARRAY_DESCRIPTION = record
+    minByteCount : ULONG;
+    maxByteCount : ULONG;
+  end;
+
+
+//  Serialization structure
+//
+//   This type description is used with WS_WSZ_TYPE and is optional.
+//  It is used to specify constraints on the set of values
+//  which can be deserialized.
+//
+  WS_WSZ_DESCRIPTION = record
+    minCharCount : ULONG;
+    maxCharCount : ULONG;
+  end;
+
+
+//  Serialization structure
+//
+//   This type description is used with WS_INT8_TYPE and is optional.
+//  It is used to specify constraints on the set of values
+//  which can be deserialized.
+//
+  WS_INT8_DESCRIPTION = record
+    minValue : ansichar;
+    maxValue : ansichar;
+  end;
+
+
+//  Serialization structure
+//
+//   This type description is used with WS_UINT8_TYPE and is optional.
+//  It is used to specify constraints on the set of values
+//  which can be deserialized.
+//
+  WS_UINT8_DESCRIPTION = record
+    minValue : BYTE;
+    maxValue : BYTE;
+  end;
+
+
+//  Serialization structure
+//
+//   This type description is used with WS_INT16_TYPE and is optional.
+//  It is used to specify constraints on the set of values
+//  which can be deserialized.
+//
+  WS_INT16_DESCRIPTION = record
+    minValue : smallint;
+    maxValue : smallint;
+  end;
+
+
+//  Serialization structure
+//
+//   This type description is used with WS_UINT16_TYPE and is optional.
+//  It is used to specify constraints on the set of values
+//  which can be deserialized.
+//
+  WS_UINT16_DESCRIPTION = record
+    minValue : word;
+    maxValue : word;
+  end;
+
+
+//  Serialization structure
+//
+//   This type description is used with WS_INT32_TYPE and is optional.
+//  It is used to specify constraints on the set of values
+//  which can be deserialized.
+//
+  WS_INT32_DESCRIPTION = record
+    minValue : longint;
+    maxValue : longint;
+  end;
+
+
+//  Serialization structure
+//
+//   This type description is used with WS_UINT32_TYPE and is optional.
+//  It is used to specify constraints on the set of values
+//  which can be deserialized.
+//
+  WS_UINT32_DESCRIPTION = record
+    minValue : longword;
+    maxValue : longword;
+  end;
+
+
+//  Serialization structure
+//
+//   This type description is used with WS_INT64_TYPE and is optional.
+//  It is used to specify constraints on the set of values
+//  which can be deserialized.
+//
+  WS_INT64_DESCRIPTION = record
+    minValue : int64;
+    maxValue : int64;
+  end;
+
+
+//  Serialization structure
+//
+//   This type description is used with WS_UINT64_TYPE and is optional.
+//  It is used to specify constraints on the set of values
+//  which can be deserialized.
+//
+  WS_UINT64_DESCRIPTION = record
+    minValue : int64;    //Is there an unsigned Int64 in Delphi ?
+    maxValue : int64;    //Is there an unsigned Int64 in Delphi ?
+  end;
+
+
+//  Serialization structure
+//
+//   This type description is used with WS_FLOAT_TYPE and is optional.
+//  It is used to specify constraints on the set of values
+//  which can be deserialized.
+//
+  WS_FLOAT_DESCRIPTION = record
+    minValue : single;
+    maxValue : single;
+  end;
+
+
+//  Serialization structure
+//
+//   This type description is used with WS_DOUBLE_TYPE and is optional.
+//  It is used to specify constraints on the set of values
+//  which can be deserialized.
+//
+  WS_DOUBLE_DESCRIPTION = record
+    minValue : double;
+    maxValue : double;
+  end;
+
+
+//  Serialization structure
+//
+//   This type description is used with WS_DECIMAL_TYPE and is optional.
+//  It is used to specify constraints on the set of values
+//  which can be deserialized.
+//
+  WS_DECIMAL_DESCRIPTION = record
+    minValue : currency;  //not sure Delphi Currency is the same as C++ DECIMAL
+    maxValue : currency;  //not sure Delphi Currency is the same as C++ DECIMAL
+  end;
+
+
+//  Serialization structure
+//
+//   This type description is used with WS_BYTES_TYPE and is optional.
+//  It is used to specify constraints on the set of values
+//  which can be deserialized.
+//
+  WS_BYTES_DESCRIPTION = record
+    minByteCount : ULONG;
+    maxByteCount : ULONG;
+  end;
+
+
+//  Serialization structure
+//
+//   Provides serialization information about a single value that
+//  is part of an enumeration ( WS_ENUM_DESCRIPTION).
+//
+  WS_ENUM_VALUE = record
+    value : integer;
+    name : PWS_XML_STRING;
+  end;
+
+
+//  Serialization structure
+//
+//   This type description is used with WS_ENUM_TYPE and is required.
+//  It provides information used in serializing and deserializing
+//  values of an enumeration.
+//
+  WS_ENUM_DESCRIPTION = record
+    values : PWS_ENUM_VALUE;
+    valueCount : ULONG;
+    maxByteCount : ULONG;
+    nameIndices : PULONG;
+  end;
+
+
+//  Serialization structure
+//
+//   Defines the minimum and maximum number of items that may appear
+//  when using WS_REPEATING_ELEMENT_FIELD_MAPPING,
+//   WS_REPEATING_ELEMENT_CHOICE_FIELD_MAPPING,
+//  or WS_REPEATING_ANY_ELEMENT_FIELD_MAPPING within
+//  a WS_FIELD_DESCRIPTION.  The constraint is only
+//  enforced during deserialization.
+//
+  WS_ITEM_RANGE = record
+    minItemCount : ULONG;
+    maxItemCount : ULONG;
+  end;
+
+
+//  Serialization structure
+//
+//   Defines a default value for a field.  This is used
+//  in a WS_FIELD_DESCRIPTION.
+//
+  WS_DEFAULT_VALUE = record
+    value : pointer;
+    valueSize : ULONG;
+  end;
+
+
+//  Serialization structure
+//
+//   Used within a WS_STRUCT_DESCRIPTION to represent a field
+//  of a structure that is mapped to XML content according to a particular
+//   WS_FIELD_MAPPING.
+//
+  WS_FIELD_DESCRIPTION = record
+    mapping : WS_FIELD_MAPPING;
+    localName : PWS_XML_STRING;
+    ns : PWS_XML_STRING;
+    type_ : WS_TYPE;
+    typeDescription : pointer;
+    offset : ULONG;
+    options : ULONG;
+    defaultValue : PWS_DEFAULT_VALUE;
+    countOffset : ULONG;
+    itemLocalName : PWS_XML_STRING;
+    itemNs : PWS_XML_STRING;
+    itemRange : PWS_ITEM_RANGE;
+  end;
+
+
+//  Serialization structure
+//
+//   Represents serialization information about a field within a union.
+//  See WS_UNION_DESCRIPTION.
+//
+  WS_UNION_FIELD_DESCRIPTION = record
+    value : integer;
+    field : WS_FIELD_DESCRIPTION;
+  end;
+
+
+//  Serialization structure
+//
+//   Information about C struct type, and how it maps to an XML element.
+//  This is used with WS_STRUCT_TYPE.
+//
+  WS_STRUCT_DESCRIPTION = record
+    size : ULONG;
+    alignment : ULONG;
+    fields : PPWS_FIELD_DESCRIPTION;
+    fieldCount : ULONG;
+    typeLocalName : PWS_XML_STRING;
+    typeNs : PWS_XML_STRING;
+    parentType : PWS_STRUCT_DESCRIPTION;
+    subTypes : PPWS_STRUCT_DESCRIPTION;
+    subTypeCount : ULONG;
+    structOptions : ULONG;
+  end;
+
+
+//  Serialization structure
+//
+//   Information about the choices within a union type.
+//  This is used with WS_UNION_TYPE.
+//
+  WS_UNION_DESCRIPTION = record
+    size : ULONG;
+    alignment : ULONG;
+    fields : PPWS_UNION_FIELD_DESCRIPTION;
+    fieldCount : ULONG;
+    enumOffset : ULONG;
+    noneEnumValue : integer;
+    valueIndices : PULONG;
+  end;
+
+
+//  Serialization structure
+//
+//   Information about a mapping between an WS_ENDPOINT_ADDRESS
+//   and an XML element.
+//
+  WS_ENDPOINT_ADDRESS_DESCRIPTION = record
+    addressingVersion : WS_ADDRESSING_VERSION;
+  end;
+
+
+//  Serialization structure
+//
+//   Information about a mapping between an WS_FAULT and an XML element.
+//
+  WS_FAULT_DESCRIPTION = record
+    envelopeVersion : WS_ENVELOPE_VERSION;
+  end;
+
+
+//  Serialization structure
+//
+//   Specifies information about a field which is neither serialized nor
+//  deserialized.
+//
+//   This is used with WS_VOID_TYPE and WS_NO_FIELD_MAPPING
+//   within a WS_FIELD_DESCRIPTION.
+//
+//   This type description is only required when WS_FIELD_POINTER is not
+//  being used.
+//
+  WS_VOID_DESCRIPTION = record
+    size : ULONG;
+  end;
+
+
+//  Serialization structure
+//
+//   Represents a custom mapping between a C data type and an XML element.
+//  User-defined callbacks are invoked to do the actual reading and
+//  writing.
+//
+  WS_CUSTOM_TYPE_DESCRIPTION = record
+    size : ULONG;
+    alignment : ULONG;
+    readCallback : WS_READ_TYPE_CALLBACK;
+    writeCallback : WS_WRITE_TYPE_CALLBACK;
+    descriptionData : pointer;
+    isDefaultValueCallback : WS_IS_DEFAULT_VALUE_CALLBACK;
+  end;
+
+
+//  Serialization structure
+//
+//   Represents a mapping between a C data type and an XML attribute.
+//
+  WS_ATTRIBUTE_DESCRIPTION = record
+    attributeLocalName : PWS_XML_STRING;
+    attributeNs : PWS_XML_STRING;
+    type_ : WS_TYPE;
+    typeDescription : pointer;
+  end;
+
+
+//  Service Operation structure
+//
+//   The index of the parameters in the incoming/outgoing messages field descriptions.
+//
+  WS_PARAMETER_DESCRIPTION = record
+    parameterType : WS_PARAMETER_TYPE;
+    inputMessageIndex : word;
+    outputMessageIndex : word;
+  end;
+
+
+//  Service Operation structure
+//
+//   Metadata for the service operation.
+//
+  WS_OPERATION_DESCRIPTION = record
+    versionInfo : ULONG;
+    inputMessageDescription : PWS_MESSAGE_DESCRIPTION;
+    outputMessageDescription : PWS_MESSAGE_DESCRIPTION;
+    inputMessageOptions : ULONG;
+    outputMessageOptions : ULONG;
+    parameterCount : word;
+    parameterDescription : PWS_PARAMETER_DESCRIPTION;
+    stubCallback : WS_SERVICE_STUB_CALLBACK;
+    style : WS_OPERATION_STYLE;
+  end;
+
+
+//  Contract structure
+//
+//   The metadata for a service contract for service model.
+//
+  WS_CONTRACT_DESCRIPTION = record
+    operationCount : ULONG;
+    operations : PPWS_OPERATION_DESCRIPTION;
+  end;
+
+
+//  Contract structure
+//
+//   Used to specify a service contract on an (WS_SERVICE_ENDPOINT) endpoint.
+//
+  WS_SERVICE_CONTRACT = record
+    contractDescription : PWS_CONTRACT_DESCRIPTION;
+    defaultMessageHandlerCallback : WS_SERVICE_MESSAGE_RECEIVE_CALLBACK;
+    methodTable : pointer;
+  end;
+
+
+//  Service Host structure
+//
+//   Specifies a service specific setting.
+//
+  WS_SERVICE_PROPERTY = record
+    id : WS_SERVICE_PROPERTY_ID;
+    value : pointer;
+    valueSize : ULONG;
+  end;
+
+
+//  Service Host structure
+//
+//   Specifies a service specific setting.
+//
+  WS_SERVICE_ENDPOINT_PROPERTY = record
+    id : WS_SERVICE_ENDPOINT_PROPERTY_ID;
+    value : pointer;
+    valueSize : ULONG;
+  end;
+
+
+//  Service Host structure
+//
+//   Specifies the callback which is called when a channel is successfully accepted.
+//
+  WS_SERVICE_PROPERTY_ACCEPT_CALLBACK = record
+    callback : WS_SERVICE_ACCEPT_CHANNEL_CALLBACK;
+  end;
+
+
+//  Service Metadata structure
+//
+//   Specifies the individual documents that make up the service metadata.
+//
+  WS_SERVICE_METADATA_DOCUMENT = record
+    content : PWS_XML_STRING;
+    name : PWS_STRING;
+  end;
+
+
+//  Service Metadata structure
+//
+//   Specifies the service metadata documents array. This can be a collection of
+//  WSDL/XSD documents represented as an array of WS_STRING.
+//
+  WS_SERVICE_METADATA = record
+    documentCount : ULONG;
+    documents : PPWS_SERVICE_METADATA_DOCUMENT;
+    serviceName : PWS_XML_STRING;
+    serviceNs : PWS_XML_STRING;
+  end;
+
+
+//  Service Host structure
+//
+//   Specifies the callback which is called when a channel is about to be closed.
+//  See, WS_SERVICE_CLOSE_CHANNEL_CALLBACK for details.
+//
+  WS_SERVICE_PROPERTY_CLOSE_CALLBACK = record
+    callback : WS_SERVICE_CLOSE_CHANNEL_CALLBACK;
+  end;
+
+
+//  Service Metadata structure
+//
+//   Represents the port element for the endpoint. The port element is
+//  generated for the service element as specified by serviceName and
+//  serviceNs for WS_SERVICE_PROPERTY_METADATA property
+//  on the WS_SERVICE_HOST.
+//
+//   Note, the port type will only be generated into the WSDL document if the service
+//  element is indeed generated by the runtime.
+//
+  WS_SERVICE_ENDPOINT_METADATA = record
+    portName : PWS_XML_STRING;
+    bindingName : PWS_XML_STRING;
+    bindingNs : PWS_XML_STRING;
+  end;
+
+
+//  Service Host structure
+//
+//   Represents an individual endpoint on a service host. The properties on the endpoint
+//  are used to specify the address, binding and contract.
+//
+  WS_SERVICE_ENDPOINT = record
+    address : WS_ENDPOINT_ADDRESS;
+    channelBinding : WS_CHANNEL_BINDING;
+    channelType : WS_CHANNEL_TYPE;
+    securityDescription : PWS_SECURITY_DESCRIPTION;
+    contract : PWS_SERVICE_CONTRACT;
+    authorizationCallback : WS_SERVICE_SECURITY_CALLBACK;
+    properties : PWS_SERVICE_ENDPOINT_PROPERTY;
+    propertyCount : ULONG;
+    channelProperties : WS_CHANNEL_PROPERTIES;
+  end;
+
+
+//  Service Proxy structure
+//
+//   Specifies a proxy property.
+//
+  WS_PROXY_PROPERTY = record
+    id : WS_PROXY_PROPERTY_ID;
+    value : pointer;
+    valueSize : ULONG;
+  end;
+
+
+//  Service Proxy structure
+//
+//   Specifies the callback function and state for an application that wishes
+//  to associate or inspect headers in an input or an output message respectively.
+//
+//   See also, WS_CALL_PROPERTY_SEND_MESSAGE_CONTEXT and
+//   WS_CALL_PROPERTY_RECEIVE_MESSAGE_CONTEXT.
+//
+  WS_PROXY_MESSAGE_CALLBACK_CONTEXT = record
+    callback : WS_PROXY_MESSAGE_CALLBACK;
+    state : pointer;
+  end;
+
+
+//  Service Proxy structure
+//
+//   Specifies a proxy property.
+//
+  WS_CALL_PROPERTY = record
+    id : WS_CALL_PROPERTY_ID;
+    value : pointer;
+    valueSize : ULONG;
+  end;
+
+
+//  Url structure
+//
+//   The abstract base type for all URL schemes used with WsDecodeUrl and WsEncodeUrl APIs.
+//
+  WS_URL = record
+    scheme : WS_URL_SCHEME_TYPE;
+  end;
+
+
+//  Url structure
+//
+//   The URL subtype for specifying an http URL.
+//
+  WS_HTTP_URL = record
+    url : WS_URL;
+    host : WS_STRING;
+    port : word;
+    portAsString : WS_STRING;
+    path : WS_STRING;
+    query : WS_STRING;
+    fragment : WS_STRING;
+  end;
+
+
+//  Url structure
+//
+//   The URL subtype for specifying an https URL.
+//
+  WS_HTTPS_URL = record
+    url : WS_URL;
+    host : WS_STRING;
+    port : word;
+    portAsString : WS_STRING;
+    path : WS_STRING;
+    query : WS_STRING;
+    fragment : WS_STRING;
+  end;
+
+
+//  Url structure
+//
+//   The URL subtype for specifying an net.tcp URL.
+//
+  WS_NETTCP_URL = record
+    url : WS_URL;
+    host : WS_STRING;
+    port : word;
+    portAsString : WS_STRING;
+    path : WS_STRING;
+    query : WS_STRING;
+    fragment : WS_STRING;
+  end;
+
+
+//  Url structure
+//
+//   The URL subtype for specifying an soap.udp URL.
+//
+  WS_SOAPUDP_URL = record
+    url : WS_URL;
+    host : WS_STRING;
+    port : word;
+    portAsString : WS_STRING;
+    path : WS_STRING;
+    query : WS_STRING;
+    fragment : WS_STRING;
+  end;
+
+
+//  Url structure
+//
+//   The URL subtype for specifying a net.pipe URL.
+//
+  WS_NETPIPE_URL = record
+    url : WS_URL;
+    host : WS_STRING;
+    port : word;
+    portAsString : WS_STRING;
+    path : WS_STRING;
+    query : WS_STRING;
+    fragment : WS_STRING;
+  end;
+
+
+//  Utilities structure
+//
+//   Represents a unique ID URI.
+//
+  WS_UNIQUE_ID = record
+    uri : WS_STRING;
+    guid : TGUID;
+  end;
+
+
+//  Utilities structure
+//  A structure used to represent a discontiguous array of WS_BYTES.
+  WS_BUFFERS = record
+    bufferCount : ULONG;
+    buffers : PWS_BYTES;
+  end;
+
+
+//  Metadata Import structure
+//
+//   Information about a single endpoint that was
+//  read from metadata documents.
+//
+  WS_METADATA_ENDPOINT = record
+    endpointAddress : WS_ENDPOINT_ADDRESS;
+    endpointPolicy : PWS_POLICY;
+    portName : PWS_XML_STRING;
+    serviceName : PWS_XML_STRING;
+    serviceNs : PWS_XML_STRING;
+    bindingName : PWS_XML_STRING;
+    bindingNs : PWS_XML_STRING;
+    portTypeName : PWS_XML_STRING;
+    portTypeNs : PWS_XML_STRING;
+  end;
+
+
+//  Metadata Import structure
+//
+//   Information about all endpoints that were
+//  read from metadata documents.
+//
+  WS_METADATA_ENDPOINTS = record
+    endpoints : PWS_METADATA_ENDPOINT;
+    endpointCount : ULONG;
+  end;
+
+
+//  Metadata Import structure
+//
+//   Specifies a metadata object setting.
+//
+  WS_METADATA_PROPERTY = record
+    id : WS_METADATA_PROPERTY_ID;
+    value : pointer;
+    valueSize : ULONG;
   end;
 
 
