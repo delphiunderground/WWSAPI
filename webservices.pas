@@ -173,6 +173,7 @@ type
 //  PASCAL POINTER DEFINITIONS
 
   PWS_XML_DICTIONARY             = ^WS_XML_DICTIONARY;
+  PPWS_XML_DICTIONARY            = ^PWS_XML_DICTIONARY;
   PWS_XML_STRING                 = ^WS_XML_STRING;
   PPWS_XML_STRING                = ^PWS_XML_STRING;
   PWS_XML_QNAME                  = ^WS_XML_QNAME;
@@ -240,6 +241,7 @@ type
   PWS_HTTP_MESSAGE_MAPPING       = ^WS_HTTP_MESSAGE_MAPPING;
   PWS_ELEMENT_DESCRIPTION        = ^WS_ELEMENT_DESCRIPTION;
   PWS_MESSAGE_DESCRIPTION        = ^WS_MESSAGE_DESCRIPTION;
+  PPWS_MESSAGE_DESCRIPTION       = ^PWS_MESSAGE_DESCRIPTION;
   PWS_CHANNEL_ENCODER            = ^WS_CHANNEL_ENCODER;
   PWS_CHANNEL_DECODER            = ^WS_CHANNEL_DECODER;
   PWS_HTTP_REDIRECT_CALLBACK_CONTEXT = ^WS_HTTP_REDIRECT_CALLBACK_CONTEXT;
@@ -377,9 +379,69 @@ type
   PWS_METADATA_ENDPOINT          = ^WS_METADATA_ENDPOINT;
   PWS_METADATA_ENDPOINTS         = ^WS_METADATA_ENDPOINTS;
   PWS_METADATA_PROPERTY          = ^WS_METADATA_PROPERTY;
-
-
-
+  PWS_POLICY_PROPERTY            = ^WS_POLICY_PROPERTY;
+  PWS_POLICY_PROPERTIES          = ^WS_POLICY_PROPERTIES;
+  PWS_SECURITY_BINDING_PROPERTY_CONSTRAINT = ^WS_SECURITY_BINDING_PROPERTY_CONSTRAINT;
+  PWS_SECURITY_BINDING_CONSTRAINT = ^WS_SECURITY_BINDING_CONSTRAINT;
+  PPWS_SECURITY_BINDING_CONSTRAINT = ^PWS_SECURITY_BINDING_CONSTRAINT;
+  PWS_SSL_TRANSPORT_SECURITY_BINDING_CONSTRAINT = ^WS_SSL_TRANSPORT_SECURITY_BINDING_CONSTRAINT;
+  PWS_USERNAME_MESSAGE_SECURITY_BINDING_CONSTRAINT = ^WS_USERNAME_MESSAGE_SECURITY_BINDING_CONSTRAINT;
+  PWS_HTTP_HEADER_AUTH_SECURITY_BINDING_CONSTRAINT = ^WS_HTTP_HEADER_AUTH_SECURITY_BINDING_CONSTRAINT;
+  PWS_TCP_SSPI_TRANSPORT_SECURITY_BINDING_CONSTRAINT = ^WS_TCP_SSPI_TRANSPORT_SECURITY_BINDING_CONSTRAINT;
+  PWS_CERT_MESSAGE_SECURITY_BINDING_CONSTRAINT = ^WS_CERT_MESSAGE_SECURITY_BINDING_CONSTRAINT;
+  PWS_KERBEROS_APREQ_MESSAGE_SECURITY_BINDING_CONSTRAINT = ^WS_KERBEROS_APREQ_MESSAGE_SECURITY_BINDING_CONSTRAINT;
+  PWS_REQUEST_SECURITY_TOKEN_PROPERTY_CONSTRAINT = ^WS_REQUEST_SECURITY_TOKEN_PROPERTY_CONSTRAINT;
+  PWS_ISSUED_TOKEN_MESSAGE_SECURITY_BINDING_CONSTRAINT = ^WS_ISSUED_TOKEN_MESSAGE_SECURITY_BINDING_CONSTRAINT;
+  PWS_SECURITY_PROPERTY_CONSTRAINT = ^WS_SECURITY_PROPERTY_CONSTRAINT;
+  PWS_SECURITY_CONSTRAINTS       = ^WS_SECURITY_CONSTRAINTS;
+  PWS_SECURITY_CONTEXT_MESSAGE_SECURITY_BINDING_CONSTRAINT = ^WS_SECURITY_CONTEXT_MESSAGE_SECURITY_BINDING_CONSTRAINT;
+  PWS_CHANNEL_PROPERTY_CONSTRAINT = ^WS_CHANNEL_PROPERTY_CONSTRAINT;
+  PWS_POLICY_EXTENSION           = ^WS_POLICY_EXTENSION;
+  PPWS_POLICY_EXTENSION          = ^PWS_POLICY_EXTENSION;
+  PWS_ENDPOINT_POLICY_EXTENSION  = ^WS_ENDPOINT_POLICY_EXTENSION;
+  PWS_POLICY_CONSTRAINTS         = ^WS_POLICY_CONSTRAINTS;
+  PWS_HTTP_POLICY_DESCRIPTION    = ^WS_HTTP_POLICY_DESCRIPTION;
+  PWS_SSL_TRANSPORT_SECURITY_BINDING_POLICY_DESCRIPTION = ^WS_SSL_TRANSPORT_SECURITY_BINDING_POLICY_DESCRIPTION;
+  PWS_HTTP_SSL_POLICY_DESCRIPTION = ^WS_HTTP_SSL_POLICY_DESCRIPTION;
+  PWS_HTTP_HEADER_AUTH_SECURITY_BINDING_POLICY_DESCRIPTION = ^WS_HTTP_HEADER_AUTH_SECURITY_BINDING_POLICY_DESCRIPTION;
+  PWS_HTTP_HEADER_AUTH_POLICY_DESCRIPTION = ^WS_HTTP_HEADER_AUTH_POLICY_DESCRIPTION;
+  PWS_HTTP_SSL_HEADER_AUTH_POLICY_DESCRIPTION = ^WS_HTTP_SSL_HEADER_AUTH_POLICY_DESCRIPTION;
+  PWS_USERNAME_MESSAGE_SECURITY_BINDING_POLICY_DESCRIPTION = ^WS_USERNAME_MESSAGE_SECURITY_BINDING_POLICY_DESCRIPTION;
+  PWS_HTTP_SSL_USERNAME_POLICY_DESCRIPTION = ^WS_HTTP_SSL_USERNAME_POLICY_DESCRIPTION;
+  PWS_KERBEROS_APREQ_MESSAGE_SECURITY_BINDING_POLICY_DESCRIPTION = ^WS_KERBEROS_APREQ_MESSAGE_SECURITY_BINDING_POLICY_DESCRIPTION;
+  PWS_HTTP_SSL_KERBEROS_APREQ_POLICY_DESCRIPTION = ^WS_HTTP_SSL_KERBEROS_APREQ_POLICY_DESCRIPTION;
+  PWS_TCP_POLICY_DESCRIPTION     = ^WS_TCP_POLICY_DESCRIPTION;
+  PWS_SSPI_TRANSPORT_SECURITY_BINDING_POLICY_DESCRIPTION = ^WS_SSPI_TRANSPORT_SECURITY_BINDING_POLICY_DESCRIPTION;
+  PWS_TCP_SSPI_POLICY_DESCRIPTION = ^WS_TCP_SSPI_POLICY_DESCRIPTION;
+  PWS_TCP_SSPI_USERNAME_POLICY_DESCRIPTION = ^WS_TCP_SSPI_USERNAME_POLICY_DESCRIPTION;
+  PWS_TCP_SSPI_KERBEROS_APREQ_POLICY_DESCRIPTION = ^WS_TCP_SSPI_KERBEROS_APREQ_POLICY_DESCRIPTION;
+  PWS_SECURITY_CONTEXT_MESSAGE_SECURITY_BINDING_POLICY_DESCRIPTION = ^WS_SECURITY_CONTEXT_MESSAGE_SECURITY_BINDING_POLICY_DESCRIPTION;
+  PWS_SECURITY_CONTEXT_SECURITY_BINDING_POLICY_DESCRIPTION = ^WS_SECURITY_CONTEXT_SECURITY_BINDING_POLICY_DESCRIPTION;
+  PWS_TCP_SSPI_KERBEROS_APREQ_SECURITY_CONTEXT_POLICY_DESCRIPTION = ^WS_TCP_SSPI_KERBEROS_APREQ_SECURITY_CONTEXT_POLICY_DESCRIPTION;
+  PWS_TCP_SSPI_USERNAME_SECURITY_CONTEXT_POLICY_DESCRIPTION = ^WS_TCP_SSPI_USERNAME_SECURITY_CONTEXT_POLICY_DESCRIPTION;
+  PWS_HTTP_SSL_USERNAME_SECURITY_CONTEXT_POLICY_DESCRIPTION = ^WS_HTTP_SSL_USERNAME_SECURITY_CONTEXT_POLICY_DESCRIPTION;
+  PWS_HTTP_SSL_KERBEROS_APREQ_SECURITY_CONTEXT_POLICY_DESCRIPTION = ^WS_HTTP_SSL_KERBEROS_APREQ_SECURITY_CONTEXT_POLICY_DESCRIPTION;
+  PWS_HTTP_BINDING_TEMPLATE      = ^WS_HTTP_BINDING_TEMPLATE;
+  PWS_TCP_BINDING_TEMPLATE       = ^WS_TCP_BINDING_TEMPLATE;
+  PWS_SSL_TRANSPORT_SECURITY_BINDING_TEMPLATE = ^WS_SSL_TRANSPORT_SECURITY_BINDING_TEMPLATE;
+  PWS_HTTP_SSL_BINDING_TEMPLATE  = ^WS_HTTP_SSL_BINDING_TEMPLATE;
+  PWS_HTTP_HEADER_AUTH_SECURITY_BINDING_TEMPLATE = ^WS_HTTP_HEADER_AUTH_SECURITY_BINDING_TEMPLATE;
+  PWS_HTTP_HEADER_AUTH_BINDING_TEMPLATE = ^WS_HTTP_HEADER_AUTH_BINDING_TEMPLATE;
+  PWS_TCP_SSPI_TRANSPORT_SECURITY_BINDING_TEMPLATE = ^WS_TCP_SSPI_TRANSPORT_SECURITY_BINDING_TEMPLATE;
+  PWS_TCP_SSPI_BINDING_TEMPLATE  = ^WS_TCP_SSPI_BINDING_TEMPLATE;
+  PWS_HTTP_SSL_HEADER_AUTH_BINDING_TEMPLATE = ^WS_HTTP_SSL_HEADER_AUTH_BINDING_TEMPLATE;
+  PWS_USERNAME_MESSAGE_SECURITY_BINDING_TEMPLATE = ^WS_USERNAME_MESSAGE_SECURITY_BINDING_TEMPLATE;
+  PWS_HTTP_SSL_USERNAME_BINDING_TEMPLATE = ^WS_HTTP_SSL_USERNAME_BINDING_TEMPLATE;
+  PWS_KERBEROS_APREQ_MESSAGE_SECURITY_BINDING_TEMPLATE = ^WS_KERBEROS_APREQ_MESSAGE_SECURITY_BINDING_TEMPLATE;
+  PWS_HTTP_SSL_KERBEROS_APREQ_BINDING_TEMPLATE = ^WS_HTTP_SSL_KERBEROS_APREQ_BINDING_TEMPLATE;
+  PWS_TCP_SSPI_USERNAME_BINDING_TEMPLATE = ^WS_TCP_SSPI_USERNAME_BINDING_TEMPLATE;
+  PWS_TCP_SSPI_KERBEROS_APREQ_BINDING_TEMPLATE = ^WS_TCP_SSPI_KERBEROS_APREQ_BINDING_TEMPLATE;
+  PWS_SECURITY_CONTEXT_MESSAGE_SECURITY_BINDING_TEMPLATE = ^WS_SECURITY_CONTEXT_MESSAGE_SECURITY_BINDING_TEMPLATE;
+  PWS_SECURITY_CONTEXT_SECURITY_BINDING_TEMPLATE = ^WS_SECURITY_CONTEXT_SECURITY_BINDING_TEMPLATE;
+  PWS_HTTP_SSL_USERNAME_SECURITY_CONTEXT_BINDING_TEMPLATE = ^WS_HTTP_SSL_USERNAME_SECURITY_CONTEXT_BINDING_TEMPLATE;
+  PWS_HTTP_SSL_KERBEROS_APREQ_SECURITY_CONTEXT_BINDING_TEMPLATE = ^WS_HTTP_SSL_KERBEROS_APREQ_SECURITY_CONTEXT_BINDING_TEMPLATE;
+  PWS_TCP_SSPI_USERNAME_SECURITY_CONTEXT_BINDING_TEMPLATE = ^WS_TCP_SSPI_USERNAME_SECURITY_CONTEXT_BINDING_TEMPLATE;
+  PWS_TCP_SSPI_KERBEROS_APREQ_SECURITY_CONTEXT_BINDING_TEMPLATE = ^WS_TCP_SSPI_KERBEROS_APREQ_SECURITY_CONTEXT_BINDING_TEMPLATE;
 
   PWS_SECURITY_TOKEN             = pointer;  //opaque handle representing a security token.
   PWS_POLICY                     = pointer;  //opaque type used to reference a metadata input policy.
@@ -3720,6 +3782,776 @@ type
   end;
 
 
+//  Metadata Import structure
+//
+//   Specifies a policy object setting.
+//
+  WS_POLICY_PROPERTY = record
+    id : WS_POLICY_PROPERTY_ID;
+    value : pointer;
+    valueSize : ULONG;
+  end;
+
+
+//  Metadata Import structure
+//
+//   A structure that is used to specify a set of WS_POLICY_PROPERTYs.
+//
+  WS_POLICY_PROPERTIES = record
+    properties : PWS_POLICY_PROPERTY;
+    propertyCount : ULONG;
+  end;
+
+
+//  Metadata Import structure
+//
+//   This structure is used to specify a set of constraints
+//  for a particular security binding property.
+//  Any property constraints that are not specified will use
+//  the default constraints.
+//
+  WS_SECURITY_BINDING_PROPERTY_CONSTRAINT = record
+    id : WS_SECURITY_BINDING_PROPERTY_ID;
+    allowedValues : pointer;
+    allowedValuesSize : ULONG;
+    securityBindingProperty : WS_SECURITY_BINDING_PROPERTY;
+  end;
+
+
+//  Metadata Import structure
+//
+//   The base class for all security binding constraint structures.
+//
+  WS_SECURITY_BINDING_CONSTRAINT = record
+    type_ : WS_SECURITY_BINDING_CONSTRAINT_TYPE;
+    propertyConstraints : PWS_SECURITY_BINDING_PROPERTY_CONSTRAINT;
+    propertyConstraintCount : ULONG;
+  end;
+
+
+//  Metadata Import structure
+//
+//   A security binding constraint that corresponds to the
+//   WS_SSL_TRANSPORT_SECURITY_BINDING.
+//
+  WS_SSL_TRANSPORT_SECURITY_BINDING_CONSTRAINT = record
+    bindingConstraint : WS_SECURITY_BINDING_CONSTRAINT;
+    clientCertCredentialRequired : BOOL;
+  end;
+
+
+//  Metadata Import structure
+//
+//   A security binding constraint that corresponds to the
+//   WS_USERNAME_MESSAGE_SECURITY_BINDING.
+//
+  WS_USERNAME_MESSAGE_SECURITY_BINDING_CONSTRAINT = record
+    bindingConstraint : WS_SECURITY_BINDING_CONSTRAINT;
+    bindingUsage : WS_MESSAGE_SECURITY_USAGE;
+  end;
+
+
+//  Metadata Import structure
+//
+//   A security binding constraint that corresponds to the
+//   WS_HTTP_HEADER_AUTH_SECURITY_BINDING.
+//
+  WS_HTTP_HEADER_AUTH_SECURITY_BINDING_CONSTRAINT = record
+    bindingConstraint : WS_SECURITY_BINDING_CONSTRAINT;
+  end;
+
+
+//  Metadata Import structure
+//
+//   A security binding constraint that corresponds to the
+//   WS_TCP_SSPI_TRANSPORT_SECURITY_BINDING.
+//
+  WS_TCP_SSPI_TRANSPORT_SECURITY_BINDING_CONSTRAINT = record
+    bindingConstraint : WS_SECURITY_BINDING_CONSTRAINT;
+  end;
+
+
+//  Metadata Import structure
+//
+//   A security binding constraint that can be used with
+//   WS_XML_TOKEN_MESSAGE_SECURITY_BINDING.
+//
+  WS_CERT_MESSAGE_SECURITY_BINDING_CONSTRAINT = record
+    bindingConstraint : WS_SECURITY_BINDING_CONSTRAINT;
+    bindingUsage : WS_MESSAGE_SECURITY_USAGE;
+  end;
+
+
+//  Metadata Import structure
+//
+//   A security binding constraint that corresponds to the
+//   WS_KERBEROS_APREQ_MESSAGE_SECURITY_BINDING.
+//
+  WS_KERBEROS_APREQ_MESSAGE_SECURITY_BINDING_CONSTRAINT = record
+    bindingConstraint : WS_SECURITY_BINDING_CONSTRAINT;
+    bindingUsage : WS_MESSAGE_SECURITY_USAGE;
+  end;
+
+//  Metadata Import structure
+//
+//   This structure is used to specify a set of constraints
+//  for a particular request security token property.
+//  Any property constraints that are not specified will use
+//  the default constraints.
+//
+  WS_REQUEST_SECURITY_TOKEN_PROPERTY_CONSTRAINT = record
+    id : WS_REQUEST_SECURITY_TOKEN_PROPERTY_ID;
+    allowedValues : pointer;
+    allowedValuesSize : ULONG;
+    requestSecurityTokenProperty : WS_REQUEST_SECURITY_TOKEN_PROPERTY;
+  end;
+
+
+//  Metadata Import structure
+//
+//   A security binding constraint that can be used to extract information
+//  about how to obtain an issued token from an issuing party.
+//
+  WS_ISSUED_TOKEN_MESSAGE_SECURITY_BINDING_CONSTRAINT = record
+    bindingConstraint : WS_SECURITY_BINDING_CONSTRAINT;
+    bindingUsage : WS_MESSAGE_SECURITY_USAGE;
+    claimConstraints : PWS_XML_STRING;
+    claimConstraintCount : ULONG;
+    requestSecurityTokenPropertyConstraints : PWS_REQUEST_SECURITY_TOKEN_PROPERTY_CONSTRAINT;
+    requestSecurityTokenPropertyConstraintCount : ULONG;
+    issuerAddress : PWS_ENDPOINT_ADDRESS;
+    requestSecurityTokenTemplate : PWS_XML_BUFFER;
+  end;
+
+
+//  Metadata Import structure
+//
+//   This structure is used to specify a set of constraints
+//  for a particular security property.
+//  Any property constraints that are not specified will use
+//  the default constraints.
+//
+  WS_SECURITY_PROPERTY_CONSTRAINT = record
+    id : WS_SECURITY_PROPERTY_ID;
+    allowedValues : pointer;
+    allowedValuesSize : ULONG;
+    securityProperty : WS_SECURITY_PROPERTY;
+  end;
+
+
+//  Metadata Import structure
+//
+//   This structure specifies the security related constraints
+//  as part of WS_POLICY_CONSTRAINTS.
+//
+  WS_SECURITY_CONSTRAINTS = record
+    securityPropertyConstraints : PWS_SECURITY_PROPERTY_CONSTRAINT;
+    securityPropertyConstraintCount : ULONG;
+    securityBindingConstraints : PPWS_SECURITY_BINDING_CONSTRAINT;
+    securityBindingConstraintCount : ULONG;
+  end;
+
+
+//  Metadata Import structure
+//
+//   A security binding constraint that corresponds to
+//  the WS_SECURITY_CONTEXT_MESSAGE_SECURITY_BINDING.
+//
+  WS_SECURITY_CONTEXT_MESSAGE_SECURITY_BINDING_CONSTRAINT = record
+    bindingConstraint : WS_SECURITY_BINDING_CONSTRAINT;
+    bindingUsage : WS_MESSAGE_SECURITY_USAGE;
+    bootstrapSecurityConstraint : PWS_SECURITY_CONSTRAINTS;
+  end;
+
+
+//  Metadata Import structure
+//
+//   This structure is used to specify a set of constraints
+//  for a particular channel property.
+//  Any property constraints that are not specified will use
+//  the default constraints.
+//
+  WS_CHANNEL_PROPERTY_CONSTRAINT = record
+    id : WS_CHANNEL_PROPERTY_ID;
+    allowedValues : pointer;
+    allowedValuesSize : ULONG;
+    channelProperty : WS_CHANNEL_PROPERTY;
+  end;
+
+
+//  Metadata Import structure
+//
+//   The base class for all policy extension structures. Policy extensions
+//  are assertions that are directly handled by applications such as custom assertions.
+//
+  WS_POLICY_EXTENSION = record
+    type_ : WS_POLICY_EXTENSION_TYPE;
+  end;
+
+
+//  Metadata Import structure
+//
+//   This structure is used to specify an endpoint policy extension.
+//
+  WS_ENDPOINT_POLICY_EXTENSION = record
+    policyExtension : WS_POLICY_EXTENSION;
+    assertionName : PWS_XML_STRING;
+    assertionNs : PWS_XML_STRING;
+    assertionValue : PWS_XML_BUFFER;
+  end;
+
+
+//  Metadata Import structure
+//
+//   This structure is used to specify policy constraints for a channel.
+//
+  WS_POLICY_CONSTRAINTS = record
+    channelBinding : WS_CHANNEL_BINDING;
+    channelPropertyConstraints : PWS_CHANNEL_PROPERTY_CONSTRAINT;
+    channelPropertyConstraintCount : ULONG;
+    securityConstraints : PWS_SECURITY_CONSTRAINTS;
+    policyExtensions : PPWS_POLICY_EXTENSION;
+    policyExtensionCount : ULONG;
+  end;
+
+
+//  Policy Support structure
+//
+//   Describes the policy specifying http channel binding.
+//
+  WS_HTTP_POLICY_DESCRIPTION = record
+    channelProperties : WS_CHANNEL_PROPERTIES;
+  end;
+
+
+//  Policy Support structure
+//
+//   This type description is used with template APIs to describe
+//  the templates generated accordingly to input policy setting.
+//
+//   See also,
+//   WsCreateServiceProxyFromTemplate,
+//   WsCreateServiceEndpointFromTemplate
+  WS_SSL_TRANSPORT_SECURITY_BINDING_POLICY_DESCRIPTION = record
+    securityBindingProperties : WS_SECURITY_BINDING_PROPERTIES;
+  end;
+
+
+//  Policy Support structure
+//
+//   Describes the policy specifying http channel binding.
+//
+  WS_HTTP_SSL_POLICY_DESCRIPTION = record
+    channelProperties : WS_CHANNEL_PROPERTIES;
+    securityProperties : WS_SECURITY_PROPERTIES;
+    sslTransportSecurityBinding : WS_SSL_TRANSPORT_SECURITY_BINDING_POLICY_DESCRIPTION;
+  end;
+
+
+//  Policy Support structure
+//
+//   This type description is used with template APIs to describe
+//  the templates generated accordingly to input policy setting.
+//
+//   See also,
+//   WsCreateServiceProxyFromTemplate,
+//   WsCreateServiceEndpointFromTemplate
+  WS_HTTP_HEADER_AUTH_SECURITY_BINDING_POLICY_DESCRIPTION = record
+    securityBindingProperties : WS_SECURITY_BINDING_PROPERTIES;
+  end;
+
+
+//  Policy Support structure
+//
+//   Describes the policy specifying http channel binding.
+//
+  WS_HTTP_HEADER_AUTH_POLICY_DESCRIPTION = record
+    channelProperties : WS_CHANNEL_PROPERTIES;
+    securityProperties : WS_SECURITY_PROPERTIES;
+    httpHeaderAuthSecurityBinding : WS_HTTP_HEADER_AUTH_SECURITY_BINDING_POLICY_DESCRIPTION;
+  end;
+
+
+//  Policy Support structure
+//
+//   Describes the policy specifying http channel binding with SSL transport security and
+//  header authentication.
+//
+  WS_HTTP_SSL_HEADER_AUTH_POLICY_DESCRIPTION = record
+    channelProperties : WS_CHANNEL_PROPERTIES;
+    securityProperties : WS_SECURITY_PROPERTIES;
+    sslTransportSecurityBinding : WS_SSL_TRANSPORT_SECURITY_BINDING_POLICY_DESCRIPTION;
+    httpHeaderAuthSecurityBinding : WS_HTTP_HEADER_AUTH_SECURITY_BINDING_POLICY_DESCRIPTION;
+  end;
+
+
+//  Policy Support structure
+//
+//   This type description is used with template APIs to describe
+//  the templates generated accordingly to input policy setting.
+//
+//   See also,
+//   WsCreateServiceProxyFromTemplate,
+//   WsCreateServiceEndpointFromTemplate
+  WS_USERNAME_MESSAGE_SECURITY_BINDING_POLICY_DESCRIPTION = record
+    securityBindingProperties : WS_SECURITY_BINDING_PROPERTIES;
+    bindingUsage : WS_MESSAGE_SECURITY_USAGE;
+  end;
+
+
+//  Policy Support structure
+//
+//   Describes the policy specifying http channel binding with SSL transport security and
+//  username/password message security.
+//
+  WS_HTTP_SSL_USERNAME_POLICY_DESCRIPTION = record
+    channelProperties : WS_CHANNEL_PROPERTIES;
+    securityProperties : WS_SECURITY_PROPERTIES;
+    sslTransportSecurityBinding : WS_SSL_TRANSPORT_SECURITY_BINDING_POLICY_DESCRIPTION;
+    usernameMessageSecurityBinding : WS_USERNAME_MESSAGE_SECURITY_BINDING_POLICY_DESCRIPTION;
+  end;
+
+
+//  Policy Support structure
+//
+//   This type description is used with template APIs to describe
+//  the templates generated accordingly to input policy setting.
+//
+//   See also,
+//   WsCreateServiceProxyFromTemplate,
+//   WsCreateServiceEndpointFromTemplate
+  WS_KERBEROS_APREQ_MESSAGE_SECURITY_BINDING_POLICY_DESCRIPTION = record
+    securityBindingProperties : WS_SECURITY_BINDING_PROPERTIES;
+    bindingUsage : WS_MESSAGE_SECURITY_USAGE;
+  end;
+
+
+//  Policy Support structure
+//
+//   Describes the policy specifying http channel binding with SSL transport security
+//  and KERBEROS AP_REQ message security.
+//
+  WS_HTTP_SSL_KERBEROS_APREQ_POLICY_DESCRIPTION = record
+    channelProperties : WS_CHANNEL_PROPERTIES;
+    securityProperties : WS_SECURITY_PROPERTIES;
+    sslTransportSecurityBinding : WS_SSL_TRANSPORT_SECURITY_BINDING_POLICY_DESCRIPTION;
+    kerberosApreqMessageSecurityBinding : WS_KERBEROS_APREQ_MESSAGE_SECURITY_BINDING_POLICY_DESCRIPTION;
+  end;
+
+
+//  Policy Support structure
+//
+//   Describes the policy specifying http channel binding.
+//
+  WS_TCP_POLICY_DESCRIPTION = record
+    channelProperties : WS_CHANNEL_PROPERTIES;
+  end;
+
+
+//  Policy Support structure
+//
+//   This type description is used with template APIs to describe
+//  the templates generated accordingly to input policy setting.
+//
+//   See also,
+//   WsCreateServiceProxyFromTemplate,
+//   WsCreateServiceEndpointFromTemplate
+  WS_SSPI_TRANSPORT_SECURITY_BINDING_POLICY_DESCRIPTION = record
+    securityBindingProperties : WS_SECURITY_BINDING_PROPERTIES;
+  end;
+
+
+//  Policy Support structure
+//
+//   Describes the policy specifying TCP channel binding with windows SSPI.
+//
+  WS_TCP_SSPI_POLICY_DESCRIPTION = record
+    channelProperties : WS_CHANNEL_PROPERTIES;
+    securityProperties : WS_SECURITY_PROPERTIES;
+    sspiTransportSecurityBinding : WS_SSPI_TRANSPORT_SECURITY_BINDING_POLICY_DESCRIPTION;
+  end;
+
+
+//  Policy Support structure
+//
+//   Describes the policy specifying TCP channel binding with windows SSPI transport
+//  security and username/password message security.
+//
+  WS_TCP_SSPI_USERNAME_POLICY_DESCRIPTION = record
+    channelProperties : WS_CHANNEL_PROPERTIES;
+    securityProperties : WS_SECURITY_PROPERTIES;
+    sspiTransportSecurityBinding : WS_SSPI_TRANSPORT_SECURITY_BINDING_POLICY_DESCRIPTION;
+    usernameMessageSecurityBinding : WS_USERNAME_MESSAGE_SECURITY_BINDING_POLICY_DESCRIPTION;
+  end;
+
+
+//  Policy Support structure
+//
+//   Describes the policy specifying TCP channel binding with windows SSPI transport
+//  security, and kerberos message security.
+//
+  WS_TCP_SSPI_KERBEROS_APREQ_POLICY_DESCRIPTION = record
+    channelProperties : WS_CHANNEL_PROPERTIES;
+    securityProperties : WS_SECURITY_PROPERTIES;
+    sspiTransportSecurityBinding : WS_SSPI_TRANSPORT_SECURITY_BINDING_POLICY_DESCRIPTION;
+    kerberosApreqMessageSecurityBinding : WS_KERBEROS_APREQ_MESSAGE_SECURITY_BINDING_POLICY_DESCRIPTION;
+  end;
+
+
+//  Policy Support structure
+//
+//   This type description is used with template APIs to describe
+//  the templates generated accordingly to input policy setting.
+//
+  WS_SECURITY_CONTEXT_MESSAGE_SECURITY_BINDING_POLICY_DESCRIPTION = record
+    securityBindingProperties : WS_SECURITY_BINDING_PROPERTIES;
+    bindingUsage : WS_MESSAGE_SECURITY_USAGE;
+  end;
+
+
+//  Policy Support structure
+//
+//   This type description is used with template APIs to describe
+//  the security context related templates generated accordingly to input policy setting.
+//
+  WS_SECURITY_CONTEXT_SECURITY_BINDING_POLICY_DESCRIPTION = record
+    securityContextMessageSecurityBinding : WS_SECURITY_CONTEXT_MESSAGE_SECURITY_BINDING_POLICY_DESCRIPTION;
+    securityProperties : WS_SECURITY_PROPERTIES;
+  end;
+
+
+//  Policy Support structure
+//
+//   Describes the policy specifying security context message binding using TCP channel binding
+//  with windows SSPI transport security. The bootstrap channel uses TCP channel binding with
+//  windows SSPI transport security and kerberos message security.
+//
+  WS_TCP_SSPI_KERBEROS_APREQ_SECURITY_CONTEXT_POLICY_DESCRIPTION = record
+    channelProperties : WS_CHANNEL_PROPERTIES;
+    securityProperties : WS_SECURITY_PROPERTIES;
+    sspiTransportSecurityBinding : WS_SSPI_TRANSPORT_SECURITY_BINDING_POLICY_DESCRIPTION;
+    kerberosApreqMessageSecurityBinding : WS_KERBEROS_APREQ_MESSAGE_SECURITY_BINDING_POLICY_DESCRIPTION;
+    securityContextSecurityBinding : WS_SECURITY_CONTEXT_SECURITY_BINDING_POLICY_DESCRIPTION;
+  end;
+
+
+//  Policy Support structure
+//
+//   Describes the policy specifying security context message binding using TCP channel binding with windows SSPI transport
+//  security. The bootstrap channel uses TCP channel binding with windows SSPI transport
+//  security and username/password message security.
+//
+  WS_TCP_SSPI_USERNAME_SECURITY_CONTEXT_POLICY_DESCRIPTION = record
+    channelProperties : WS_CHANNEL_PROPERTIES;
+    securityProperties : WS_SECURITY_PROPERTIES;
+    sspiTransportSecurityBinding : WS_SSPI_TRANSPORT_SECURITY_BINDING_POLICY_DESCRIPTION;
+    usernameMessageSecurityBinding : WS_USERNAME_MESSAGE_SECURITY_BINDING_POLICY_DESCRIPTION;
+    securityContextSecurityBinding : WS_SECURITY_CONTEXT_SECURITY_BINDING_POLICY_DESCRIPTION;
+  end;
+
+
+//  Policy Support structure
+//
+//   Describes the policy specifying security context message binding over http channel binding, with SSL
+//  transport security. The bootstrap channel uses http channel binding with SSL transport security
+//  and username/password message security.
+//
+  WS_HTTP_SSL_USERNAME_SECURITY_CONTEXT_POLICY_DESCRIPTION = record
+    channelProperties : WS_CHANNEL_PROPERTIES;
+    securityProperties : WS_SECURITY_PROPERTIES;
+    sslTransportSecurityBinding : WS_SSL_TRANSPORT_SECURITY_BINDING_POLICY_DESCRIPTION;
+    usernameMessageSecurityBinding : WS_USERNAME_MESSAGE_SECURITY_BINDING_POLICY_DESCRIPTION;
+    securityContextSecurityBinding : WS_SECURITY_CONTEXT_SECURITY_BINDING_POLICY_DESCRIPTION;
+  end;
+
+
+//  Policy Support structure
+//
+//   Describes the policy specifying security context message binding over http channel binding, with SSL
+//  transport security. The bootstrap channel uses http channel binding with SSL transport security
+//  and KERBEROS AP_REQ message security.
+//
+  WS_HTTP_SSL_KERBEROS_APREQ_SECURITY_CONTEXT_POLICY_DESCRIPTION = record
+    channelProperties : WS_CHANNEL_PROPERTIES;
+    securityProperties : WS_SECURITY_PROPERTIES;
+    sslTransportSecurityBinding : WS_SSL_TRANSPORT_SECURITY_BINDING_POLICY_DESCRIPTION;
+    kerberosApreqMessageSecurityBinding : WS_KERBEROS_APREQ_MESSAGE_SECURITY_BINDING_POLICY_DESCRIPTION;
+    securityContextSecurityBinding : WS_SECURITY_CONTEXT_SECURITY_BINDING_POLICY_DESCRIPTION;
+  end;
+
+
+//  Policy Support structure
+//
+//   HTTP template structure to be filled in by application for http binding.
+//
+  WS_HTTP_BINDING_TEMPLATE = record
+    channelProperties : WS_CHANNEL_PROPERTIES;
+  end;
+
+
+//  Policy Support structure
+//
+//   TCP template structure to be filled in by application for TCP binding.
+//
+  WS_TCP_BINDING_TEMPLATE = record
+    channelProperties : WS_CHANNEL_PROPERTIES;
+  end;
+
+
+//  Policy Support structure
+//
+//   The security binding template for specifying the use of SSL/TLS
+//  protocol based transport security.
+//  See Also WS_SSL_TRANSPORT_SECURITY_BINDING
+//   This security binding is supported only with WS_HTTP_CHANNEL_BINDING.
+//
+  WS_SSL_TRANSPORT_SECURITY_BINDING_TEMPLATE = record
+    securityBindingProperties : WS_SECURITY_BINDING_PROPERTIES;
+    localCertCredential : PWS_CERT_CREDENTIAL;
+  end;
+
+
+//  Policy Support structure
+//
+//   SSL security template information to be filled in by application.
+//  Associated with WS_HTTP_SSL_BINDING_TEMPLATE_TYPE.
+//
+  WS_HTTP_SSL_BINDING_TEMPLATE = record
+    channelProperties : WS_CHANNEL_PROPERTIES;
+    securityProperties : WS_SECURITY_PROPERTIES;
+    sslTransportSecurityBinding : WS_SSL_TRANSPORT_SECURITY_BINDING_TEMPLATE;
+  end;
+
+
+//  Policy Support structure
+//
+//   The security binding template for specifying the use of HTP header authentication
+//  protocol based security.
+//  See also WS_HTTP_HEADER_AUTH_SECURITY_BINDING
+  WS_HTTP_HEADER_AUTH_SECURITY_BINDING_TEMPLATE = record
+    securityBindingProperties : WS_SECURITY_BINDING_PROPERTIES;
+    clientCredential : PWS_WINDOWS_INTEGRATED_AUTH_CREDENTIAL;
+  end;
+
+
+//  Policy Support structure
+//
+//   HTTP header authentication security template information to be filled in by application.
+//  Associated with WS_HTTP_HEADER_AUTH_BINDING_TEMPLATE_TYPE.
+//
+  WS_HTTP_HEADER_AUTH_BINDING_TEMPLATE = record
+    channelProperties : WS_CHANNEL_PROPERTIES;
+    securityProperties : WS_SECURITY_PROPERTIES;
+    httpHeaderAuthSecurityBinding : WS_HTTP_HEADER_AUTH_SECURITY_BINDING_TEMPLATE;
+  end;
+
+
+//  Policy Support structure
+//
+//   The security binding template for specifying the use of Windows SSPI
+//  protocol based transport security.
+//
+//   See also WS_TCP_SSPI_TRANSPORT_SECURITY_BINDING.
+//
+  WS_TCP_SSPI_TRANSPORT_SECURITY_BINDING_TEMPLATE = record
+    securityBindingProperties : WS_SECURITY_BINDING_PROPERTIES;
+    clientCredential : PWS_WINDOWS_INTEGRATED_AUTH_CREDENTIAL;
+  end;
+
+
+//  Policy Support structure
+//
+//   HTTP header authentication security template information to be filled in by application.
+//  Associated with WS_TCP_SSPI_BINDING_TEMPLATE_TYPE.
+//
+  WS_TCP_SSPI_BINDING_TEMPLATE = record
+    channelProperties : WS_CHANNEL_PROPERTIES;
+    securityProperties : WS_SECURITY_PROPERTIES;
+    sspiTransportSecurityBinding : WS_TCP_SSPI_TRANSPORT_SECURITY_BINDING_TEMPLATE;
+  end;
+
+
+//  Policy Support structure
+//
+//   Username/password security template information to be filled in by application.
+//  Associated with WS_HTTP_SSL_HEADER_AUTH_BINDING_TEMPLATE_TYPE.
+//
+  WS_HTTP_SSL_HEADER_AUTH_BINDING_TEMPLATE = record
+    channelProperties : WS_CHANNEL_PROPERTIES;
+    securityProperties : WS_SECURITY_PROPERTIES;
+    sslTransportSecurityBinding : WS_SSL_TRANSPORT_SECURITY_BINDING_TEMPLATE;
+    httpHeaderAuthSecurityBinding : WS_HTTP_HEADER_AUTH_SECURITY_BINDING_TEMPLATE;
+  end;
+
+
+//  Policy Support structure
+//
+//   The security binding template for specifying the use of an application
+//  supplied username / password pair as a direct (i.e., one-shot)
+//  security token.  This security binding may be used only with message
+//  security.  It provides client authentication, but not traffic signing
+//  or encryption.  So, it is used in conjunction with another transport
+//  security or message security binding that provides message protection.
+//  See also WS_USERNAME_MESSAGE_SECURITY_BINDING
+//
+  WS_USERNAME_MESSAGE_SECURITY_BINDING_TEMPLATE = record
+    securityBindingProperties : WS_SECURITY_BINDING_PROPERTIES;
+    clientCredential : PWS_USERNAME_CREDENTIAL;
+    passwordValidator : WS_VALIDATE_PASSWORD_CALLBACK;
+    passwordValidatorCallbackState : pointer;
+  end;
+
+
+//  Policy Support structure
+//
+//   Username/password security template information to be filled in by application.
+//  Associated with WS_HTTP_SSL_USERNAME_BINDING_TEMPLATE_TYPE.
+//
+  WS_HTTP_SSL_USERNAME_BINDING_TEMPLATE = record
+    channelProperties : WS_CHANNEL_PROPERTIES;
+    securityProperties : WS_SECURITY_PROPERTIES;
+    sslTransportSecurityBinding : WS_SSL_TRANSPORT_SECURITY_BINDING_TEMPLATE;
+    usernameMessageSecurityBinding : WS_USERNAME_MESSAGE_SECURITY_BINDING_TEMPLATE;
+  end;
+
+
+//  Policy Support structure
+//
+//   The security binding template for specifying the use of the Kerberos
+//  AP_REQ ticket as a direct (i.e., without establishing a session)
+//  security token with WS-Security.
+//  See also WS_KERBEROS_APREQ_MESSAGE_SECURITY_BINDING
+//
+  WS_KERBEROS_APREQ_MESSAGE_SECURITY_BINDING_TEMPLATE = record
+    securityBindingProperties : WS_SECURITY_BINDING_PROPERTIES;
+    clientCredential : PWS_WINDOWS_INTEGRATED_AUTH_CREDENTIAL;
+  end;
+
+
+//  Policy Support structure
+//
+//   Username/password security template information to be filled in by application.
+//  Associated with WS_HTTP_SSL_KERBEROS_APREQ_BINDING_TEMPLATE_TYPE.
+//
+  WS_HTTP_SSL_KERBEROS_APREQ_BINDING_TEMPLATE = record
+    channelProperties : WS_CHANNEL_PROPERTIES;
+    securityProperties : WS_SECURITY_PROPERTIES;
+    sslTransportSecurityBinding : WS_SSL_TRANSPORT_SECURITY_BINDING_TEMPLATE;
+    kerberosApreqMessageSecurityBinding : WS_KERBEROS_APREQ_MESSAGE_SECURITY_BINDING_TEMPLATE;
+  end;
+
+
+//  Policy Support structure
+//
+//   Username/password security template information to be filled in by application.
+//  Associated with WS_TCP_SSPI_USERNAME_BINDING_TEMPLATE_TYPE.
+//
+  WS_TCP_SSPI_USERNAME_BINDING_TEMPLATE = record
+    channelProperties : WS_CHANNEL_PROPERTIES;
+    securityProperties : WS_SECURITY_PROPERTIES;
+    sspiTransportSecurityBinding : WS_TCP_SSPI_TRANSPORT_SECURITY_BINDING_TEMPLATE;
+    usernameMessageSecurityBinding : WS_USERNAME_MESSAGE_SECURITY_BINDING_TEMPLATE;
+  end;
+
+
+//  Policy Support structure
+//
+//   Username/password security template information to be filled in by application.
+//  Associated with WS_TCP_SSPI_KERBEROS_APREQ_BINDING_TEMPLATE_TYPE.
+//
+  WS_TCP_SSPI_KERBEROS_APREQ_BINDING_TEMPLATE = record
+    channelProperties : WS_CHANNEL_PROPERTIES;
+    securityProperties : WS_SECURITY_PROPERTIES;
+    sspiTransportSecurityBinding : WS_TCP_SSPI_TRANSPORT_SECURITY_BINDING_TEMPLATE;
+    kerberosApreqMessageSecurityBinding : WS_KERBEROS_APREQ_MESSAGE_SECURITY_BINDING_TEMPLATE;
+  end;
+
+
+//  Policy Support structure
+//
+//   The security binding template for specifying the use of an application
+//  supplied security context security binding.  This security binding may
+//  be used only with message security. So, it is used in conjunction with another transport
+//  security or message security binding that provides message protection.
+//
+//   See also WS_SECURITY_CONTEXT_MESSAGE_SECURITY_BINDING
+  WS_SECURITY_CONTEXT_MESSAGE_SECURITY_BINDING_TEMPLATE = record
+    securityBindingProperties : WS_SECURITY_BINDING_PROPERTIES;
+  end;
+
+
+//  Policy Support structure
+//
+//   The security binding template for specifying the use of an application
+//  supplied security context security binding.  This security binding may
+//  be used only with message security. So, it is used in conjunction with another transport
+//  security binding that provides message protection. The security properties are
+//  used to establish the secure conversation.
+//
+//   See also WS_SECURITY_CONTEXT_MESSAGE_SECURITY_BINDING
+//
+  WS_SECURITY_CONTEXT_SECURITY_BINDING_TEMPLATE = record
+    securityContextMessageSecurityBinding : WS_SECURITY_CONTEXT_MESSAGE_SECURITY_BINDING_TEMPLATE;
+    securityProperties : WS_SECURITY_PROPERTIES;
+  end;
+
+
+//  Policy Support structure
+//
+//   Security template information to be filled in by application.
+//  Associated with WS_HTTP_SSL_USERNAME_SECURITY_CONTEXT_BINDING_TEMPLATE_TYPE.
+//
+  WS_HTTP_SSL_USERNAME_SECURITY_CONTEXT_BINDING_TEMPLATE = record
+    channelProperties : WS_CHANNEL_PROPERTIES;
+    securityProperties : WS_SECURITY_PROPERTIES;
+    sslTransportSecurityBinding : WS_SSL_TRANSPORT_SECURITY_BINDING_TEMPLATE;
+    usernameMessageSecurityBinding : WS_USERNAME_MESSAGE_SECURITY_BINDING_TEMPLATE;
+    securityContextSecurityBinding : WS_SECURITY_CONTEXT_SECURITY_BINDING_TEMPLATE;
+  end;
+
+
+//  Policy Support structure
+//
+//   Security template information to be filled in by application.
+//  Associated with WS_HTTP_SSL_KERBEROS_APREQ_SECURITY_CONTEXT_BINDING_TEMPLATE_TYPE.
+//
+  WS_HTTP_SSL_KERBEROS_APREQ_SECURITY_CONTEXT_BINDING_TEMPLATE = record
+    channelProperties : WS_CHANNEL_PROPERTIES;
+    securityProperties : WS_SECURITY_PROPERTIES;
+    sslTransportSecurityBinding : WS_SSL_TRANSPORT_SECURITY_BINDING_TEMPLATE;
+    kerberosApreqMessageSecurityBinding : WS_KERBEROS_APREQ_MESSAGE_SECURITY_BINDING_TEMPLATE;
+    securityContextSecurityBinding : WS_SECURITY_CONTEXT_SECURITY_BINDING_TEMPLATE;
+  end;
+
+
+//  Policy Support structure
+//
+//   Security template information to be filled in by application.
+//  Associated with WS_TCP_SSPI_USERNAME_SECURITY_CONTEXT_BINDING_TEMPLATE_TYPE.
+//
+  WS_TCP_SSPI_USERNAME_SECURITY_CONTEXT_BINDING_TEMPLATE = record
+    channelProperties : WS_CHANNEL_PROPERTIES;
+    securityProperties : WS_SECURITY_PROPERTIES;
+    sspiTransportSecurityBinding : WS_TCP_SSPI_TRANSPORT_SECURITY_BINDING_TEMPLATE;
+    usernameMessageSecurityBinding : WS_USERNAME_MESSAGE_SECURITY_BINDING_TEMPLATE;
+    securityContextSecurityBinding : WS_SECURITY_CONTEXT_SECURITY_BINDING_TEMPLATE;
+  end;
+
+
+//  Policy Support structure
+//
+//   Security template information to be filled in by application.
+//  Associated with WS_TCP_SSPI_KERBEROS_APREQ_SECURITY_CONTEXT_BINDING_TEMPLATE_TYPE.
+//
+  WS_TCP_SSPI_KERBEROS_APREQ_SECURITY_CONTEXT_BINDING_TEMPLATE = record
+    channelProperties : WS_CHANNEL_PROPERTIES;
+    securityProperties : WS_SECURITY_PROPERTIES;
+    sspiTransportSecurityBinding : WS_TCP_SSPI_TRANSPORT_SECURITY_BINDING_TEMPLATE;
+    kerberosApreqMessageSecurityBinding : WS_KERBEROS_APREQ_MESSAGE_SECURITY_BINDING_TEMPLATE;
+    securityContextSecurityBinding : WS_SECURITY_CONTEXT_SECURITY_BINDING_TEMPLATE;
+  end;
+
+
 //  FUNCTION DEFINITIONS
 
 //  XML Canonicalization function
@@ -4479,6 +5311,242 @@ function WsCreateChannel(channelType : WS_CHANNEL_TYPE;
                          error : PWS_ERROR):HRESULT; stdcall;
 
 
+//  Channel function
+//
+//   Open a channel to an endpoint.
+//
+function WsOpenChannel(channel : PWS_CHANNEL;
+                       endpointAddress : PWS_ENDPOINT_ADDRESS;
+                       asyncContext : PWS_ASYNC_CONTEXT;
+                       error : PWS_ERROR):HRESULT; stdcall;
+
+
+//  Channel function
+//
+//   Send a message on a channel using serialization to write the body element.
+//
+function WsSendMessage(channel : PWS_CHANNEL;
+                       message_ : PWS_MESSAGE;
+                       messageDescription : PWS_MESSAGE_DESCRIPTION;
+                       writeOption : WS_WRITE_OPTION;
+                       bodyValue : pointer;
+                       bodyValueSize : ULONG;
+                       asyncContext : PWS_ASYNC_CONTEXT;
+                       error : PWS_ERROR):HRESULT; stdcall;
+
+
+//  Channel function
+//
+//   Receive a message and deserialize the body of the message as a value.
+//
+function WsReceiveMessage(channel : PWS_CHANNEL;
+                          message_ : PWS_MESSAGE;
+                          messageDescriptions : PPWS_MESSAGE_DESCRIPTION;
+                          messageDescriptionCount : ULONG;
+                          receiveOption : WS_RECEIVE_OPTION;
+                          readBodyOption : WS_READ_OPTION;
+                          heap : PWS_HEAP;
+                          value : pointer;
+                          valueSize : ULONG;
+                          index : PULONG;
+                          asyncContext : PWS_ASYNC_CONTEXT;
+                          error : PWS_ERROR):HRESULT; stdcall;
+
+
+//  Channel function
+//
+//   Used to send a request message and receive a correlated reply message.
+//
+function WsRequestReply(channel : PWS_CHANNEL;
+                        requestMessage : PWS_MESSAGE;
+                        requestMessageDescription : PWS_MESSAGE_DESCRIPTION;
+                        writeOption : WS_WRITE_OPTION;
+                        requestBodyValue : pointer;
+                        requestBodyValueSize : ULONG;
+                        replyMessage : PWS_MESSAGE;
+                        replyMessageDescription : PWS_MESSAGE_DESCRIPTION;
+                        readOption : WS_READ_OPTION;
+                        heap : PWS_HEAP;
+                        value : pointer;
+                        valueSize : ULONG;
+                        asyncContext : PWS_ASYNC_CONTEXT;
+                        error : PWS_ERROR):HRESULT; stdcall;
+
+
+//  Channel function
+//
+//   Sends a message which is a reply to a received message.
+//
+function WsSendReplyMessage(channel : PWS_CHANNEL;
+                            replyMessage : PWS_MESSAGE;
+                            replyMessageDescription : PWS_MESSAGE_DESCRIPTION;
+                            writeOption : WS_WRITE_OPTION;
+                            replyBodyValue : pointer;
+                            replyBodyValueSize : ULONG;
+                            requestMessage : PWS_MESSAGE;
+                            asyncContext : PWS_ASYNC_CONTEXT;
+                            error : PWS_ERROR):HRESULT; stdcall;
+
+
+//  Channel function
+//
+//   Sends a fault message given a WS_ERROR object.
+//
+function WsSendFaultMessageForError(channel : PWS_CHANNEL;
+                                    replyMessage : PWS_MESSAGE;
+                                    faultError : PWS_ERROR;
+                                    faultErrorCode : HRESULT;
+                                    faultDisclosure : WS_FAULT_DISCLOSURE;
+                                    requestMessage : PWS_MESSAGE;
+                                    asyncContext : PWS_ASYNC_CONTEXT;
+                                    error : PWS_ERROR):HRESULT; stdcall;
+
+
+//  Channel function
+//
+//   Retrieve a property of the channel.
+//
+function WsGetChannelProperty(channel : PWS_CHANNEL;
+                              id : WS_CHANNEL_PROPERTY_ID;
+                              value : pointer;
+                              valueSize : ULONG;
+                              error : PWS_ERROR):HRESULT; stdcall;
+
+
+//  Channel function
+//
+//   Set a property of the channel.
+//
+function WsSetChannelProperty(channel : PWS_CHANNEL;
+                              id : WS_CHANNEL_PROPERTY_ID;
+                              value : pointer;
+                              valueSize : ULONG;
+                              error : PWS_ERROR):HRESULT; stdcall;
+
+
+//  Channel function
+//
+//   Write out all the headers of the message to the channel, and prepare to write the body elements.
+//
+function WsWriteMessageStart(channel : PWS_CHANNEL;
+                             message_ : PWS_MESSAGE;
+                             asyncContext : PWS_ASYNC_CONTEXT;
+                             error : PWS_ERROR):HRESULT; stdcall;
+
+
+//  Channel function
+//
+//   Write the closing elements of the message to the channel.
+//
+function WsWriteMessageEnd(channel : PWS_CHANNEL;
+                           message_ : PWS_MESSAGE;
+                           asyncContext : PWS_ASYNC_CONTEXT;
+                           error : PWS_ERROR):HRESULT; stdcall;
+
+
+//  Channel function
+//
+//   Read the headers of the next message from the channel, and prepare to read the body elements.
+//
+function WsReadMessageStart(channel : PWS_CHANNEL;
+                            message_ : PWS_MESSAGE;
+                            asyncContext : PWS_ASYNC_CONTEXT;
+                            error : PWS_ERROR):HRESULT; stdcall;
+
+
+//  Channel function
+//
+//   Read the closing elements of a message from a channel.
+//
+function WsReadMessageEnd(channel : PWS_CHANNEL;
+                          message_ : PWS_MESSAGE;
+                          asyncContext : PWS_ASYNC_CONTEXT;
+                          error : PWS_ERROR):HRESULT; stdcall;
+
+
+//  Channel function
+//
+//   Close a channel.
+//
+function WsCloseChannel(channel : PWS_CHANNEL;
+                        asyncContext : PWS_ASYNC_CONTEXT;
+                        error : PWS_ERROR):HRESULT; stdcall;
+
+
+//  Channel function
+//
+//   Abort all pending IO for a channel.
+//
+function WsAbortChannel(channel : PWS_CHANNEL;
+                        error : PWS_ERROR):HRESULT; stdcall;
+
+
+//  Channel function
+//
+//   Free a channel.
+//
+procedure WsFreeChannel(channel : PWS_CHANNEL); stdcall;
+
+
+//  Channel function
+//
+//   Reset a channel so it can be reused.
+//
+function WsResetChannel(channel : PWS_CHANNEL;
+                        error : PWS_ERROR):HRESULT; stdcall;
+
+
+//  Channel function
+//
+//   Used to skip the remainder of a message for a channel.
+//
+function WsAbandonMessage(channel : PWS_CHANNEL;
+                          message_ : PWS_MESSAGE;
+                          error : PWS_ERROR):HRESULT; stdcall;
+
+
+//  Channel function
+//
+//   Used to signal the end of messages for a session channel.
+//
+function WsShutdownSessionChannel(channel : PWS_CHANNEL;
+                                  asyncContext : PWS_ASYNC_CONTEXT;
+                                  error : PWS_ERROR):HRESULT; stdcall;
+
+
+//  Context function
+//
+//   Returns a property of the specified operation context. It should be noted that the
+//  validity of these property is limited to the lifetime of the operation context itself.
+//  See Operation Context Lifetime and Threading for details around accessing
+//  these properties and the lifetime of the operation context.
+//
+function WsGetOperationContextProperty(context : PWS_OPERATION_CONTEXT;
+                                       id : WS_OPERATION_CONTEXT_PROPERTY_ID;
+                                       value : pointer;
+                                       valueSize : ULONG;
+                                       error : PWS_ERROR):HRESULT; stdcall;
+
+
+function WsGetDictionary(encoding : WS_ENCODING;
+                         dictionary : PPWS_XML_DICTIONARY;
+                         error : PWS_ERROR):HRESULT; stdcall;
+
+
+//  Message function
+//
+//   Reads an extension of the WS_ENDPOINT_ADDRESS.
+//
+function WsReadEndpointAddressExtension(reader : PWS_XML_READER;
+                                        endpointAddress : PWS_ENDPOINT_ADDRESS;
+                                        extensionType : WS_ENDPOINT_ADDRESS_EXTENSION_TYPE;
+                                        readOption : WS_READ_OPTION;
+                                        heap : PWS_HEAP;
+                                        value : pointer;
+                                        valueSize : ULONG;
+                                        error : PWS_ERROR):HRESULT; stdcall;
+
+
 //  Errors function
 //
 //   Creates an error object that can passed to functions to in order to
@@ -4491,11 +5559,28 @@ function WsCreateError(properties    : PWS_ERROR_PROPERTY;
 
 //  Errors function
 //
+//   Add an error string to the error object.
+//
+function WsAddErrorString(error : PWS_ERROR;
+                          string_ : PWS_STRING):HRESULT; stdcall;
+
+
+//  Errors function
+//
 //   Retrieves an error string from an error object.
 //
 function WsGetErrorString(error : PWS_ERROR;
                           index : ULONG;
                           str   : PWS_STRING):HRESULT; stdcall;
+
+
+//  Errors function
+//
+//   Copies the error object from source to destination.
+//
+function WsCopyError(source : PWS_ERROR;
+                     destination : PWS_ERROR):HRESULT; stdcall;
+
 
 
 //  Errors function
@@ -6357,15 +7442,44 @@ function WsGetXmlAttribute; external WEBSERVICES_DLL name 'WsGetXmlAttribute';
 function WsCopyNode; external WEBSERVICES_DLL name 'WsCopyNode';
 function WsAsyncExecute; external WEBSERVICES_DLL name 'WsAsyncExecute';
 function WsCreateChannel; external WEBSERVICES_DLL name 'WsCreateChannel';
+function WsOpenChannel; external WEBSERVICES_DLL name 'WsOpenChannel';
+function WsSendMessage; external WEBSERVICES_DLL name 'WsSendMessage';
+function WsReceiveMessage; external WEBSERVICES_DLL name 'WsReceiveMessage';
+function WsRequestReply; external WEBSERVICES_DLL name 'WsRequestReply';
+function WsSendReplyMessage; external WEBSERVICES_DLL name 'WsSendReplyMessage';
+function WsSendFaultMessageForError; external WEBSERVICES_DLL name 'WsSendFaultMessageForError';
+function WsGetChannelProperty; external WEBSERVICES_DLL name 'WsGetChannelProperty';
+function WsSetChannelProperty; external WEBSERVICES_DLL name 'WsSetChannelProperty';
+function WsWriteMessageStart; external WEBSERVICES_DLL name 'WsWriteMessageStart';
+function WsWriteMessageEnd; external WEBSERVICES_DLL name 'WsWriteMessageEnd';
+function WsReadMessageStart; external WEBSERVICES_DLL name 'WsReadMessageStart';
+function WsReadMessageEnd; external WEBSERVICES_DLL name 'WsReadMessageEnd';
+function WsCloseChannel; external WEBSERVICES_DLL name 'WsCloseChannel';
+function WsAbortChannel; external WEBSERVICES_DLL name 'WsAbortChannel';
+procedure WsFreeChannel; external WEBSERVICES_DLL name 'WsFreeChannel';
+function WsResetChannel; external WEBSERVICES_DLL name 'WsResetChannel';
+function WsAbandonMessage; external WEBSERVICES_DLL name 'WsAbandonMessage';
+function WsShutdownSessionChannel; external WEBSERVICES_DLL name 'WsShutdownSessionChannel';
+function WsGetOperationContextProperty; external WEBSERVICES_DLL name 'WsGetOperationContextProperty';
+function WsGetDictionary; external WEBSERVICES_DLL name 'WsGetDictionary';
+function WsReadEndpointAddressExtension; external WEBSERVICES_DLL name 'WsReadEndpointAddressExtension';
+function WsCreateError; external WEBSERVICES_DLL name 'WsCreateError';
+function WsAddErrorString; external WEBSERVICES_DLL name 'WsAddErrorString';
+function WsGetErrorString; external WEBSERVICES_DLL name 'WsGetErrorString';
+function WsCopyError; external WEBSERVICES_DLL name 'WsGetErrorString';
+function WsGetErrorProperty; external WEBSERVICES_DLL name 'WsGetErrorProperty';
+
+
+
 
 
 function WsWriteXmlBuffer; external WEBSERVICES_DLL name 'WsWriteXmlBuffer';
 function WsReadXmlBuffer; external WEBSERVICES_DLL name 'WsReadXmlBuffer';
 function WsWriteXmlBufferToBytes; external WEBSERVICES_DLL name 'WsWriteXmlBufferToBytes';
 function WsReadXmlBufferFromBytes; external WEBSERVICES_DLL name 'WsReadXmlBufferFromBytes';
-function WsCreateError; external WEBSERVICES_DLL name 'WsCreateError';
-function WsGetErrorString; external WEBSERVICES_DLL name 'WsGetErrorString';
-function WsGetErrorProperty; external WEBSERVICES_DLL name 'WsGetErrorProperty';
+
+
+
 procedure WsFreeError; external WEBSERVICES_DLL name 'WsFreeError';
 function WsCreateHeap; external WEBSERVICES_DLL name 'WsCreateHeap';
 procedure WsFreeHeap; external WEBSERVICES_DLL name 'WsFreeHeap';
