@@ -445,6 +445,8 @@ type
 
   PWS_SECURITY_TOKEN             = pointer;  //opaque handle representing a security token.
   PWS_POLICY                     = pointer;  //opaque type used to reference a metadata input policy.
+  PWS_LISTENER                   = pointer;  //opaque type used to reference a listener
+  PPWS_LISTENER                  = ^PWS_LISTENER;
 
 
 //  CALLBACK DEFINITIONS
@@ -5595,9 +5597,80 @@ function WsGetErrorProperty(error      : PWS_ERROR;
 
 //  Errors function
 //
+//   Set a property of the error.
+//
+function WsSetErrorProperty(error : PWS_ERROR;
+                            id : WS_ERROR_PROPERTY_ID;
+                            value : pointer;
+                            valueSize : ULONG):HRESULT; stdcall;
+
+
+//  Errors function
+//
+//   Frees the contents of the error object, but does not free the error object itself.
+//
+function WsResetError(error : PWS_ERROR):HRESULT; stdcall;
+
+
+//  Errors function
+//
 //   Free the error object created by WsCreateError.
 //
 procedure WsFreeError(error : PWS_ERROR); stdcall;
+
+
+//  Faults function
+//
+//   Retrieve a fault-related property of the error object.
+//
+function WsGetFaultErrorProperty(error : PWS_ERROR;
+                                 id : WS_FAULT_ERROR_PROPERTY_ID;
+                                 buffer : pointer;
+                                 bufferSize : ULONG):HRESULT; stdcall;
+
+
+//  Faults function
+//
+//   Set a fault-related property of the error object.
+//
+function WsSetFaultErrorProperty(error : PWS_ERROR;
+                                 id : WS_FAULT_ERROR_PROPERTY_ID;
+                                 value : pointer;
+                                 valueSize : ULONG):HRESULT; stdcall;
+
+
+//  Faults function
+//
+//   Construct a WS_FAULT given an error object.
+//
+function WsCreateFaultFromError(error : PWS_ERROR;
+                                faultErrorCode : HRESULT;
+                                faultDisclosure : WS_FAULT_DISCLOSURE;
+                                heap : PWS_HEAP;
+                                fault : PWS_FAULT):HRESULT; stdcall;
+
+
+//  Faults function
+//
+//   Write the fault detail stored in a WS_ERROR object.
+//
+function WsSetFaultErrorDetail(error : PWS_ERROR;
+                               faultDetailDescription : PWS_FAULT_DETAIL_DESCRIPTION;
+                               writeOption : WS_WRITE_OPTION;
+                               value : pointer;
+                               valueSize : ULONG):HRESULT; stdcall;
+
+
+//  Faults function
+//
+//   Read the fault detail stored in a WS_ERROR object.
+//
+function WsGetFaultErrorDetail(error : PWS_ERROR;
+                               faultDetailDescription : PWS_FAULT_DETAIL_DESCRIPTION;
+                               readOption : WS_READ_OPTION;
+                               heap : PWS_HEAP;
+                               value : pointer;
+                               valueSize : ULONG):HRESULT; stdcall;
 
 
 //  Heap function
@@ -5613,6 +5686,34 @@ function WsCreateHeap(maxSize : size_t;
 
 
 //  Heap function
+//  Allocate a chunk of data from the heap.
+//
+function WsAlloc(heap : PWS_HEAP;
+                 size : SIZE_T;
+                 ptr : ppointer;
+                 error : PWS_ERROR):HRESULT; stdcall;
+
+
+//  Heap function
+//  Returns a property of the specified heap.
+function WsGetHeapProperty(heap : PWS_HEAP;
+                           id : WS_HEAP_PROPERTY_ID;
+                           value : pointer;
+                           valueSize : ULONG;
+                           error : PWS_ERROR):HRESULT; stdcall;
+
+
+//  Heap function
+//
+//   This resets the heap to have no allocations.  All allocations made on the heap
+//  using WsAlloc are no longer valid.  However, this call does not actually
+//  free the heap object.
+//
+function WsResetHeap(heap : PWS_HEAP;
+                     error : PWS_ERROR):HRESULT; stdcall;
+
+
+//  Heap function
 //
 //   This frees the heap object, and the memory associated with any allocations
 //  made on it using WsAlloc.
@@ -5620,6 +5721,91 @@ function WsCreateHeap(maxSize : size_t;
 procedure WsFreeHeap(heap : PWS_HEAP); stdcall;
 
 
+//  Listener function
+//
+//   Create a listener object.
+//
+function WsCreateListener(channelType : WS_CHANNEL_TYPE;
+                          channelBinding : WS_CHANNEL_BINDING;
+                          properties : PWS_LISTENER_PROPERTY;
+                          propertyCount : ULONG;
+                          securityDescription : PWS_SECURITY_DESCRIPTION;
+                          listener : PPWS_LISTENER;
+                          error : PWS_ERROR):HRESULT; stdcall;
+
+
+//  Listener function
+//
+//   Start listening.
+//
+function WsOpenListener(listener : PWS_LISTENER;
+                        url : PWS_STRING;
+                        asyncContext : PWS_ASYNC_CONTEXT;
+                        error : PWS_ERROR):HRESULT; stdcall;
+
+
+//  Listener function
+//
+//   Accepts the next incoming message exchange from a listener.
+//
+function WsAcceptChannel(listener : PWS_LISTENER;
+                         channel : PWS_CHANNEL;
+                         asyncContext : PWS_ASYNC_CONTEXT;
+                         error : PWS_ERROR):HRESULT; stdcall;
+
+
+//  Listener function
+//
+//   Stop listening.
+//
+function WsCloseListener(listener : PWS_LISTENER;
+                         asyncContext : PWS_ASYNC_CONTEXT;
+                         error : PWS_ERROR):HRESULT; stdcall;
+
+
+//  Listener function
+//
+//   Cancel any pending IO for the listener.
+//
+function WsAbortListener(listener : PWS_LISTENER;
+                         error : PWS_ERROR):HRESULT; stdcall;
+
+
+//  Listener function
+//
+//   Reset a listener so it can be reused.
+//
+function WsResetListener(listener : PWS_LISTENER;
+                         error : PWS_ERROR):HRESULT; stdcall;
+
+
+//  Listener function
+//
+//   Free the listener.
+//
+procedure WsFreeListener(listener : PWS_LISTENER);
+
+
+//  Listener function
+//
+//   Retrieve a property of the listener.
+//
+function WsGetListenerProperty(listener : PWS_LISTENER;
+                               id : WS_LISTENER_PROPERTY_ID;
+                               value : pointer;
+                               valueSize : ULONG;
+                               error : PWS_ERROR):HRESULT; stdcall;
+
+
+//  Listener function
+//
+//   Set a property of the listener.
+//
+function WsSetListenerProperty(listener : PWS_LISTENER;
+                               id : WS_LISTENER_PROPERTY_ID;
+                               value : pointer;
+                               valueSize : ULONG;
+                               error : PWS_ERROR):HRESULT; stdcall;
 
 
 const
@@ -7417,6 +7603,10 @@ function WsWriteXmlnsAttribute; external WEBSERVICES_DLL name 'WsWriteXmlnsAttri
 function WsWriteStartAttribute; external WEBSERVICES_DLL name 'WsWriteStartAttribute';
 function WsWriteEndAttribute; external WEBSERVICES_DLL name 'WsWriteEndAttribute';
 function WsWriteValue; external WEBSERVICES_DLL name 'WsWriteValue';
+function WsWriteXmlBuffer; external WEBSERVICES_DLL name 'WsWriteXmlBuffer';
+function WsReadXmlBuffer; external WEBSERVICES_DLL name 'WsReadXmlBuffer';
+function WsWriteXmlBufferToBytes; external WEBSERVICES_DLL name 'WsWriteXmlBufferToBytes';
+function WsReadXmlBufferFromBytes; external WEBSERVICES_DLL name 'WsReadXmlBufferFromBytes';
 function WsWriteArray; external WEBSERVICES_DLL name 'WsWriteArray';
 function WsWriteQualifiedName; external WEBSERVICES_DLL name 'WsWriteQualifiedName';
 function WsWriteChars; external WEBSERVICES_DLL name 'WsWriteChars';
@@ -7468,21 +7658,29 @@ function WsAddErrorString; external WEBSERVICES_DLL name 'WsAddErrorString';
 function WsGetErrorString; external WEBSERVICES_DLL name 'WsGetErrorString';
 function WsCopyError; external WEBSERVICES_DLL name 'WsGetErrorString';
 function WsGetErrorProperty; external WEBSERVICES_DLL name 'WsGetErrorProperty';
-
-
-
-
-
-function WsWriteXmlBuffer; external WEBSERVICES_DLL name 'WsWriteXmlBuffer';
-function WsReadXmlBuffer; external WEBSERVICES_DLL name 'WsReadXmlBuffer';
-function WsWriteXmlBufferToBytes; external WEBSERVICES_DLL name 'WsWriteXmlBufferToBytes';
-function WsReadXmlBufferFromBytes; external WEBSERVICES_DLL name 'WsReadXmlBufferFromBytes';
-
-
-
+function WsSetErrorProperty; external WEBSERVICES_DLL name 'WsSetErrorProperty';
+function WsResetError; external WEBSERVICES_DLL name 'WsResetError';
 procedure WsFreeError; external WEBSERVICES_DLL name 'WsFreeError';
+function WsGetFaultErrorProperty; external WEBSERVICES_DLL name 'WsGetFaultErrorProperty';
+function WsSetFaultErrorProperty; external WEBSERVICES_DLL name 'WsSetFaultErrorProperty';
+function WsCreateFaultFromError; external WEBSERVICES_DLL name 'WsCreateFaultFromError';
+function WsSetFaultErrorDetail; external WEBSERVICES_DLL name 'WsSetFaultErrorDetail';
+function WsGetFaultErrorDetail; external WEBSERVICES_DLL name 'WsGetFaultErrorDetail';
 function WsCreateHeap; external WEBSERVICES_DLL name 'WsCreateHeap';
+function WsAlloc; external WEBSERVICES_DLL name 'WsAlloc';
+function WsGetHeapProperty; external WEBSERVICES_DLL name 'WsGetHeapProperty';
+function WsResetHeap; external WEBSERVICES_DLL name 'WsResetHeap';
 procedure WsFreeHeap; external WEBSERVICES_DLL name 'WsFreeHeap';
+function WsCreateListener; external WEBSERVICES_DLL name 'WsCreateListener';
+function WsOpenListener; external WEBSERVICES_DLL name 'WsOpenListener';
+function WsAcceptChannel; external WEBSERVICES_DLL name 'WsAcceptChannel';
+function WsCloseListener; external WEBSERVICES_DLL name 'WsCloseListener';
+function WsAbortListener; external WEBSERVICES_DLL name 'WsAbortListener';
+function WsResetListener; external WEBSERVICES_DLL name 'WsResetListener';
+procedure WsFreeListener; external WEBSERVICES_DLL name 'WsFreeListener';
+function WsGetListenerProperty; external WEBSERVICES_DLL name 'WsGetListenerProperty';
+function WsSetListenerProperty; external WEBSERVICES_DLL name 'WsSetListenerProperty';
+
 
 
 end.
