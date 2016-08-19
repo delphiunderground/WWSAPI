@@ -66,6 +66,7 @@ type
   PWS_HEAP = pointer;
   PPWS_HEAP = ^PWS_HEAP;
   PWS_MESSAGE = pointer;
+  PPWS_MESSAGE = ^PWS_MESSAGE;
 
 
 //  ENUM TYPE
@@ -444,9 +445,11 @@ type
   PWS_TCP_SSPI_KERBEROS_APREQ_SECURITY_CONTEXT_BINDING_TEMPLATE = ^WS_TCP_SSPI_KERBEROS_APREQ_SECURITY_CONTEXT_BINDING_TEMPLATE;
 
   PWS_SECURITY_TOKEN             = pointer;  //opaque handle representing a security token.
+  PPWS_SECURITY_TOKEN            = ^PWS_SECURITY_TOKEN;
   PWS_POLICY                     = pointer;  //opaque type used to reference a metadata input policy.
   PWS_LISTENER                   = pointer;  //opaque type used to reference a listener
   PPWS_LISTENER                  = ^PWS_LISTENER;
+  PWS_SECURITY_CONTEXT           = pointer;  //opaque type used to reference a security context object.
 
 
 //  CALLBACK DEFINITIONS
@@ -5808,6 +5811,439 @@ function WsSetListenerProperty(listener : PWS_LISTENER;
                                error : PWS_ERROR):HRESULT; stdcall;
 
 
+//  Listener function
+//
+//   Create a channel that is used to accept incoming message exchanges from a listener.
+//
+function WsCreateChannelForListener(listener : PWS_LISTENER;
+                                    properties : PWS_CHANNEL_PROPERTY;
+                                    propertyCount : ULONG;
+                                    channel : PPWS_CHANNEL;
+                                    error : PWS_ERROR):HRESULT; stdcall;
+
+
+//  Message function
+//
+//   Creates a message object.
+//
+function WsCreateMessage(envelopeVersion : WS_ENVELOPE_VERSION;
+                         addressingVersion : WS_ADDRESSING_VERSION;
+                         properties : PWS_MESSAGE_PROPERTY;
+                         propertyCount : ULONG;
+                         message_ : PPWS_MESSAGE;
+                         error : PWS_ERROR):HRESULT; stdcall;
+
+
+//  Message function
+//
+//   Creates a message that is appropriate for use with a particular channel.
+//
+function WsCreateMessageForChannel(channel : PWS_CHANNEL;
+                                   properties : PWS_MESSAGE_PROPERTY;
+                                   propertyCount : ULONG;
+                                   message_ : PPWS_MESSAGE;
+                                   error : PWS_ERROR):HRESULT; stdcall;
+
+
+//  Message function
+//
+//   Sets up the initial set of headers for the message in preparation for
+//  sending/writing the message.
+//
+function WsInitializeMessage(message_ : PWS_MESSAGE;
+                             initialization_ : WS_MESSAGE_INITIALIZATION;
+                             sourceMessage : PWS_MESSAGE;
+                             error : PWS_ERROR):HRESULT; stdcall;
+
+
+//  Message function
+//
+//   Prepare the message for reuse.
+//
+function WsResetMessage(message_ : PWS_MESSAGE;
+                        error : PWS_ERROR):HRESULT; stdcall;
+
+
+//  Message function
+//
+//   Releases the memory associated with the message object.
+//
+procedure WsFreeMessage(message_ : PWS_MESSAGE); stdcall;
+
+
+//  Message function
+//
+//   Returns the WS_HEADER_ATTRIBUTES for the header element the reader is positioned on.  The
+//  envelope version of the message is used to determine which attributes to return.
+//
+function WsGetHeaderAttributes(message_ : PWS_MESSAGE;
+                               reader : PWS_XML_READER;
+                               headerAttributes : PULONG;
+                               error : PWS_ERROR):HRESULT; stdcall;
+
+
+//  Message function
+//
+//   Finds a particular standard header in the message and deserializes it.
+//
+function WsGetHeader(message_ : PWS_MESSAGE;
+                     headerType : WS_HEADER_TYPE;
+                     valueType : WS_TYPE;
+                     readOption : WS_READ_OPTION;
+                     heap : PWS_HEAP;
+                     value : pointer;
+                     valueSize : ULONG;
+                     error : PWS_ERROR):HRESULT; stdcall;
+
+
+//  Message function
+//
+//   Finds an application-defined header of the message and deserializes it.
+//
+function WsGetCustomHeader(message_ : PWS_MESSAGE;
+                           customHeaderDescription : PWS_ELEMENT_DESCRIPTION;
+                           repeatingOption : WS_REPEATING_HEADER_OPTION;
+                           headerIndex : ULONG;
+                           readOption : WS_READ_OPTION;
+                           heap : PWS_HEAP;
+                           value : pointer;
+                           valueSize : ULONG;
+                           headerAttributes : PULONG;
+                           error : PWS_ERROR):HRESULT; stdcall;
+
+
+//  Message function
+//
+//   Removes all instances of the specified standard header from the message.
+//
+function WsRemoveHeader(message_ : PWS_MESSAGE;
+                        headerType : WS_HEADER_TYPE;
+                        error : PWS_ERROR):HRESULT; stdcall;
+
+
+//  Message function
+//
+//   Adds or replaces the specified standard header in the message.
+//
+function WsSetHeader(message_ : PWS_MESSAGE;
+                     headerType : WS_HEADER_TYPE;
+                     valueType : WS_TYPE;
+                     writeOption : WS_WRITE_OPTION;
+                     value : pointer;
+                     valueSize : ULONG;
+                     error : PWS_ERROR):HRESULT; stdcall;
+
+
+//  Message function
+//
+//   Removes all instances of the application defined header from the message.
+//
+function WsRemoveCustomHeader(message_ : PWS_MESSAGE;
+                              headerName : PWS_XML_STRING;
+                              headerNs : PWS_XML_STRING;
+                              error : PWS_ERROR):HRESULT; stdcall;
+
+
+//  Message function
+//
+//   Adds the specified application defined header to the message.
+//
+function WsAddCustomHeader(message_ : PWS_MESSAGE;
+                           headerDescription : PWS_ELEMENT_DESCRIPTION;
+                           writeOption : WS_WRITE_OPTION;
+                           value : pointer;
+                           valueSize : ULONG;
+                           headerAttributes : ULONG;
+                           error : PWS_ERROR):HRESULT; stdcall;
+
+
+//  Message function
+//
+//   Adds a specified mapped header to the message.
+//
+function WsAddMappedHeader(message_ : PWS_MESSAGE;
+                           headerName : PWS_XML_STRING;
+                           valueType : WS_TYPE;
+                           writeOption : WS_WRITE_OPTION;
+                           value : pointer;
+                           valueSize : ULONG;
+                           error : PWS_ERROR):HRESULT; stdcall;
+
+
+//  Message function
+//
+//   Removes all instances of a mapped header from the message.
+//
+function WsRemoveMappedHeader(message_ : PWS_MESSAGE;
+                              headerName : PWS_XML_STRING;
+                              error : PWS_ERROR):HRESULT; stdcall;
+
+
+//  Message function
+//
+//   Finds a mapped header in the message and deserializes it.
+//
+function WsGetMappedHeader(message_ : PWS_MESSAGE;
+                           headerName : PWS_XML_STRING;
+                           repeatingOption : WS_REPEATING_HEADER_OPTION;
+                           headerIndex : ULONG;
+                           valueType : WS_TYPE;
+                           readOption : WS_READ_OPTION;
+                           heap : PWS_HEAP;
+                           value : pointer;
+                           valueSize : ULONG;
+                           error : PWS_ERROR):HRESULT; stdcall;
+
+
+//  Message function
+//
+//   Serialize a value in the body of the message.
+//
+function WsWriteBody(message_ : PWS_MESSAGE;
+                     bodyDescription : PWS_ELEMENT_DESCRIPTION;
+                     writeOption : WS_WRITE_OPTION;
+                     value : pointer;
+                     valueSize : ULONG;
+                     error : PWS_ERROR):HRESULT; stdcall;
+
+
+//  Message function
+//
+//   Deserialize a value from the body of the message.
+//
+function WsReadBody(message_ : PWS_MESSAGE;
+                    bodyDescription : PWS_ELEMENT_DESCRIPTION;
+                    readOption : WS_READ_OPTION;
+                    heap : PWS_HEAP;
+                    value : pointer;
+                    valueSize : ULONG;
+                    error : PWS_ERROR):HRESULT; stdcall;
+
+
+//  Message function
+//
+//   Write out all the headers of the message and prepare to write the body elements.
+//
+function WsWriteEnvelopeStart(message_ : PWS_MESSAGE;
+                              writer : PWS_XML_WRITER;
+                              doneCallback : WS_MESSAGE_DONE_CALLBACK;
+                              doneCallbackState : pointer;
+                              error : PWS_ERROR):HRESULT; stdcall;
+
+
+//  Message function
+//
+//   Write the closing elements of the message.
+//
+function WsWriteEnvelopeEnd(message_ : PWS_MESSAGE;
+                            error : PWS_ERROR):HRESULT; stdcall;
+
+
+//  Message function
+//
+//   Read the headers of the message and prepare to read the body elements.
+//
+function WsReadEnvelopeStart(message_ : PWS_MESSAGE;
+                             reader : PWS_XML_READER;
+                             doneCallback : WS_MESSAGE_DONE_CALLBACK;
+                             doneCallbackState : pointer;
+                             error : PWS_ERROR):HRESULT; stdcall;
+
+
+//  Message function
+//
+//   Read the closing elements of a message.
+//
+function WsReadEnvelopeEnd(message_ : PWS_MESSAGE;
+                           error : PWS_ERROR):HRESULT; stdcall;
+
+
+//  Message function
+//
+//   Returns a property of the specified message.
+//
+function WsGetMessageProperty(message_ : PWS_MESSAGE;
+                              id : WS_MESSAGE_PROPERTY_ID;
+                              value : pointer;
+                              valueSize : ULONG;
+                              error : PWS_ERROR):HRESULT; stdcall;
+
+
+//  Message function
+//
+//   Set a property of the message.
+//
+function WsSetMessageProperty(message_ : PWS_MESSAGE;
+                              id : WS_MESSAGE_PROPERTY_ID;
+                              value : pointer;
+                              valueSize : ULONG;
+                              error : PWS_ERROR):HRESULT; stdcall;
+
+
+//  Message function
+//
+//   Addresses a message given an Endpoint Address.
+//
+function WsAddressMessage(message_ : PWS_MESSAGE;
+                          address : PWS_ENDPOINT_ADDRESS;
+                          error : PWS_ERROR):HRESULT; stdcall;
+
+
+//  Message function
+//
+//   Verifies that all headers that were specified to be required to be
+//  understood by the receiver were actually understood.
+//
+function WsCheckMustUnderstandHeaders(message_ : PWS_MESSAGE;
+                                      error : PWS_ERROR):HRESULT; stdcall;
+
+
+//  Message function
+//
+//   Marks a header as one that was understood by the application.
+//
+function WsMarkHeaderAsUnderstood(message_ : PWS_MESSAGE;
+                                  headerPosition : PWS_XML_NODE_POSITION;
+                                  error : PWS_ERROR):HRESULT; stdcall;
+
+
+//  Message function
+//
+//   Ensures that the message has at least a specified amount of body data available to it for reading.
+//
+function WsFillBody(message_ : PWS_MESSAGE;
+                    minSize : ULONG;
+                    asyncContext : PWS_ASYNC_CONTEXT;
+                    error : PWS_ERROR):HRESULT; stdcall;
+
+
+//  Message function
+//
+//   Flushes all accumulated body data that has been written for the message.
+//
+function WsFlushBody(message_ : PWS_MESSAGE;
+                     minSize : ULONG;
+                     asyncContext : PWS_ASYNC_CONTEXT;
+                     error : PWS_ERROR):HRESULT; stdcall;
+
+
+//  Security Bindings function
+//
+//   Get a security token from a security token service (STS) that acts as
+//  the token issuer in a (Federation) federation scenario.
+//  This function is used on the client side, and performs the WS-Trust
+//  based negotiation steps with the STS until the security token is
+//  obtained or the negotiation process fails.
+//
+function WsRequestSecurityToken(channel : PWS_CHANNEL;
+                                properties : PWS_REQUEST_SECURITY_TOKEN_PROPERTY;
+                                propertyCount : ULONG;
+                                token : PPWS_SECURITY_TOKEN;
+                                asyncContext : PWS_ASYNC_CONTEXT;
+                                error : PWS_ERROR):HRESULT; stdcall;
+
+
+//  Security Processing Results function
+//
+//   Extract a field or a property from a security token. If the queried property does not use the 'heap' parameter, the returned
+//  data is owned by the security token and remains valid as long as the security token itself remains valid. Specifically, for
+//  security tokens extracted from a received message, the security token and fields extracted from it are valid only as long as
+//  the message is not reset or freed.
+//   If the 'heap' parameter is required by the property, then the returned data is stored on the heap, with its lifetime
+//  detached from the underlying token.
+//
+function WsGetSecurityTokenProperty(securityToken : PWS_SECURITY_TOKEN;
+                                    id : WS_SECURITY_TOKEN_PROPERTY_ID;
+                                    value : pointer;
+                                    valueSize : ULONG;
+                                    heap : PWS_HEAP;
+                                    error : PWS_ERROR):HRESULT; stdcall;
+
+
+//  Security Bindings function
+//
+//  Create a security token from its XML form.
+//
+function WsCreateXmlSecurityToken(tokenXml : PWS_XML_BUFFER;
+                                  tokenKey : PWS_SECURITY_KEY_HANDLE;
+                                  properties : PWS_XML_SECURITY_TOKEN_PROPERTY;
+                                  propertyCount : ULONG;
+                                  token : PPWS_SECURITY_TOKEN;
+                                  error : PWS_ERROR):HRESULT; stdcall;
+
+
+//  Security Bindings function
+//
+//   Free a security token.
+//
+procedure WsFreeSecurityToken(token : PWS_SECURITY_TOKEN); stdcall;
+
+
+//  Security Context function
+//
+//   Revokes a security context. Can only be called on the server side.
+//
+//   This function can be used when the server knows that no more messages are
+//  coming and does not want to wait for the client or the context timeouts to
+//  trigger the reclaiming of resources, or when the server wants to engage in
+//  active context management.
+//
+function WsRevokeSecurityContext(securityContext : PWS_SECURITY_CONTEXT;
+                                 error : PWS_ERROR):HRESULT; stdcall;
+
+
+//  Security Context function
+//
+//   Gets a property of the specified security context.
+//
+function WsGetSecurityContextProperty(securityContext : PWS_SECURITY_CONTEXT;
+                                      id : WS_SECURITY_CONTEXT_PROPERTY_ID;
+                                      value : pointer;
+                                      valueSize : ULONG;
+                                      error : PWS_ERROR):HRESULT; stdcall;
+
+
+//  Serialization function
+//
+//   Read an element producing a value of the specified WS_TYPE.
+//
+function WsReadElement(reader : PWS_XML_READER;
+                       elementDescription : PWS_ELEMENT_DESCRIPTION;
+                       readOption : WS_READ_OPTION;
+                       heap : PWS_HEAP;
+                       value : pointer;
+                       valueSize : ULONG;
+                       error : PWS_ERROR):HRESULT; stdcall;
+
+
+//  Serialization function
+//
+//   Read an attribute producing a value of the specified WS_TYPE.
+//
+function WsReadAttribute(reader : PWS_XML_READER;
+                         attributeDescription : PWS_ATTRIBUTE_DESCRIPTION;
+                         readOption : WS_READ_OPTION;
+                         heap : PWS_HEAP;
+                         value : pointer;
+                         valueSize : ULONG;
+                         error : PWS_ERROR):HRESULT; stdcall;
+
+
+//  Serialization function
+//
+//   Read a value of a given WS_TYPE from XML according to the WS_TYPE_MAPPING.
+//
+function WsReadType(reader: PWS_XML_READER;
+                    typeMapping : WS_TYPE_MAPPING;
+                    type_ : WS_TYPE;
+                    typeDescription : pointer;
+                    readOption : WS_READ_OPTION;
+                    heap : PWS_HEAP;
+                    value : pointer;
+                    valueSize : ULONG;
+                    error : PWS_ERROR):HRESULT; stdcall;
+
+
 const
 
 //  ENUM DEFINITIONS
@@ -7680,6 +8116,44 @@ function WsResetListener; external WEBSERVICES_DLL name 'WsResetListener';
 procedure WsFreeListener; external WEBSERVICES_DLL name 'WsFreeListener';
 function WsGetListenerProperty; external WEBSERVICES_DLL name 'WsGetListenerProperty';
 function WsSetListenerProperty; external WEBSERVICES_DLL name 'WsSetListenerProperty';
+function WsCreateChannelForListener; external WEBSERVICES_DLL name 'WsCreateChannelForListener';
+function WsCreateMessage; external WEBSERVICES_DLL name 'WsCreateMessage';
+function WsCreateMessageForChannel; external WEBSERVICES_DLL name 'WsCreateMessageForChannel';
+function WsInitializeMessage; external WEBSERVICES_DLL name 'WsInitializeMessage';
+function WsResetMessage; external WEBSERVICES_DLL name 'WsResetMessage';
+procedure WsFreeMessage; external WEBSERVICES_DLL name 'WsFreeMessage';
+function WsGetHeaderAttributes; external WEBSERVICES_DLL name 'WsGetHeaderAttributes';
+function WsGetHeader; external WEBSERVICES_DLL name 'WsGetHeader';
+function WsGetCustomHeader; external WEBSERVICES_DLL name 'WsGetCustomHeader';
+function WsRemoveHeader; external WEBSERVICES_DLL name 'WsRemoveHeader';
+function WsSetHeader; external WEBSERVICES_DLL name 'WsSetHeader';
+function WsRemoveCustomHeader; external WEBSERVICES_DLL name 'WsRemoveCustomHeader';
+function WsAddCustomHeader; external WEBSERVICES_DLL name 'WsAddCustomHeader';
+function WsAddMappedHeader; external WEBSERVICES_DLL name 'WsAddMappedHeader';
+function WsRemoveMappedHeader; external WEBSERVICES_DLL name 'WsRemoveMappedHeader';
+function WsGetMappedHeader; external WEBSERVICES_DLL name 'WsGetMappedHeader';
+function WsWriteBody; external WEBSERVICES_DLL name 'WsWriteBody';
+function WsReadBody; external WEBSERVICES_DLL name 'WsReadBody';
+function WsWriteEnvelopeStart; external WEBSERVICES_DLL name 'WsWriteEnvelopeStart';
+function WsWriteEnvelopeEnd; external WEBSERVICES_DLL name 'WsWriteEnvelopeEnd';
+function WsReadEnvelopeStart; external WEBSERVICES_DLL name 'WsReadEnvelopeStart';
+function WsReadEnvelopeEnd; external WEBSERVICES_DLL name 'WsReadEnvelopeEnd';
+function WsGetMessageProperty; external WEBSERVICES_DLL name 'WsGetMessageProperty';
+function WsSetMessageProperty; external WEBSERVICES_DLL name 'WsSetMessageProperty';
+function WsAddressMessage; external WEBSERVICES_DLL name 'WsAddressMessage';
+function WsCheckMustUnderstandHeaders; external WEBSERVICES_DLL name 'WsCheckMustUnderstandHeaders';
+function WsMarkHeaderAsUnderstood; external WEBSERVICES_DLL name 'WsMarkHeaderAsUnderstood';
+function WsFillBody; external WEBSERVICES_DLL name 'WsFillBody';
+function WsFlushBody; external WEBSERVICES_DLL name 'WsFlushBody';
+function WsRequestSecurityToken; external WEBSERVICES_DLL name 'WsRequestSecurityToken';
+function WsGetSecurityTokenProperty; external WEBSERVICES_DLL name 'WsGetSecurityTokenProperty';
+function WsCreateXmlSecurityToken; external WEBSERVICES_DLL name 'WsCreateXmlSecurityToken';
+procedure WsFreeSecurityToken; external WEBSERVICES_DLL name 'WsFreeSecurityToken';
+function WsRevokeSecurityContext; external WEBSERVICES_DLL name 'WsRevokeSecurityContext';
+function WsGetSecurityContextProperty; external WEBSERVICES_DLL name 'WsGetSecurityContextProperty';
+function WsReadElement; external WEBSERVICES_DLL name 'WsReadElement';
+function WsReadAttribute; external WEBSERVICES_DLL name 'WsReadAttribute';
+function WsReadType; external WEBSERVICES_DLL name 'WsReadType';
 
 
 
