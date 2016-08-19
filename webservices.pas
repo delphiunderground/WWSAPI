@@ -248,6 +248,7 @@ type
   PWS_HTTP_REDIRECT_CALLBACK_CONTEXT = ^WS_HTTP_REDIRECT_CALLBACK_CONTEXT;
   PWS_ENDPOINT_IDENTITY          = ^WS_ENDPOINT_IDENTITY;
   PWS_ENDPOINT_ADDRESS           = ^WS_ENDPOINT_ADDRESS;
+  PPWS_ENDPOINT_ADDRESS          = ^PWS_ENDPOINT_ADDRESS;
   PWS_DNS_ENDPOINT_IDENTITY      = ^WS_DNS_ENDPOINT_IDENTITY;
   PWS_UPN_ENDPOINT_IDENTITY      = ^WS_UPN_ENDPOINT_IDENTITY;
   PWS_SPN_ENDPOINT_IDENTITY      = ^WS_SPN_ENDPOINT_IDENTITY;
@@ -366,10 +367,12 @@ type
   PWS_SERVICE_PROPERTY_CLOSE_CALLBACK = ^WS_SERVICE_PROPERTY_CLOSE_CALLBACK;
   PWS_SERVICE_ENDPOINT_METADATA  = ^WS_SERVICE_ENDPOINT_METADATA;
   PWS_SERVICE_ENDPOINT           = ^WS_SERVICE_ENDPOINT;
+  PPWS_SERVICE_ENDPOINT          = ^PWS_SERVICE_ENDPOINT;
   PWS_PROXY_PROPERTY             = ^WS_PROXY_PROPERTY;
   PWS_PROXY_MESSAGE_CALLBACK_CONTEXT = ^WS_PROXY_MESSAGE_CALLBACK_CONTEXT;
   PWS_CALL_PROPERTY              = ^WS_CALL_PROPERTY;
   PWS_URL                        = ^WS_URL;
+  PPWS_URL                       = ^PWS_URL;
   PWS_HTTP_URL                   = ^WS_HTTP_URL;
   PWS_HTTPS_URL                  = ^WS_HTTPS_URL;
   PWS_NETTCP_URL                 = ^WS_NETTCP_URL;
@@ -450,6 +453,12 @@ type
   PWS_LISTENER                   = pointer;  //opaque type used to reference a listener
   PPWS_LISTENER                  = ^PWS_LISTENER;
   PWS_SECURITY_CONTEXT           = pointer;  //opaque type used to reference a security context object.
+  PWS_SERVICE_HOST               = pointer;  //opaque type used to reference a service host
+  PPWS_SERVICE_HOST              = ^PWS_SERVICE_HOST;
+  PWS_SERVICE_PROXY              = pointer;  //opaque type used to reference a service proxy
+  PPWS_SERVICE_PROXY             = ^PWS_SERVICE_PROXY;
+  PWS_METADATA                   = pointer;  //opaque type used to reference a set of metadata documents
+  PPWS_METADATA                  = ^PWS_METADATA;
 
 
 //  CALLBACK DEFINITIONS
@@ -6244,6 +6253,462 @@ function WsReadType(reader: PWS_XML_READER;
                     error : PWS_ERROR):HRESULT; stdcall;
 
 
+//  Serialization function
+//
+//   Write a typed value as an XML element.
+//
+function WsWriteElement(writer : PWS_XML_WRITER;
+                        elementDescription : PWS_ELEMENT_DESCRIPTION;
+                        writeOption : WS_WRITE_OPTION;
+                        value : pointer;
+                        valueSize : ULONG;
+                        error : PWS_ERROR):HRESULT; stdcall;
+
+
+//  Serialization function
+//
+//   Write a typed value as an XML attribute.
+//
+function WsWriteAttribute(writer : PWS_XML_WRITER;
+                          attributeDescription : PWS_ATTRIBUTE_DESCRIPTION;
+                          writeOption : WS_WRITE_OPTION;
+                          value : pointer;
+                          valueSize : ULONG;
+                          error : PWS_ERROR):HRESULT; stdcall;
+
+
+//  Serialization function
+//
+//   Write a value of a given WS_TYPE to XML according to the WS_TYPE_MAPPING.
+//
+function WsWriteType(writer : PWS_XML_WRITER;
+                     typeMapping : WS_TYPE_MAPPING;
+                     type_ : WS_TYPE;
+                     typeDescription : pointer;
+                     writeOption : WS_WRITE_OPTION;
+                     value : pointer;
+                     valueSize : ULONG;
+                     error : PWS_ERROR):HRESULT; stdcall;
+
+
+//  Call cancellation function
+//
+//   A service operation can use this function to register for a cancel notification.
+//  It is only valid to call this API when the service operation is executing. The behavior
+//  for calling it after the completion of Service Operation is not supported.
+//
+//   While this API is being called and the runtime has determined that the cancellation of the
+//  service operation is necessary, it can call the callback during the call to this API by the application.
+//
+//   The caller should therefore assume that the runtime may call on the callback
+//   WS_OPERATION_CANCEL_CALLBACK as soon as the WsRegisterOperationForCancel is called.
+//
+function WsRegisterOperationForCancel(context : PWS_OPERATION_CONTEXT;
+                                      cancelCallback : WS_OPERATION_CANCEL_CALLBACK;
+                                      freestateCallback : WS_OPERATION_FREE_STATE_CALLBACK;
+                                      userState : pointer;
+                                      error : PWS_ERROR):HRESULT; stdcall;
+
+
+//  Service Host function
+//
+//   Retrieve a property of the service host.
+//
+function WsGetServiceHostProperty(serviceHost : PWS_SERVICE_HOST;
+                                  id : WS_SERVICE_PROPERTY_ID;
+                                  value : pointer;
+                                  valueSize : ULONG;
+                                  error : PWS_ERROR):HRESULT; stdcall;
+
+
+//  Service Host function
+//
+//   Create a service host.
+//
+function WsCreateServiceHost(endpoints : PPWS_SERVICE_ENDPOINT;
+                             endpointCount : word;
+                             serviceProperties : PWS_SERVICE_PROPERTY;
+                             servicePropertyCount : ULONG;
+                             serviceHost : PPWS_SERVICE_HOST;
+                             error : PWS_ERROR):HRESULT; stdcall;
+
+
+//  Service Host function
+//
+//   Open a service host for communication. Starts the listeners on all the endpoints.
+//
+function WsOpenServiceHost(serviceHost : PWS_SERVICE_HOST;
+                           asyncContext : PWS_ASYNC_CONTEXT;
+                           error : PWS_ERROR):HRESULT; stdcall;
+
+
+//  Service Host function
+//
+//   Closes down a service host for communication.
+//
+//   During WsCloseServiceHost all the listeners are closed such that no new
+//  channels are accepted from the client. Work on  channels already accepted
+//  before WsCloseServiceHost closed the listeners, is allowed to complete.
+//  This has special implications for endpoints configured to run with session
+//  based channel binding. If a client has a session opened to the service, the
+//  close will not complete till the client closes the session with the service.
+//
+function WsCloseServiceHost(serviceHost : PWS_SERVICE_HOST;
+                            asyncContext : PWS_ASYNC_CONTEXT;
+                            error : PWS_ERROR):HRESULT; stdcall;
+
+
+//  Service Host function
+//
+//   Aborts the current operation on the service host.
+//
+function WsAbortServiceHost(serviceHost : PWS_SERVICE_HOST;
+                            error : PWS_ERROR):HRESULT; stdcall;
+
+
+//  Service Host function
+//
+//   Free's the service host.
+//
+procedure WsFreeServiceHost(serviceHost : PWS_SERVICE_HOST); stdcall;
+
+
+//  Service Host function
+//
+//   Resets service host so that it can be opened again.
+//
+//   Rather the creating a new service host from scratch WsResetServiceHost
+//  provides a convenient way to reuse service host. Specifically in a scenario
+//  where a service host has to go through close and open on a regular basis,
+//  this allows for an efficient way for reusing the same service host. It resets
+//  the underlying channel and listeners for reuse.
+//
+function WsResetServiceHost(serviceHost : PWS_SERVICE_HOST;
+                            error : PWS_ERROR):HRESULT; stdcall;
+
+
+//  Service Proxy function
+//
+//   Retrieve a property of service proxy.
+//
+function WsGetServiceProxyProperty(serviceProxy : PWS_SERVICE_PROXY;
+                                   id : WS_PROXY_PROPERTY_ID;
+                                   value : pointer;
+                                   valueSize : ULONG;
+                                   error : PWS_ERROR):HRESULT; stdcall;
+
+
+//  Service Proxy function
+//
+//   Creates a service proxy.
+//
+function WsCreateServiceProxy(channelType : WS_CHANNEL_TYPE;
+                              channelBinding : WS_CHANNEL_BINDING;
+                              securityDescription : PWS_SECURITY_DESCRIPTION;
+                              properties : PWS_PROXY_PROPERTY;
+                              propertyCount : ULONG;
+                              channelProperties : PWS_CHANNEL_PROPERTY;
+                              channelPropertyCount : ULONG;
+                              serviceProxy : PPWS_SERVICE_PROXY;
+                              error : PWS_ERROR):HRESULT; stdcall;
+
+
+//  Service Proxy function
+//
+//   Opens the service proxy to a service endpoint.
+//
+//   Once the operation succeeds, application can now go ahead and make calls on the service proxy.
+//
+function WsOpenServiceProxy(serviceProxy : PWS_SERVICE_PROXY;
+                            address : PWS_ENDPOINT_ADDRESS;
+                            asyncContext : PWS_ASYNC_CONTEXT;
+                            error : PWS_ERROR):HRESULT; stdcall;
+
+
+//  Service Proxy function
+//
+//   Closes a service proxy for communication.
+//
+//   Close performs the following tasks in given order
+//
+//  .If a service operation call is pending on the service proxy, close will wait for each call to complete.
+//
+//  .If the proxy was created with session based channel binding this will close the underlying channel.
+//
+//   During this calls are accepted by the service proxy.
+//
+function WsCloseServiceProxy(serviceProxy : PWS_SERVICE_PROXY;
+                             asyncContext : PWS_ASYNC_CONTEXT;
+                             error : PWS_ERROR):HRESULT; stdcall;
+
+
+//  Service Proxy function
+//
+//   Aborts the service proxy.
+//
+//   Aborts cancel all I/O if any on the service proxy.
+//  WsAbortServiceProxy: During Open or WS_SERVICE_PROXY_STATE_OPENING state
+//   WsAbortServiceProxy can be used to abort the open operation. The service proxy will
+//  cancel all pending I/O and transition back to WS_SERVICE_PROXY_STATE_CREATED state.
+//  WsAbortServiceProxy: While making calls or WS_SERVICE_PROXY_STATE_OPEN state
+//   WsAbortServiceProxy will abort all the underlying channels. The service proxy is transitioned to
+//  to WS_SERVICE_PROXY_STATE_FAULTED. Once abort is initiated service proxy will
+//  not accept any new calls. The application can call WsCloseServiceProxy to close it.
+//  WsAbortServiceProxy: During Close or WS_SERVICE_PROXY_STATE_CLOSING state
+//   During close, all underlying channels are aborted. The service proxy is transitioned to the
+//   WS_SERVICE_PROXY_STATE_CLOSED state.
+//
+function WsAbortServiceProxy(serviceProxy : PWS_SERVICE_PROXY;
+                             error : PWS_ERROR):HRESULT; stdcall;
+
+
+//  Service Proxy function
+//
+//   Free's a service proxy.
+//
+procedure WsFreeServiceProxy(serviceProxy : PWS_SERVICE_PROXY); stdcall;
+
+
+//  Service Proxy function
+//  Resets service proxy.
+//   WsResetServiceProxy provides a convenient way to reuse the service proxy.
+//  Once the proxy is (WS_SERVICE_PROXY_STATE) closed,
+//  the application can call WsResetServiceProxy to reuse it.
+//
+//   Reusing the service proxy is helpful in scenarios where an application connects
+//  to the same service time and time again. The cost of initialization is only paid
+//  once during the initial creation of the service proxy.
+//
+function WsResetServiceProxy(serviceProxy : PWS_SERVICE_PROXY;
+                             error : PWS_ERROR):HRESULT; stdcall;
+
+
+//  Service Proxy function
+//
+//   Abandons a call identified by the callId on the given (Service Proxy) service proxy.
+//
+//   An applications must be careful with the usage of this operation. Since the actual I/O specific
+//  to the call is not canceled. The service proxy will keep the resources for the abandoned call
+//  around to complete call.
+//
+//   This consumption of resources can be aggravated if the application continues to abandon more
+//  and more calls. This aggravation usually results if the server is slow to respond back to the
+//  client. Mean while if the application continues to make more calls on the service proxy that
+//  can further aggravate the situation.
+//
+function WsAbandonCall(serviceProxy : PWS_SERVICE_PROXY;
+                       callId : ULONG;
+                       error : PWS_ERROR):HRESULT; stdcall;
+
+
+//  Service Proxy function
+//
+//   Using the passed in (WS_OPERATION_DESCRIPTION) operation parameter packs
+//  the arguments into a message and sends it over the channel.
+//
+//   This function is internally used by proxy service operation. The application should
+//  never call it directly.
+//
+function WsCall(serviceProxy : PWS_SERVICE_PROXY;
+                operation : PWS_OPERATION_DESCRIPTION;
+                arguments : ppointer;
+                heap : PWS_HEAP;
+                callProperties : PWS_CALL_PROPERTY;
+                callPropertyCount : ULONG;
+                asyncContext : PWS_ASYNC_CONTEXT;
+                error : PWS_ERROR):HRESULT; stdcall;
+
+
+//  Url function
+//
+//   Decodes an URL into its component parts.
+//
+function WsDecodeUrl(url : PWS_STRING;
+                     flags : ULONG;
+                     heap : PWS_HEAP;
+                     outUrl : PPWS_URL;
+                     error : PWS_ERROR):HRESULT; stdcall;
+
+
+//  Url function
+//
+//   Encodes an URL into a string given its component parts.
+//
+function WsEncodeUrl(url : PWS_URL;
+                     flags : ULONG;
+                     heap : PWS_HEAP;
+                     outUrl : PWS_STRING;
+                     error : PWS_ERROR):HRESULT; stdcall;
+
+
+//  Url function
+//
+//   Produces an absolute URL given a URL reference (absolute or relative URL) and an absolute base URL.
+//
+function WsCombineUrl(baseUrl : PWS_STRING;
+                      referenceUrl : PWS_STRING;
+                      flags : ULONG;
+                      heap : PWS_HEAP;
+                      resultUrl : PWS_STRING;
+                      error : PWS_ERROR):HRESULT; stdcall;
+
+
+//  Utilities function
+//
+//   Converts a WS_DATETIME to a FILETIME.
+//
+function WsDateTimeToFileTime(dateTime : PWS_DATETIME;
+                              fileTime : PFileTime;
+                              error : PWS_ERROR):HRESULT; stdcall;
+
+
+//  Utilities function
+//
+//   Converts a FILETIME to a WS_DATETIME.
+//
+function WsFileTimeToDateTime(fileTime : PFileTime;
+                              dateTime : PWS_DATETIME;
+                              error : PWS_ERROR):HRESULT; stdcall;
+
+
+//  Metadata Import function
+//
+//   Create a metadata object which is used to collect and process metadata documents.
+//
+function WsCreateMetadata(properties : PWS_METADATA_PROPERTY;
+                          propertyCount : ULONG;
+                          metadata : PPWS_METADATA;
+                          error : PWS_ERROR):HRESULT; stdcall;
+
+
+//  Metadata Import function
+//
+//   Read a metadata element and add it to the set of metadata
+//  documents stored in the metadata object.
+//
+function WsReadMetadata(metadata : PWS_METADATA;
+                        reader : PWS_XML_READER;
+                        url : PWS_STRING;
+                        error : PWS_ERROR):HRESULT; stdcall;
+
+
+//  Metadata Import function
+//
+//   Free a metadata object.
+//
+procedure WsFreeMetadata(metadata : PWS_METADATA); stdcall;
+
+
+//  Metadata Import function
+//
+//   Reset a metadata object so it can be reused.
+//
+function WsResetMetadata(metadata : PWS_METADATA;
+                         error : PWS_ERROR):HRESULT; stdcall;
+
+
+//  Metadata Import function
+//
+//   Retrieve a property of the metadata object.
+//
+function WsGetMetadataProperty(metadata : PWS_METADATA;
+                               id : WS_METADATA_PROPERTY_ID;
+                               value : pointer;
+                               valueSize : ULONG;
+                               error : PWS_ERROR):HRESULT; stdcall;
+
+
+//  Metadata Import function
+//
+//   Returns the address of a missing document that is referenced by the metadata object.
+//
+function WsGetMissingMetadataDocumentAddress(metadata : PWS_METADATA;
+                                             address : PPWS_ENDPOINT_ADDRESS;
+                                             error : PWS_ERROR):HRESULT; stdcall;
+
+
+//  Metadata Import function
+//
+//   Returns the endpoints that were defined in the metadata documents
+//  that were added to the metadata object.
+//
+function WsGetMetadataEndpoints(metadata : PWS_METADATA;
+                                endpoints : PWS_METADATA_ENDPOINTS;
+                                error : PWS_ERROR):HRESULT; stdcall;
+
+
+//  Metadata Import function
+//
+//   This function tests to see if a particular policy alternative is compatible
+//  with the specified policy constraint structures.  If the alternative is compatible,
+//  then the "out" fields within the constraint structures are filled with information
+//  from the policy.
+//
+function WsMatchPolicyAlternative(policy : PWS_POLICY;
+                                  alternativeIndex : ULONG;
+                                  policyConstraints : PWS_POLICY_CONSTRAINTS;
+                                  matchRequired : BOOL;
+                                  heap : PWS_HEAP;
+                                  error : PWS_ERROR):HRESULT; stdcall;
+
+
+//  Metadata Import function
+//
+//   Retrieve a property of the policy object.
+//
+function WsGetPolicyProperty(policy : PWS_POLICY;
+                             id : WS_POLICY_PROPERTY_ID;
+                             value : pointer;
+                             valueSize : ULONG;
+                             error : PWS_ERROR):HRESULT; stdcall;
+
+
+//  Metadata Import function
+//
+//   Retrieve the number of alternatives available in the policy object.
+//
+function WsGetPolicyAlternativeCount(policy : PWS_POLICY;
+                                     count : PULONG;
+                                     error : PWS_ERROR):HRESULT; stdcall;
+
+
+//  Policy Support function
+//
+//   Helper routine to create channel from policy templates.
+//
+function WsCreateServiceProxyFromTemplate(channelType : WS_CHANNEL_TYPE;
+                                          properties : PWS_PROXY_PROPERTY;
+                                          propertyCount : ULONG;
+                                          templateType : WS_BINDING_TEMPLATE_TYPE;
+                                          templateValue : pointer;
+                                          templateSize : ULONG;
+                                          templateDescription : pointer;
+                                          templateDescriptionSize : ULONG;
+                                          serviceProxy : PPWS_SERVICE_PROXY;
+                                          error : PWS_ERROR):HRESULT; stdcall;
+
+
+//  Policy Support function
+//
+//   Helper routine to create channel from policy templates.
+//
+function WsCreateServiceEndpointFromTemplate(
+                             channelType : WS_CHANNEL_TYPE;
+                             properties : PWS_SERVICE_ENDPOINT_PROPERTY;
+                             propertyCount : ULONG;
+                             addressUrl: PWS_STRING;
+                             contract : PWS_SERVICE_CONTRACT;
+                             authorizationCallback : WS_SERVICE_SECURITY_CALLBACK;
+                             heap : PWS_HEAP;
+                             templateType : WS_BINDING_TEMPLATE_TYPE;
+                             templateValue : pointer;
+                             templateSize : ULONG;
+                             templateDescription : pointer;
+                             templateDescriptionSize : ULONG;
+                             serviceEndpoint : PPWS_SERVICE_ENDPOINT;
+                             error : PWS_ERROR):HRESULT; stdcall;
+
+
 const
 
 //  ENUM DEFINITIONS
@@ -8154,7 +8619,43 @@ function WsGetSecurityContextProperty; external WEBSERVICES_DLL name 'WsGetSecur
 function WsReadElement; external WEBSERVICES_DLL name 'WsReadElement';
 function WsReadAttribute; external WEBSERVICES_DLL name 'WsReadAttribute';
 function WsReadType; external WEBSERVICES_DLL name 'WsReadType';
-
+function WsWriteElement; external WEBSERVICES_DLL name 'WsWriteElement';
+function WsWriteAttribute; external WEBSERVICES_DLL name 'WsWriteAttribute';
+function WsWriteType; external WEBSERVICES_DLL name 'WsWriteType';
+function WsRegisterOperationForCancel; external WEBSERVICES_DLL name 'WsRegisterOperationForCancel';
+function WsGetServiceHostProperty; external WEBSERVICES_DLL name 'WsGetServiceHostProperty';
+function WsCreateServiceHost; external WEBSERVICES_DLL name 'WsCreateServiceHost';
+function WsOpenServiceHost; external WEBSERVICES_DLL name 'WsOpenServiceHost';
+function WsCloseServiceHost; external WEBSERVICES_DLL name 'WsCloseServiceHost';
+function WsAbortServiceHost; external WEBSERVICES_DLL name 'WsAbortServiceHost';
+procedure WsFreeServiceHost; external WEBSERVICES_DLL name 'WsFreeServiceHost';
+function WsResetServiceHost; external WEBSERVICES_DLL name 'WsResetServiceHost';
+function WsGetServiceProxyProperty; external WEBSERVICES_DLL name 'WsGetServiceProxyProperty';
+function WsCreateServiceProxy; external WEBSERVICES_DLL name 'WsCreateServiceProxy';
+function WsOpenServiceProxy; external WEBSERVICES_DLL name 'WsOpenServiceProxy';
+function WsCloseServiceProxy; external WEBSERVICES_DLL name 'WsCloseServiceProxy';
+function WsAbortServiceProxy; external WEBSERVICES_DLL name 'WsAbortServiceProxy';
+procedure WsFreeServiceProxy; external WEBSERVICES_DLL name 'WsFreeServiceProxy';
+function WsResetServiceProxy; external WEBSERVICES_DLL name 'WsResetServiceProxy';
+function WsAbandonCall; external WEBSERVICES_DLL name 'WsAbandonCall';
+function WsCall; external WEBSERVICES_DLL name 'WsCall';
+function WsDecodeUrl; external WEBSERVICES_DLL name 'WsDecodeUrl';
+function WsEncodeUrl; external WEBSERVICES_DLL name 'WsEncodeUrl';
+function WsCombineUrl; external WEBSERVICES_DLL name 'WsCombineUrl';
+function WsDateTimeToFileTime; external WEBSERVICES_DLL name 'WsDateTimeToFileTime';
+function WsFileTimeToDateTime; external WEBSERVICES_DLL name 'WsFileTimeToDateTime';
+function WsCreateMetadata; external WEBSERVICES_DLL name 'WsCreateMetadata';
+function WsReadMetadata; external WEBSERVICES_DLL name 'WsReadMetadata';
+procedure WsFreeMetadata; external WEBSERVICES_DLL name 'WsFreeMetadata';
+function WsResetMetadata; external WEBSERVICES_DLL name 'WsResetMetadata';
+function WsGetMetadataProperty; external WEBSERVICES_DLL name 'WsGetMetadataProperty';
+function WsGetMissingMetadataDocumentAddress; external WEBSERVICES_DLL name 'WsGetMissingMetadataDocumentAddress';
+function WsGetMetadataEndpoints; external WEBSERVICES_DLL name 'WsGetMetadataEndpoints';
+function WsMatchPolicyAlternative; external WEBSERVICES_DLL name 'WsMatchPolicyAlternative';
+function WsGetPolicyProperty; external WEBSERVICES_DLL name 'WsGetPolicyProperty';
+function WsGetPolicyAlternativeCount; external WEBSERVICES_DLL name 'WsGetPolicyAlternativeCount';
+function WsCreateServiceProxyFromTemplate; external WEBSERVICES_DLL name 'WsCreateServiceProxyFromTemplate';
+function WsCreateServiceEndpointFromTemplate; external WEBSERVICES_DLL name 'WsCreateServiceEndpointFromTemplate';
 
 
 end.
