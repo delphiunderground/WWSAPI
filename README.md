@@ -8,7 +8,7 @@ This repository aims to provide a Delphi interface to Windows WebServices API
 Original Windows Web Services examples :
 https://msdn.microsoft.com/en-us/library/ee354195(v=vs.85).aspx
 
-Windows Web Services Reference :
+Windows Web Services Reference :  
 https://msdn.microsoft.com/en-us/library/windows/desktop/dd430470(v=vs.85).aspx
 
 Any suggestions or improvements are welcome.
